@@ -1,9 +1,6 @@
-import logo from "./logo.svg";
-import "./App.css";
-
 function App() {
   return (
-    <div className="App">
+    <div className="bg-red-100">
       Iw john
       <span class="material-symbols-outlined">search</span>
       <span class="material-symbols-outlined">favorite</span>
