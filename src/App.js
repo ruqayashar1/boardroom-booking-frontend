@@ -1,11 +1,11 @@
-function App() {
+import Layout from "./layout/Layout";
+
+const App = () => {
   return (
-    <div className="bg-red-100">
-      Iw john
-      <span class="material-symbols-outlined">search</span>
-      <span class="material-symbols-outlined">favorite</span>
+    <div className="w-[85%] m-auto">
+      <Layout />
     </div>
   );
-}
+};
 
 export default App;
