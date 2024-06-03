@@ -5,7 +5,7 @@ const Notifications = ({ notificationPaneRef, openNotificationPopUp }) => {
     <div
       ref={notificationPaneRef}
       id="notification-pane-popup"
-      className="hidden w-96 h-56 absolute z-10 top-[75px] right-0 shadow-md hover:shadow"
+      className="hidden w-96 h-56 bg-[#FFF] absolute z-10 top-[75px] right-0 shadow-md hover:shadow"
     >
       <div className="w-full h-8 bg-[#06ABDD] text-white font-bold flex justify-between items-center px-2">
         <h3>NOTIFICATIONS</h3>
