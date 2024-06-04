@@ -1,8 +1,10 @@
 import React from "react";
 import { Oval } from "react-loader-spinner";
 import login_image from "../assets/kemri-logo.png";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigation = useNavigate();
   return (
     <>
       <header className="flex justify-center items-center h-[70px] p-2 shadow-sm">
@@ -18,12 +20,12 @@ const LoginPage = () => {
           id="top-loging-area"
           className="flex flex-col justify-center items-center"
         >
-          <img src={login_image} alt="logo image" className="w-40 h-40 mb-4" />
+          <img src={login_image} alt="logo" className="w-40 h-40 mb-4" />
           <h4 className="text-[#DD0606] text-[1.5rem] mb-9 font-bold font-[Poppins] italic drop-shadow-lg">
             In Search Of Better Health
           </h4>
         </div>
-        <form id="login-form" className="font-[Inter]">
+        <form id="login-form" className="font-[Inter]" action="">
           <div id="login-username" className="">
             <div className="bg-[#D9D9D9] bg-opacity-[50%] flex justify-around p-1 items-center rounded-sm">
               <span class="material-symbols-outlined opacity-50 mx-1 mr-2">
@@ -67,6 +69,9 @@ const LoginPage = () => {
             className="relative flex justify-center items-center mt-5"
           >
             <input
+              onClick={() => {
+                navigation("home");
+              }}
               type="submit"
               value="Login"
               className="bg-[#06ABDD] text-white font-bold p-2 mr-2 w-24 cursor-pointer rounded-sm"
