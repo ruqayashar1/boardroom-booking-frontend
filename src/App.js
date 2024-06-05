@@ -4,6 +4,7 @@ const App = () => {
   return (
     <div className="w-[85%] m-auto">
       <Layout />
+      
     </div>
   );
 };
