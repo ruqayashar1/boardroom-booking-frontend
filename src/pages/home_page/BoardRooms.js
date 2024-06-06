@@ -30,7 +30,7 @@ const BoardRooms = () => {
         <div id="boardroom-card-2" className="flex items-start p-6 max-w-sm bg-white rounded-xl shadow-md space-x-4">
           <img
             className="w-32 h-40 object-cover square-full"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSC3cqw4RicBWO4NpnJaPsd9zrrO8XpvId6FhPK2zoklBz4LATFpbzIDV8Lfo-Wj-z2LBo&usqp=CAU"
+            src="https://d326yn2yk9qb38.cloudfront.net/15097/6c3abaa2-6c77-4f54-9ca6-d95bdd37138a_1200x629.jpg"
             alt="Boardroom"
           />
           <div className="ml-4">
@@ -53,7 +53,7 @@ const BoardRooms = () => {
         <div id="boardroom-card-1" className="flex items-start p-6 max-w-sm bg-white rounded-xl shadow-md space-x-4">
           <img
             className="w-32 h-40 object-cover square-full"
-            src="https://img.freepik.com/premium-photo/corporate-office-rooms-concept-designs_853932-4112.jpg?size=626&ext=jpg"
+            src="https://cdn-kkilb.nitrocdn.com/ntNaADXIIgLxcKtuDNMKXdlotSgKZwtj/assets/images/optimized/rev-e293bed/www.pinehurst.com/wp-content/uploads/2023/03/CentennialBR_mast_large.jpg"
             alt="Boardroom"
           />
           <div className="ml-4">
