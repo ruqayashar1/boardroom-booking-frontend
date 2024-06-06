@@ -3,6 +3,7 @@ import Header from "../../ components/header/Header";
 import { Bars } from "react-loader-spinner";
 import boardroomImage from "../../assets/boardroom-img.jpg";
 import BoardroomSettings from "./BoardroomSettings";
+import { NavLink, Outlet } from "react-router-dom";
 
 const BoardRoomDetailPage = () => {
   return (
@@ -28,12 +29,15 @@ const BoardRoomDetailPage = () => {
             />
           </div>
         </div>
-        <section id="boardroom-basic-info" className="flex justify-between">
+        <section
+          id="boardroom-basic-info"
+          className="flex justify-between mb-6"
+        >
           <div id="boardroom-image" className="w-[49%] h-[100%]">
             <img
               src={boardroomImage}
               alt="boardroom"
-              className=" w-[100%] h-[100%] opacity-70 rounded-sm shadow-lg"
+              className=" w-[100%] h-[100%] opacity-70 rounded-sm shadow-md brightness-90"
             />
           </div>
           <div
@@ -51,8 +55,8 @@ const BoardRoomDetailPage = () => {
                 </div>
                 <BoardroomSettings />
               </div>
-              <div className="flex justify-evenly mb-5">
-                <div>
+              <div className="flex justify-center mb-5">
+                <div className="mr-24">
                   <h3 className="font-bold text-sm mb-2 opacity-50">
                     Supports
                   </h3>
@@ -90,6 +94,36 @@ const BoardRoomDetailPage = () => {
             </div>
           </div>
         </section>
+        <section
+          id="boardroom-navigation-area"
+          className="font-[Roboto] flex mb-10"
+        >
+          <NavLink
+            to=""
+            className="w-max h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] bg-[#d9d9d9] bg-opacity-50 flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer mr-4"
+          >
+            <h3 className="font-bold text-sm">Reservations</h3>
+          </NavLink>
+          <NavLink
+            to="archived-reservations"
+            className="w-max h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] bg-[#d9d9d9] bg-opacity-50 flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer mr-4"
+          >
+            <h3 className="font-bold text-sm">Archived Reservations</h3>
+          </NavLink>
+          <NavLink
+            to="equipments"
+            className="w-max h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] bg-[#d9d9d9] bg-opacity-50 flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer mr-4"
+          >
+            <h3 className="font-bold text-sm">Equipment</h3>
+          </NavLink>
+          <NavLink
+            to="admin-info"
+            className="w-max h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] bg-[#d9d9d9] bg-opacity-50 flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer mr-4"
+          >
+            <h3 className="font-bold text-sm">Admin Info</h3>
+          </NavLink>
+        </section>
+        <Outlet />
       </main>
     </>
   );

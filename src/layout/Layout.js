@@ -9,6 +9,10 @@ import LiveMeetings from "../pages/home_page/LiveMeetings";
 import LockedRooms from "../pages/home_page/LockedRooms";
 import UpcomingMeeting from "../pages/home_page/UpcomingMeeting";
 import BoardRoomDetailPage from "../pages/boardroom_detail_page/BoardRoomDetailPage";
+import BoardroomReservations from "../pages/boardroom_detail_page/BoardroomReservations";
+import BoardroomArchivedReservations from "../pages/boardroom_detail_page/BoardroomArchivedReservations";
+import BoardroomEquipment from "../pages/boardroom_detail_page/BoardroomEquipment";
+import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdminDetails";
 
 const Layout = () => {
   return (
@@ -22,10 +26,15 @@ const Layout = () => {
         <Route path="locked" element={<LockedRooms />} />
         <Route path="upcoming" element={<UpcomingMeeting />} />
       </Route>
-      <Route
-        path="boardroom_detail_page"
-        element={<BoardRoomDetailPage />}
-      ></Route>
+      <Route path="boardrooms/:id" element={<BoardRoomDetailPage />}>
+        <Route index element={<BoardroomReservations />} />
+        <Route
+          path="archived-reservations"
+          element={<BoardroomArchivedReservations />}
+        />
+        <Route path="equipments" element={<BoardroomEquipment />} />
+        <Route path="admin-info" element={<BoardroomAdminDetails />} />
+      </Route>
     </Routes>
   );
 };
