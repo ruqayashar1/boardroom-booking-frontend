@@ -8,6 +8,7 @@ import Reservations from "../pages/home_page/Reservations";
 import LiveMeetings from "../pages/home_page/LiveMeetings";
 import LockedRooms from "../pages/home_page/LockedRooms";
 import UpcomingMeeting from "../pages/home_page/UpcomingMeeting";
+import BoardRoomDetailPage from "../pages/boardroom_detail_page/BoardRoomDetailPage";
 
 const Layout = () => {
   return (
@@ -21,6 +22,10 @@ const Layout = () => {
         <Route path="locked" element={<LockedRooms />} />
         <Route path="upcoming" element={<UpcomingMeeting />} />
       </Route>
+      <Route
+        path="boardroom_detail_page"
+        element={<BoardRoomDetailPage />}
+      ></Route>
     </Routes>
   );
 };
