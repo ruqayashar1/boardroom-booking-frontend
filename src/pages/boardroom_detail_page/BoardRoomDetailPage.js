@@ -6,12 +6,18 @@ import BoardroomSettings from "./BoardroomSettings";
 import { NavLink, Outlet } from "react-router-dom";
 import AdminCreateForm from "./AdminCreateForm";
 import AddEquipmentForm from "./AddEquipmentForm";
+import MakeReservationForm from "./MakeReservationForm";
 
 const BoardRoomDetailPage = () => {
   const [showAdminForm, setShowAdminForm] = useState(false);
   const [showEquipmentForm, setShowEquipmentForm] = useState(false);
+  const [showReservationForm, setShowReservationForm] = useState(false);
 
-  const showControls = [setShowAdminForm, setShowEquipmentForm];
+  const showControls = [
+    setShowAdminForm,
+    setShowEquipmentForm,
+    setShowReservationForm,
+  ];
   const manageControls = (funcName) => {
     showControls.map((func) => {
       if (func === funcName) {
@@ -27,9 +33,14 @@ const BoardRoomDetailPage = () => {
     manageControls(setShowEquipmentForm);
   };
 
+  const toggleReservationForm = () => {
+    manageControls(setShowReservationForm);
+  };
+
   const toggleFuncs = {
     toggleAdminForm: toggleAdminForm,
     toggleEquipmentForm: toggleEquipmentForm,
+    toggleReservationForm: toggleReservationForm,
   };
   return (
     <>
@@ -124,6 +135,9 @@ const BoardRoomDetailPage = () => {
         ) : null}
         {showEquipmentForm ? (
           <AddEquipmentForm toggleEquipmentForm={toggleEquipmentForm} />
+        ) : null}
+        {showReservationForm ? (
+          <MakeReservationForm toggleReservationForm={toggleReservationForm} />
         ) : null}
         <section
           id="boardroom-navigation-area"
