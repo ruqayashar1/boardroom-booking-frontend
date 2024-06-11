@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import Logo from "./Logo";
 import Notification from "./NotificationLink";
 import Notifications from "./Notifications";
+import { NavLink } from "react-router-dom";
+import { useClickAway } from "react-use";
 
 const Header = () => {
   const [numberOfNotifications, setNumberOfNotifications] = useState(4);
@@ -11,6 +13,13 @@ const Header = () => {
     notificationPaneRef.current.classList.toggle("hidden");
     setNumberOfNotifications(0);
   };
+
+  useClickAway(notificationPaneRef, () => {
+    const hidden = notificationPaneRef.current.classList.toggle("hidden");
+    if (!hidden) {
+      notificationPaneRef.current.classList.add("hidden");
+    }
+  });
   return (
     <header
       id="header"
@@ -25,9 +34,12 @@ const Header = () => {
           numberOfNotifications={numberOfNotifications}
           openNotificationPopUp={openNotificationPopUp}
         />
-        <h3 className="font-bold cursor-pointer text-[#06ABDD] p-1 rounded-sm transition duration-1000 ease-out hover:bg-[#f3f3f3]">
+        <NavLink
+          to="/"
+          className="font-bold cursor-pointer text-[#06ABDD] p-1 rounded-sm transition duration-1000 ease-out hover:bg-[#f3f3f3]"
+        >
           BOARDROOMS
-        </h3>
+        </NavLink>
         <div
           id="user-profile"
           className="flex font-[Inter] cursor-pointer opacity-70 hover:opacity-100"

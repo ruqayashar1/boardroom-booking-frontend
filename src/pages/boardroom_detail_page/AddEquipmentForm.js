@@ -1,16 +1,15 @@
 import React from "react";
 
-const Notifications = ({ notificationPaneRef, openNotificationPopUp }) => {
+const AddEquipmentForm = ({ toggleEquipmentForm }) => {
   return (
-    <div
-      ref={notificationPaneRef}
-      id="notification-pane-popup"
-      className="hidden w-96 h-56 bg-[#FFF] absolute z-10 top-[75px] right-0 shadow-md hover:shadow"
+    <aside
+      id="add-equipment-popup"
+      className="w-[50%] h-[500px] shadow shadow-slate-500 absolute bg-white top-16 left-0 z-10"
     >
       <div className="w-full h-8 bg-[#06ABDD] text-white font-bold flex justify-between items-center px-2">
-        <h3>NOTIFICATIONS</h3>
+        <h3>EQUIPMENT FORM</h3>
         <span
-          onClick={openNotificationPopUp}
+          onClick={toggleEquipmentForm}
           title="close"
           className="material-symbols-outlined cursor-pointer hover:bg-slate-700 pr-0 opacity-80 transition-all duration-500 line-clamp-4"
         >
@@ -18,8 +17,8 @@ const Notifications = ({ notificationPaneRef, openNotificationPopUp }) => {
         </span>
       </div>
       {/* write your code here */}
-    </div>
+    </aside>
   );
 };
 
-export default Notifications;
+export default AddEquipmentForm;

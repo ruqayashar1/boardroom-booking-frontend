@@ -17,8 +17,8 @@ import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdmin
 const Layout = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="home" element={<HomePage />}>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<HomePage />}>
         <Route index element={<BoardRooms />} />
         <Route path="add-boardroom" element={<AddBoardRoomForm />} />
         <Route path="reservations" element={<Reservations />} />

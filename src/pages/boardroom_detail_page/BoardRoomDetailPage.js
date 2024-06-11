@@ -1,11 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../ components/header/Header";
 import { Bars } from "react-loader-spinner";
 import boardroomImage from "../../assets/boardroom-img.jpg";
 import BoardroomSettings from "./BoardroomSettings";
 import { NavLink, Outlet } from "react-router-dom";
+import AdminCreateForm from "./AdminCreateForm";
+import AddEquipmentForm from "./AddEquipmentForm";
 
 const BoardRoomDetailPage = () => {
+  const [showAdminForm, setShowAdminForm] = useState(false);
+  const [showEquipmentForm, setShowEquipmentForm] = useState(false);
+
+  const showControls = [setShowAdminForm, setShowEquipmentForm];
+  const manageControls = (funcName) => {
+    showControls.map((func) => {
+      if (func === funcName) {
+        return func((prev) => !prev);
+      }
+      return func(false);
+    });
+  };
+  const toggleAdminForm = () => {
+    manageControls(setShowAdminForm);
+  };
+  const toggleEquipmentForm = () => {
+    manageControls(setShowEquipmentForm);
+  };
+
+  const toggleFuncs = {
+    toggleAdminForm: toggleAdminForm,
+    toggleEquipmentForm: toggleEquipmentForm,
+  };
   return (
     <>
       <Header />
@@ -53,7 +78,7 @@ const BoardRoomDetailPage = () => {
                   <span className="material-symbols-outlined mr-2">wifi</span>
                   <h3>Enabled</h3>
                 </div>
-                <BoardroomSettings />
+                <BoardroomSettings toggleFuncs={toggleFuncs} />
               </div>
               <div className="flex justify-center mb-5">
                 <div className="mr-24">
@@ -94,6 +119,12 @@ const BoardRoomDetailPage = () => {
             </div>
           </div>
         </section>
+        {showAdminForm ? (
+          <AdminCreateForm toggleAdminForm={toggleAdminForm} />
+        ) : null}
+        {showEquipmentForm ? (
+          <AddEquipmentForm toggleEquipmentForm={toggleEquipmentForm} />
+        ) : null}
         <section
           id="boardroom-navigation-area"
           className="font-[Roboto] flex mb-10"
