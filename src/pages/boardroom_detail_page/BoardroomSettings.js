@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useClickAway } from "react-use";
 
-const BoardroomSettings = ({ toggleFuncs }) => {
+const BoardroomSettings = ({ toggleFuncs, isRoomLocked = false }) => {
   const boardroomSettingRef = useRef();
   const toggleBoardromSettingsPopup = (e) => {
     e.stopPropagation();
@@ -61,12 +61,27 @@ const BoardroomSettings = ({ toggleFuncs }) => {
           </span>
           <h3 className="mr-4">Make Reservation</h3>
         </div>
-        <div className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded">
-          <span className="material-symbols-outlined text-[#DD0606] mr-2 ml-4 py-2">
-            lock
-          </span>
-          <h3 className="mr-4">Lock</h3>
-        </div>
+        {isRoomLocked ? (
+          <div
+            onClick={toggleFuncs.toggleUnLockRoomForm}
+            className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded"
+          >
+            <span className="material-symbols-outlined text-[#DD0606] mr-2 ml-4 py-2">
+              lock_open
+            </span>
+            <h3 className="mr-4">Unlock</h3>
+          </div>
+        ) : (
+          <div
+            onClick={toggleFuncs.toggleLockRoomForm}
+            className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded"
+          >
+            <span className="material-symbols-outlined text-[#DD0606] mr-2 ml-4 py-2">
+              lock
+            </span>
+            <h3 className="mr-4">Lock</h3>
+          </div>
+        )}
       </div>
     </div>
   );
