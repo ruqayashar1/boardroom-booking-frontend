@@ -70,7 +70,7 @@ const LoginPage = () => {
           >
             <input
               onClick={() => {
-                navigation("home");
+                navigation("/");
               }}
               type="submit"
               value="Login"

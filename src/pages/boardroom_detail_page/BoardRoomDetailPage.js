@@ -1,11 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../ components/header/Header";
 import { Bars } from "react-loader-spinner";
 import boardroomImage from "../../assets/boardroom-img.jpg";
 import BoardroomSettings from "./BoardroomSettings";
 import { NavLink, Outlet } from "react-router-dom";
+import AdminCreateForm from "./AdminCreateForm";
+import AddEquipmentForm from "./AddEquipmentForm";
+import MakeReservationForm from "./MakeReservationForm";
+import LockRoomForm from "./LockRoomForm";
+import UnLockRoomForm from "./UnLockRoomForm";
 
 const BoardRoomDetailPage = () => {
+  const isRoomLocked = false;
+  const [showAdminForm, setShowAdminForm] = useState(false);
+  const [showEquipmentForm, setShowEquipmentForm] = useState(false);
+  const [showReservationForm, setShowReservationForm] = useState(false);
+  const [showLockRoomForm, setShowLockRoomForm] = useState(false);
+  const [showUnLockRoomForm, setShowUnLockRoomForm] = useState(false);
+
+  const showControls = [
+    setShowAdminForm,
+    setShowEquipmentForm,
+    setShowReservationForm,
+    setShowLockRoomForm,
+    setShowUnLockRoomForm,
+  ];
+  const manageControls = (funcName) => {
+    showControls.map((func) => {
+      if (func === funcName) {
+        return func((prev) => !prev);
+      }
+      return func(false);
+    });
+  };
+  const toggleAdminForm = () => {
+    manageControls(setShowAdminForm);
+  };
+  const toggleEquipmentForm = () => {
+    manageControls(setShowEquipmentForm);
+  };
+
+  const toggleReservationForm = () => {
+    manageControls(setShowReservationForm);
+  };
+
+  const toggleLockRoomForm = () => {
+    manageControls(setShowLockRoomForm);
+  };
+
+  const toggleUnLockRoomForm = () => {
+    manageControls(setShowUnLockRoomForm);
+  };
+
+  const toggleFuncs = {
+    toggleAdminForm: toggleAdminForm,
+    toggleEquipmentForm: toggleEquipmentForm,
+    toggleReservationForm: toggleReservationForm,
+    toggleLockRoomForm: toggleLockRoomForm,
+    toggleUnLockRoomForm: toggleUnLockRoomForm,
+  };
   return (
     <>
       <Header />
@@ -53,7 +106,10 @@ const BoardRoomDetailPage = () => {
                   <span className="material-symbols-outlined mr-2">wifi</span>
                   <h3>Enabled</h3>
                 </div>
-                <BoardroomSettings />
+                <BoardroomSettings
+                  toggleFuncs={toggleFuncs}
+                  isRoomLocked={isRoomLocked}
+                />
               </div>
               <div className="flex justify-center mb-5">
                 <div className="mr-24">
@@ -88,12 +144,30 @@ const BoardRoomDetailPage = () => {
               id="bottom-info"
               className="w-[100%] h-max bg-gradient-to-tr from-[#06ABDE] to-[#a4e9e0] rounded-sm"
             >
-              <button className="w-[100%] p-2 text-center font-bold text-white rounded-sm shadow-md">
+              <button
+                onClick={toggleReservationForm}
+                className="w-[100%] p-2 text-center font-bold text-white rounded-sm shadow-md"
+              >
                 Make Reservation
               </button>
             </div>
           </div>
         </section>
+        {showAdminForm ? (
+          <AdminCreateForm toggleAdminForm={toggleAdminForm} />
+        ) : null}
+        {showEquipmentForm ? (
+          <AddEquipmentForm toggleEquipmentForm={toggleEquipmentForm} />
+        ) : null}
+        {showReservationForm ? (
+          <MakeReservationForm toggleReservationForm={toggleReservationForm} />
+        ) : null}
+        {showLockRoomForm ? (
+          <LockRoomForm toggleLockRoomForm={toggleLockRoomForm} />
+        ) : null}
+        {showUnLockRoomForm ? (
+          <UnLockRoomForm toggleUnLockRoomForm={toggleUnLockRoomForm} />
+        ) : null}
         <section
           id="boardroom-navigation-area"
           className="font-[Roboto] flex mb-10"
