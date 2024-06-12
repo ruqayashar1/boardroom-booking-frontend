@@ -6,7 +6,7 @@ const BoardRooms = () => {
   return (
     <section id="boardrooms" className="w-full relative">
       <BoardroomFilterPopup />
-      <div id="all-boardrooms" className="p-4 flex space-x-14" justify-centre>n
+      <div id="all-boardrooms" className="p-4 flex space-x-14" justify-centre>
         <div id="boardroom-card-1" className="flex items-start p-6  max-w-sm bg-white rounded-xl shadow-md space-x-4">
           <img
             className="w-32 h-40 object-cover square-full"
