@@ -18,14 +18,29 @@ const Reservations = () => {
                             Please write a brief summary of your meeting
                         </small>
                     </div>
-                    <div className="flex flex-col">
-                        <h5 className="font-bold mb-1">Boardroom</h5>
-                        <input
-                            type="text"
-                            disabled
-                            placeholder="CBRD BOARDROOM"
-                            className="bg-white w-full py-2 px-2"
-                        />
+                    <div className="flex items-center space-x-10">
+                        <div className="flex flex-col">
+                            <h5 className="font-bold mb-1">Boardroom</h5>
+                            <input
+                                type="text"
+                                disabled
+                                placeholder="CBRD BOARDROOM"
+                                className="bg-white w-full py-2 px-2"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <h5 className="font-bold mb-1">Meeting type</h5>
+                            <select>
+                                <option value="Physical">Physical</option>
+                                <option value="Hybrid">Hybrid</option>
+                            </select>
+                        </div>
+                        <div className="rounded-md p-10 flex space-x-10">
+                            <h5 className="font-bold mb-1">ICT Support</h5>
+                            <div class="flex items-center">
+                                <input type="checkbox" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
