@@ -2,8 +2,11 @@ import React from "react";
 import { Oval } from "react-loader-spinner";
 import login_image from "../assets/kemri-logo.png";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authenticate } from "../context/auth/authSlice";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigate();
   return (
     <>
@@ -28,7 +31,7 @@ const LoginPage = () => {
         <form id="login-form" className="font-[Inter]" action="">
           <div id="login-username" className="">
             <div className="bg-[#D9D9D9] bg-opacity-[50%] flex justify-around p-1 items-center rounded-sm">
-              <span class="material-symbols-outlined opacity-50 mx-1 mr-2">
+              <span className="material-symbols-outlined opacity-50 mx-1 mr-2">
                 person
               </span>
               <input
@@ -37,7 +40,7 @@ const LoginPage = () => {
                 placeholder="Username"
                 className="outline-none p-1 bg-[#D9D9D9] bg-opacity-[10%]"
               />
-              <span class="material-symbols-outlined text-green-500 mx-1">
+              <span className="material-symbols-outlined text-green-500 mx-1">
                 check
               </span>
             </div>
@@ -47,7 +50,7 @@ const LoginPage = () => {
           </div>
           <div id="login-password" className="mt-2">
             <div className="bg-[#D9D9D9] bg-opacity-[50%] mb-1 flex justify-around p-1 items-center rounded-sm">
-              <span class="material-symbols-outlined opacity-50 mx-1 mr-2">
+              <span className="material-symbols-outlined opacity-50 mx-1 mr-2">
                 lock
               </span>
               <input
@@ -56,7 +59,7 @@ const LoginPage = () => {
                 placeholder="password"
                 className="outline-none p-1 bg-[#D9D9D9] bg-opacity-[10%]"
               />
-              <span class="material-symbols-outlined text-green-500 mx-1">
+              <span className="material-symbols-outlined text-green-500 mx-1">
                 check
               </span>
             </div>
@@ -70,6 +73,7 @@ const LoginPage = () => {
           >
             <input
               onClick={() => {
+                dispatch(authenticate(true));
                 navigation("/home");
               }}
               type="submit"

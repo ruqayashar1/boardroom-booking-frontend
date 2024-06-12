@@ -35,7 +35,7 @@ const Header = () => {
           openNotificationPopUp={openNotificationPopUp}
         />
         <NavLink
-          to="/"
+          to="/home"
           className="font-bold cursor-pointer text-[#06ABDD] p-1 rounded-sm transition duration-1000 ease-out hover:bg-[#f3f3f3]"
         >
           BOARDROOMS

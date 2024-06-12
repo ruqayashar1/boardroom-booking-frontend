@@ -14,9 +14,10 @@ import BoardroomArchivedReservations from "../pages/boardroom_detail_page/Boardr
 import BoardroomEquipment from "../pages/boardroom_detail_page/BoardroomEquipment";
 import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdminDetails";
 import ProtectedRoute from "../routes/ProtectedRoute";
+import { useSelector } from "react-redux";
 
 const Layout = () => {
-  const isAuthenticated = true;
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
