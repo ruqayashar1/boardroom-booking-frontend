@@ -13,12 +13,22 @@ import BoardroomReservations from "../pages/boardroom_detail_page/BoardroomReser
 import BoardroomArchivedReservations from "../pages/boardroom_detail_page/BoardroomArchivedReservations";
 import BoardroomEquipment from "../pages/boardroom_detail_page/BoardroomEquipment";
 import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdminDetails";
+import ProtectedRoute from "../routes/ProtectedRoute";
+import { useSelector } from "react-redux";
 
 const Layout = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="/home" element={<HomePage />}>
+      <Route
+        path="/home"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <HomePage />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<BoardRooms />} />
         <Route path="add-boardroom" element={<AddBoardRoomForm />} />
         <Route path="reservations" element={<Reservations />} />
@@ -26,7 +36,14 @@ const Layout = () => {
         <Route path="locked" element={<LockedRooms />} />
         <Route path="upcoming" element={<UpcomingMeeting />} />
       </Route>
-      <Route path="boardrooms/:id" element={<BoardRoomDetailPage />}>
+      <Route
+        path="boardrooms/:id"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <BoardRoomDetailPage />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<BoardroomReservations />} />
         <Route
           path="archived-reservations"
