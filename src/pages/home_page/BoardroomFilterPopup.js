@@ -50,7 +50,7 @@ const BoardroomFilterPopup = () => {
       <div
         ref={filterPanePopupRef}
         id="filter-popup"
-        className="hidden absolute w-36 h-48 top-[50px] right-2 cursor-default shadow-lg hover:shadow"
+        className="hidden absolute z-10 bg-white w-36 h-48 top-[50px] right-2 cursor-default shadow-lg hover:shadow"
       >
         <div
           id="boardroom-filter-header"
