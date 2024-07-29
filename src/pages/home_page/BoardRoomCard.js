@@ -1,10 +1,12 @@
 import React from "react";
+import { Bars } from "react-loader-spinner";
 import { NavLink } from "react-router-dom";
 
 const BoardRoomCard = ({
   boardroomImage,
   locked = false,
   hasInternet = true,
+  anyLiveMeeting = false,
 }) => {
   return (
     <NavLink className="boardroom-card cursor-pointer">
@@ -15,17 +17,30 @@ const BoardRoomCard = ({
       />
       <div className="mx-2 my-6">
         <span className="block font-bold w-full text-sm">CBRD Boardroom</span>
-        <div className="flex mt-2">
-          {hasInternet ? (
-            <span className="material-symbols-outlined block text-green-500 text-sm mr-2">
-              wifi
-            </span>
-          ) : (
-            <span className="material-symbols-outlined block text-red-500 text-sm mr-2">
-              wifi
-            </span>
-          )}
-          <span className="block text-gray-500 text-sm">Wifi</span>
+        <div className=" w-[50%] flex mt-2 justify-between items-center">
+          <div className="flex mt-2">
+            {hasInternet ? (
+              <span className="material-symbols-outlined block text-green-500 text-sm mr-2">
+                wifi
+              </span>
+            ) : (
+              <span className="material-symbols-outlined block text-red-500 text-sm mr-2">
+                wifi
+              </span>
+            )}
+            <span className="block text-gray-500 text-sm">Wifi</span>
+          </div>
+          {anyLiveMeeting ? (
+            <Bars
+              height="30"
+              width="30"
+              color="#4fa94d"
+              ariaLabel="bars-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          ) : null}
         </div>
       </div>
       <div className="capacity-badge">

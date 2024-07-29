@@ -10,7 +10,7 @@ const BoardRooms = () => {
       <div id="all-boardrooms" className="p-4 grid lg:grid-cols-3 gap-10">
         <BoardRoomCard boardroomImage={BoardroomImage} hasInternet={false} />
         <BoardRoomCard boardroomImage={BoardroomImage} locked={true} />
-        <BoardRoomCard boardroomImage={BoardroomImage} />
+        <BoardRoomCard boardroomImage={BoardroomImage} anyLiveMeeting={true} />
       </div>
     </section>
   );
