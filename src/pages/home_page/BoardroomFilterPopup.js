@@ -50,7 +50,7 @@ const BoardroomFilterPopup = () => {
       <div
         ref={filterPanePopupRef}
         id="filter-popup"
-        className="hidden absolute z-10 bg-white w-36 h-48 top-[50px] right-2 cursor-default shadow-lg hover:shadow"
+        className="hidden absolute z-10 bg-white w-36 h-max top-[50px] right-2 cursor-default shadow-lg hover:shadow"
       >
         <div
           id="boardroom-filter-header"
@@ -65,7 +65,17 @@ const BoardroomFilterPopup = () => {
             close
           </span>
         </div>
-        <div id="boardroom-filter-body">{/* write your code here */}</div>
+        <div id="boardroom-filter-body" className="h-max py-2 font-[Nunito]">
+          <div className="p-1">
+            <span className="block text-sm mb-1">Capacity</span>
+            <input
+              className="estimated-capacity w-[100%] p-1 border rounded shadow text-sm mb-1 outline-none hover:rounded-sm"
+              type="number"
+              name="estimted-capacity"
+              min={2}
+            />
+          </div>
+        </div>
       </div>
     </>
   );
