@@ -4,10 +4,13 @@ import Notification from "./NotificationLink";
 import Notifications from "./Notifications";
 import { NavLink } from "react-router-dom";
 import { useClickAway } from "react-use";
+import UserProfilePopup from "./UserProfilePopup";
 
 const Header = () => {
+  const [userPopupOpen, setUserPopupOpen] = useState(false);
   const [numberOfNotifications, setNumberOfNotifications] = useState(4);
   const notificationPaneRef = useRef();
+  const userProfilePopupRef = useRef();
   const openNotificationPopUp = (e) => {
     e.preventDefault();
     notificationPaneRef.current.classList.toggle("hidden");
@@ -20,6 +23,20 @@ const Header = () => {
       notificationPaneRef.current.classList.add("hidden");
     }
   });
+
+  useClickAway(userProfilePopupRef, () => {
+    setUserPopupOpen(false);
+  });
+
+  const toggleUserProfilePopup = (e) => {
+    e.preventDefault();
+    setUserPopupOpen((prev) => !prev);
+  };
+
+  const closeUserProfilePopup = (e) => {
+    e.preventDefault();
+    setUserPopupOpen(false);
+  };
   return (
     <header
       id="header"
@@ -41,6 +58,8 @@ const Header = () => {
           BOARDROOMS
         </NavLink>
         <div
+          ref={userProfilePopupRef}
+          onClick={toggleUserProfilePopup}
           id="user-profile"
           className="flex font-[Inter] cursor-pointer opacity-70 hover:opacity-100"
         >
@@ -49,6 +68,9 @@ const Header = () => {
           <span className="material-symbols-outlined">arrow_drop_down</span>
         </div>
       </div>
+      {userPopupOpen ? (
+        <UserProfilePopup closeUserProfilePopup={closeUserProfilePopup} />
+      ) : null}
       <Notifications
         notificationPaneRef={notificationPaneRef}
         openNotificationPopUp={openNotificationPopUp}
