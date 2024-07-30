@@ -12,7 +12,7 @@ const HomePage = () => {
           className="flex justify-between flex-wrap gap-2 min-h-[6rem] bg-white bg-opacity-[5%] my-4 shadow p-4"
         >
           <NavLink
-            to="/"
+            to="/home"
             className="w-max h-10 bg-[#daf3f5] flex shadow justify-between items-center rounded-[5px] px-4 bg-opacity-40"
           >
             <span className="material-symbols-outlined mr-2">meeting_room</span>
