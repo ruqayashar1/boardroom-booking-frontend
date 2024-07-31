@@ -1,17 +1,7 @@
-import React, { useState } from "react";
-import ReservationDetails from "./ReservationDetails";
+import React from "react";
+import { Bars } from "react-loader-spinner";
 
-const BoardroomReservations = () => {
-  const [isReservationDetailsPopupOpen, setIsReservationDetailsPopupOpen] =
-    useState(false);
-  const [selectedItemId, setSelectedItemId] = useState(null); // by default should be null when no item is selected
-  const showReservationDetailsPopup = (itemId) => {
-    setSelectedItemId(itemId);
-    setIsReservationDetailsPopupOpen(true);
-  };
-  const hideReservationDetailsPopup = () => {
-    setIsReservationDetailsPopupOpen(false);
-  };
+const LiveMeetingsTable = () => {
   return (
     <>
       <div className="w-[100%] shadow p-2 font-[Roboto] overflow-auto md:overflow-hidden scroll-smooth">
@@ -19,7 +9,7 @@ const BoardroomReservations = () => {
           <thead className="font-bold text-left border-b-2">
             <tr className="text-nowrap mb-24 bg-gray-100">
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Booked BY
+                Created By
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
                 Start Date
@@ -39,16 +29,11 @@ const BoardroomReservations = () => {
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
                 Department
               </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Approval Status
-              </th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-left"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            <tr
-              onClick={() => showReservationDetailsPopup(1)}
-              className="bg-white cursor-pointer"
-            >
+            <tr className="bg-white cursor-pointer hover:bg-red-50">
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -71,15 +56,20 @@ const BoardroomReservations = () => {
                 Graduate School
               </td>
               <td className="text-[#06ABDD]">
-                <span className="block bg-[#06ABDD] bg-opacity-10 p-1 px-4 rounded font-bold w-[7rem] text-center">
-                  Approved
-                </span>
+                <div className="">
+                  <Bars
+                    height="20"
+                    width="20"
+                    color="#4fa94d"
+                    ariaLabel="bars-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                </div>
               </td>
             </tr>
-            <tr
-              onClick={() => showReservationDetailsPopup(2)}
-              className="text-nowrap bg-gray-50 mt-10 cursor-pointer"
-            >
+            <tr className="text-nowrap bg-gray-50 mt-10 cursor-pointer hover:bg-red-50">
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -102,15 +92,20 @@ const BoardroomReservations = () => {
                 Graduate School
               </td>
               <td className="text-[#DD0606]">
-                <span className="block bg-[#DD0606] bg-opacity-10 p-1 px-4 rounded font-bold w-[7rem] text-center">
-                  Canceled
-                </span>
+                <div className="">
+                  <Bars
+                    height="20"
+                    width="20"
+                    color="#4fa94d"
+                    ariaLabel="bars-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                </div>
               </td>
             </tr>
-            <tr
-              onClick={() => showReservationDetailsPopup(3)}
-              className="text-nowrap bg-white cursor-pointer"
-            >
+            <tr className="text-nowrap bg-white cursor-pointer hover:bg-red-50">
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -132,23 +127,26 @@ const BoardroomReservations = () => {
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 Graduate School
               </td>
+
               <td className="text-[#DDC706]">
-                <span className="block bg-[#DDC706] bg-opacity-10 p-1 px-4 rounded font-bold w-[7rem] text-center">
-                  Pending
-                </span>
+                <div className="">
+                  <Bars
+                    height="20"
+                    width="20"
+                    color="#4fa94d"
+                    ariaLabel="bars-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      {isReservationDetailsPopupOpen ? (
-        <ReservationDetails
-          selectedItemId={selectedItemId}
-          hideReservationDetailsPopup={hideReservationDetailsPopup}
-        />
-      ) : null}
     </>
   );
 };
 
-export default BoardroomReservations;
+export default LiveMeetingsTable;

@@ -1,25 +1,35 @@
-import React, { useState } from "react";
-import ReservationDetails from "./ReservationDetails";
+import React from "react";
 
-const BoardroomReservations = () => {
-  const [isReservationDetailsPopupOpen, setIsReservationDetailsPopupOpen] =
-    useState(false);
-  const [selectedItemId, setSelectedItemId] = useState(null); // by default should be null when no item is selected
-  const showReservationDetailsPopup = (itemId) => {
-    setSelectedItemId(itemId);
-    setIsReservationDetailsPopupOpen(true);
-  };
-  const hideReservationDetailsPopup = () => {
-    setIsReservationDetailsPopupOpen(false);
-  };
+const ReservationsTable = () => {
   return (
     <>
+      <div className="w-full flex justify-end mb-5">
+        <div className="flex items-center bg-gray-100 shadow p-2">
+          <span className="block border-r border-solid h-full p-1 bg-blue-200 shadow">
+            Filters
+          </span>
+          <div className="flex gap-2">
+            <div>
+              <span className="m-2 text-[#06ABDD]">Approved</span>
+              <input type="checkbox" checked />
+            </div>
+            <div>
+              <span className="m-2 text-[#DDC706]">Pending</span>
+              <input type="checkbox" checked />
+            </div>
+            <div>
+              <span className="m-2 text-[#DD0606]">Canceled</span>
+              <input type="checkbox" checked />
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="w-[100%] shadow p-2 font-[Roboto] overflow-auto md:overflow-hidden scroll-smooth">
         <table className="w-full bg-white">
           <thead className="font-bold text-left border-b-2">
             <tr className="text-nowrap mb-24 bg-gray-100">
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Booked BY
+                Booked By
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
                 Start Date
@@ -45,10 +55,7 @@ const BoardroomReservations = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            <tr
-              onClick={() => showReservationDetailsPopup(1)}
-              className="bg-white cursor-pointer"
-            >
+            <tr className="bg-white cursor-pointer hover:bg-red-50">
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -76,10 +83,7 @@ const BoardroomReservations = () => {
                 </span>
               </td>
             </tr>
-            <tr
-              onClick={() => showReservationDetailsPopup(2)}
-              className="text-nowrap bg-gray-50 mt-10 cursor-pointer"
-            >
+            <tr className="text-nowrap bg-gray-50 mt-10 cursor-pointer hover:bg-red-50">
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -107,10 +111,7 @@ const BoardroomReservations = () => {
                 </span>
               </td>
             </tr>
-            <tr
-              onClick={() => showReservationDetailsPopup(3)}
-              className="text-nowrap bg-white cursor-pointer"
-            >
+            <tr className="text-nowrap bg-white cursor-pointer hover:bg-red-50">
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -141,14 +142,8 @@ const BoardroomReservations = () => {
           </tbody>
         </table>
       </div>
-      {isReservationDetailsPopupOpen ? (
-        <ReservationDetails
-          selectedItemId={selectedItemId}
-          hideReservationDetailsPopup={hideReservationDetailsPopup}
-        />
-      ) : null}
     </>
   );
 };
 
-export default BoardroomReservations;
+export default ReservationsTable;
