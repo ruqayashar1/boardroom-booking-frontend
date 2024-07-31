@@ -1,153 +1,160 @@
+import React from "react";
+import { Oval } from "react-loader-spinner";
 
-
-import React, { useState } from 'react';
-
-const AddBoardroomForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    location: '',
-    capacity: '',
-    amenities: '',
-    description: '',
-    image: null,
-    imagePreview: '',
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setFormData({
-        ...formData,
-        image: file,
-        imagePreview: reader.result,
-      });
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
+const AddBoardRoomForm = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="max-w-4xl w-full bg-white shadow-md rounded-lg">
-        <div className="bg-blue text-white text-center py-4 rounded-t-lg">
-          <h1 className="text-2xl font-semibold">Add Boardroom</h1>
-        </div>
-        <form onSubmit={handleSubmit} className="p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-           
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-700">Name</label>
+    <div id="add-boardroom" className="p-2 mb-52">
+      <div className="w-max my-0 mx-auto">
+        <form className="bg-gray-50 p-4 font-[Roboto] text-opacity-70 shadow flex gap-3 flex-col items-center sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex flex-col items-center sm:items-start gap-4">
+            <div className="">
+              <label className="block mb-1" htmlFor="name">
+                Name
+              </label>
+              <div className="flex flex-col">
                 <input
+                  className="w-60 border border-solid outline-none p-1 pl-4 text-sm mb-1 shadow"
                   type="text"
                   name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
                 />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Location</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Capacity</label>
-                <input
-                  type="number"
-                  name="capacity"
-                  value={formData.capacity}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Amenities</label>
-                <input
-                  type="text"
-                  name="amenities"
-                  value={formData.amenities}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                />
+                <span className="text-red-400 block tracking-wide text-sm italic">
+                  required field
+                </span>
               </div>
             </div>
-
-        
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-700">Image Preview</label>
-                {formData.imagePreview && (
-                  <img
-                    src={formData.imagePreview}
-                    alt="Preview"
-                    className="mt-1 w-full h-48 object-cover border border-gray-300 rounded-md"
-                  />
-                )}
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Upload Image</label>
+            <div className="">
+              <label className="block mb-1" htmlFor="centre">
+                Centre
+              </label>
+              <div className="flex flex-col">
                 <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  className="w-60 border border-solid outline-none p-1 pl-4 text-sm mb-1 shadow"
+                  type="text"
+                  name="centre"
+                  required
                 />
+                <span className="text-red-400 block tracking-wide text-sm italic">
+                  required field
+                </span>
               </div>
-
-              <div>
-                <label className="block text-gray-700">Brief Description</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                ></textarea>
+            </div>
+            <div className="">
+              <label className="block mb-1" htmlFor="department">
+                Department
+              </label>
+              <div className="flex flex-col">
+                <input
+                  className="w-60 border border-solid outline-none p-1 pl-4 text-sm mb-1 shadow"
+                  type="text"
+                  name="department"
+                  required
+                />
+                <span className="text-red-400 block tracking-wide text-sm italic">
+                  required field
+                </span>
+              </div>
+            </div>
+            <div className="">
+              <label className="block mb-1" htmlFor="email">
+                Email
+              </label>
+              <div className="flex flex-col">
+                <input
+                  className="w-60 border border-solid outline-none p-1 pl-4 text-sm mb-1 shadow"
+                  type="email"
+                  name="email"
+                />
+                <span className="text-red-400 block tracking-wide text-sm italic">
+                  required field
+                </span>
               </div>
             </div>
           </div>
+          <div className="mx-10 flex items-center flex-col gap-4">
+            <div className="">
+              <label className="block mb-1" htmlFor="capacity">
+                Capacity
+              </label>
+              <div className="flex flex-col">
+                <input
+                  className="w-60 border border-solid outline-none p-1 pl-4 text-sm mb-1 shadow"
+                  type="number"
+                  name="capacity"
+                />
+                <span className="text-red-400 block tracking-wide text-sm italic">
+                  required field
+                </span>
+              </div>
+            </div>
+            <div className="">
+              <label className="mb-1 mr-2" htmlFor="internet">
+                Contains Internet?
+              </label>
+              <input
+                className="shadow inline-block"
+                type="checkbox"
+                name="internet"
+              />
+            </div>
+            <div className="">
+              <label className="block mb-1" htmlFor="description">
+                Brief description
+              </label>
+              <div className="flex flex-col w-80">
+                <textarea
+                  className="border border-solid outline-none p-1 pl-4 text-sm mb-1 shadow"
+                  name="description"
+                  required
+                  rows="7"
+                />
+                <span className="text-red-400 block tracking-wide text-sm italic">
+                  required field
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col justify-center gap-4">
+            <div className="mt-5">
+              <label className="block mb-2" htmlFor="boardroom-mage">
+                Choose a boardroom profile picture:
+              </label>
+              <div className="flex flex-col">
+                <input
+                  type="file"
+                  id="boardroom-mage"
+                  name="boardroom-mage"
+                  accept="image/png, image/jpeg"
+                />
+                <span className="text-red-400 block tracking-wide text-sm italic">
+                  required field
+                </span>
+              </div>
+            </div>
+            <input
+              className="mt-10 bg-blue-300 w-48 p-2 font-bold text-white cursor-pointer shadow"
+              type="submit"
+              value="Create Boardroom"
+            />
+            <div className="flex items-end gap-2">
+              <Oval
+                visible={true}
+                height="32"
+                width="32"
+                color="#FF956C"
+                ariaLabel="oval-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+              <span className="text-xs italic text-[#DDC706] tracking-wider">
+                creating item...
+              </span>
+            </div>
+          </div>
         </form>
-      </div>
-
-      <div className="mt-8">
-        <button
-          type="submit"
-          className="text-center px-6 py-2 bg-blue text-white rounded-md hover:bg-blue-700"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
       </div>
     </div>
   );
 };
 
-export default AddBoardroomForm;
-
+export default AddBoardRoomForm;
