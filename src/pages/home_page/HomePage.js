@@ -6,52 +6,52 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <main id="main">
+      <main id="main" className="w-full">
         <section
           id="navigation-area"
-          className="flex justify-between flex-wrap gap-2 min-h-[6rem] bg-white bg-opacity-[5%] my-4 shadow p-4"
+          className="flex flex-wrap gap-2 min-h-[6rem] bg-white bg-opacity-5 my-4 shadow p-4 justify-evenly items-center"
         >
           <NavLink
             to="/home"
-            className="w-max h-10 bg-[#daf3f5] flex shadow justify-between items-center rounded-[5px] px-4 bg-opacity-40"
+            className="flex items-center gap-2 h-10 bg-[#daf3f5] shadow rounded px-4 bg-opacity-40 text-xs font-bold uppercase"
           >
-            <span className="material-symbols-outlined mr-2">meeting_room</span>
-            <h4 className="font-bold uppercase text-xs">Boardrooms</h4>
+            <span className="material-symbols-outlined">meeting_room</span>
+            <h4>Boardrooms</h4>
           </NavLink>
           <NavLink
             to="add-boardroom"
-            className="w-max h-10 bg-[#D9D9D9] flex shadow-md justify-between items-center rounded-[5px] px-4 bg-opacity-40"
+            className="flex items-center gap-2 h-10 bg-[#D9D9D9] shadow-md rounded px-4 bg-opacity-40 text-xs font-bold uppercase"
           >
-            <span className="material-symbols-outlined mr-2">add</span>
-            <h4 className="font-bold uppercase text-xs">Add Boardroom</h4>
+            <span className="material-symbols-outlined">add</span>
+            <h4>Add Boardroom</h4>
           </NavLink>
           <NavLink
             to="reservations"
-            className="w-max h-10 bg-[#D9D9D9] flex shadow-md justify-between items-center rounded-[5px] px-4 bg-opacity-40"
+            className="flex items-center gap-2 h-10 bg-[#D9D9D9] shadow-md rounded px-4 bg-opacity-40 text-xs font-bold uppercase"
           >
-            <span className="material-symbols-outlined mr-2">event_seat</span>
-            <h4 className="font-bold uppercase text-xs">Reservations</h4>
+            <span className="material-symbols-outlined">event_seat</span>
+            <h4>Reservations</h4>
           </NavLink>
           <NavLink
             to="live-meetings"
-            className="w-max h-10 bg-[#D9D9D9] flex shadow-md justify-between items-center rounded-[5px] px-4 bg-opacity-40"
+            className="flex items-center gap-2 h-10 bg-[#D9D9D9] shadow-md rounded px-4 bg-opacity-40 text-xs font-bold uppercase"
           >
-            <span className="material-symbols-outlined mr-2">groups</span>
-            <h4 className="font-bold uppercase text-xs">Live Meeting</h4>
+            <span className="material-symbols-outlined">groups</span>
+            <h4>Live Meeting</h4>
           </NavLink>
           <NavLink
             to="locked"
-            className="w-max h-10 bg-[#D9D9D9] flex shadow-md justify-between items-center rounded-[5px] px-4 bg-opacity-40"
+            className="flex items-center gap-2 h-10 bg-[#D9D9D9] shadow-md rounded px-4 bg-opacity-40 text-xs font-bold uppercase"
           >
-            <span className="material-symbols-outlined mr-2">lock</span>
-            <h4 className="font-bold uppercase text-xs">Locked</h4>
+            <span className="material-symbols-outlined">lock</span>
+            <h4>Locked</h4>
           </NavLink>
           <NavLink
             to="upcoming"
-            className="w-max h-10 bg-[#D9D9D9] flex shadow-md justify-between items-center rounded-[5px] px-4 bg-opacity-40"
+            className="flex items-center gap-2 h-10 bg-[#D9D9D9] shadow-md rounded px-4 bg-opacity-40 text-xs font-bold uppercase"
           >
-            <span className="material-symbols-outlined mr-2">upcoming</span>
-            <h4 className="font-bold uppercase text-xs">Upcoming Meetings</h4>
+            <span className="material-symbols-outlined">upcoming</span>
+            <h4>Upcoming Meetings</h4>
           </NavLink>
         </section>
         <Outlet />

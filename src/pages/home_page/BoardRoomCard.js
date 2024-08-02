@@ -9,7 +9,7 @@ const BoardRoomCard = ({
   anyLiveMeeting = false,
 }) => {
   return (
-    <NavLink className="boardroom-card cursor-pointer">
+    <NavLink to="/boardrooms/1" className="boardroom-card cursor-pointer">
       <img
         src={boardroomImage}
         alt="boardroom"

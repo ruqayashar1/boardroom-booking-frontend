@@ -1,9 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import ConfirmDeleteAlert from "../../ components/alerts/ConfirmDeleteAlert";
+import ConfirmReservationApprovalAlert from "../../ components/alerts/ConfirmReservationApprovalAlert";
+import ConfirmVenueChangeAlert from "../../ components/alerts/ConfirmVenueChangeAlert";
+import MeetingLink from "./MeetingLink";
 
 const ReservationDetails = ({
   selectedItemId,
   hideReservationDetailsPopup,
 }) => {
+  const [reservationVenue, setReservationVenue] = useState("CBRD Boardroom");
   const meetingDescriptionRef = useRef();
   const attendeesRef = useRef();
   const toggleMeetingDescription = (e) => {
@@ -15,18 +22,56 @@ const ReservationDetails = ({
     attendeesRef.current.classList.toggle("hidden");
     attendeesRef.current.classList.toggle("flex");
   };
+
+  const updateResevationVenueFromServer = (venue) => {
+    setReservationVenue(venue);
+    console.log("updating with " + venue);
+  };
+
+  const confirmDeletion = (e) => {
+    e.preventDefault();
+    confirmAlert({
+      customUI: ({ onClose }) => <ConfirmDeleteAlert onClose={onClose} />,
+    });
+  };
+
+  const confirmApproval = (e, isAcceptButton) => {
+    e.preventDefault();
+    return confirmAlert({
+      customUI: ({ onClose }) => (
+        <ConfirmReservationApprovalAlert
+          onClose={onClose}
+          isAcceptButton={isAcceptButton}
+        />
+      ),
+    });
+  };
+
+  const confirmVenueChange = (newVenue) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        const confirmAcceptedFunc = (accepted) => {
+          if (accepted) {
+            updateResevationVenueFromServer(newVenue);
+          }
+        };
+        return (
+          <ConfirmVenueChangeAlert
+            onClose={onClose}
+            confirmAcceptedFunc={confirmAcceptedFunc}
+          />
+        );
+      },
+    });
+  };
+
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    confirmVenueChange(e.target.value);
+  };
+
   return (
-    <section className="w-[60%] min-h-96 shadow bg-white z-10 absolute top-16 right-0">
-      <div className="w-full h-8 bg-[#06ABDD] text-white font-bold flex justify-between items-center px-2 font-[Roboto]">
-        <h4 className="font-bold m-1">INTERNAL AUDIT MEETING</h4>
-        <span
-          onClick={hideReservationDetailsPopup}
-          title="close"
-          className="material-symbols-outlined cursor-pointer hover:bg-slate-700 pr-0 opacity-80 transition-all duration-500 line-clamp-4"
-        >
-          close
-        </span>
-      </div>
+    <section className="w-[100%] h-max shadow mb-4 bg-white font-[Inter]">
       <div
         id="detail-area"
         className="w-[95%] grid grid-cols-12 auto-rows-auto gap-2 mx-auto p-2 opacity-80 hover:opacity-100"
@@ -55,11 +100,17 @@ const ReservationDetails = ({
         </div>
         <div
           id="meeting-type"
-          className="col-start-1 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
+          className="col-start-1 col-end-7 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
         >
           <h3 className="font-bold opacity-70 m-1">
             Meeting Type: <b className="text-[#024458] ml-2">hybrid</b>
           </h3>
+        </div>
+        <div
+          id="meeting-link"
+          className="col-start-7 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
+        >
+          <MeetingLink />
         </div>
         <div
           id="meeting-dates"
@@ -160,19 +211,23 @@ const ReservationDetails = ({
         </div>
         <div
           id="reschedue-approval-area"
-          className="col-start-1 col-end-13 flex p-2 py-10 justify-start items-center relative"
+          className="col-start-1 col-end-13 flex flex-col gap-2 p-2 py-10 justify-start items-center relative sm:flex-row"
         >
-          <div className="w-[50%] flex gap-6">
+          <div className="w-[50%] flex flex-col gap-4 mb-4 sm:flex-row">
             <div>
               <h3 className="font-bold opacity-70 m-1 absolute top-0">
                 Change venue
               </h3>
-              <form className="w-max h-max p-2 bg-[#D9D9D9]">
-                <select className="bg-[#D9D9D9]">
-                  <option>CVR Boardroom</option>
-                  <option>CBRD Boardroom</option>
+              <div className="w-max h-max p-2 bg-[#D9D9D9]">
+                <select
+                  onChange={handleInputChange}
+                  value={reservationVenue}
+                  className="bg-[#D9D9D9]"
+                >
+                  <option value="CVR Boardroom">CVR Boardroom</option>
+                  <option value="CBRD Boardroom">CBRD Boardroom</option>
                 </select>
-              </form>
+              </div>
             </div>
             <button className="flex justify-center items-center w-max h-max p-2 bg-[#D9D9D9]">
               <span className="material-symbols-outlined opacity-70 mr-2">
@@ -181,9 +236,28 @@ const ReservationDetails = ({
               <h3 className="opacity-70 inline-block">Reschedule</h3>
             </button>
           </div>
+          <div className="flex justify-end items-center w-[50%] font-bold text-white mb-4">
+            <button className="bg-blue-300 w-24 h-max p-2 mr-2">EDIT</button>
+            <button
+              onClick={confirmDeletion}
+              className="bg-[#D4342C] w-24 h-max p-2"
+            >
+              DELETE
+            </button>
+          </div>
           <div className="flex justify-end items-center w-[50%] font-bold text-white">
-            <button className="bg-[#52AC43] w-24 h-max p-2 mr-2">ACCEPT</button>
-            <button className="bg-[#D4342C] w-24 h-max p-2">REJECT</button>
+            <button
+              onClick={(e) => confirmApproval(e, true)}
+              className="bg-[#52AC43] w-24 h-max p-2 mr-2"
+            >
+              ACCEPT
+            </button>
+            <button
+              onClick={(e) => confirmApproval(e, false)}
+              className="bg-[#D4342C] w-24 h-max p-2"
+            >
+              DECLINE
+            </button>
           </div>
         </div>
       </div>

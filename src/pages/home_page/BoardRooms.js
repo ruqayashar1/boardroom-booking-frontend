@@ -7,13 +7,21 @@ const BoardRooms = () => {
   return (
     <section id="boardrooms" className="w-full relative">
       <BoardroomFilterPopup />
-      <div id="all-boardrooms" className="p-4 grid lg:grid-cols-3 gap-10">
+      <div
+        id="all-boardrooms"
+        className="p-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10"
+      >
         <BoardRoomCard
           key="1"
           boardroomImage={BoardroomImage}
           hasInternet={false}
         />
         <BoardRoomCard key="2" boardroomImage={BoardroomImage} locked={true} />
+        <BoardRoomCard
+          key="3"
+          boardroomImage={BoardroomImage}
+          anyLiveMeeting={true}
+        />
         <BoardRoomCard
           key="3"
           boardroomImage={BoardroomImage}

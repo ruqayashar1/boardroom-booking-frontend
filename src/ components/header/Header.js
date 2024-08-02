@@ -40,12 +40,12 @@ const Header = () => {
   return (
     <header
       id="header"
-      className="flex justify-between items-center h-[70px] p-2 shadow-sm sticky top-0 z-30 bg-white"
+      className="flex flex-col md:flex-row justify-between items-center h-auto md:h-[70px] p-4 md:p-2 shadow-sm sticky top-0 z-30 bg-white"
     >
       <Logo />
       <div
         id="right-area"
-        className="flex justify-between items-center md:w-[400px] gap-1"
+        className="flex flex-col md:flex-row justify-between items-center w-full md:w-[400px] gap-2 md:gap-4"
       >
         <Notification
           numberOfNotifications={numberOfNotifications}
@@ -53,7 +53,7 @@ const Header = () => {
         />
         <NavLink
           to="/home"
-          className="font-bold cursor-pointer text-[#06ABDD] p-1 rounded-sm transition duration-1000 ease-out hover:bg-[#f3f3f3]"
+          className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"
         >
           BOARDROOMS
         </NavLink>
@@ -61,10 +61,10 @@ const Header = () => {
           ref={userProfilePopupRef}
           onClick={toggleUserProfilePopup}
           id="user-profile"
-          className="flex font-[Inter] cursor-pointer opacity-70 hover:opacity-100"
+          className="flex items-center font-[Inter] cursor-pointer opacity-70 hover:opacity-100 gap-2"
         >
           <span className="material-symbols-outlined">person</span>
-          <h3 className="font-bold opacity-80">Rukia</h3>
+          <h3 className="font-bold opacity-80 text-sm md:text-base">Rukia</h3>
           <span className="material-symbols-outlined">arrow_drop_down</span>
         </div>
       </div>

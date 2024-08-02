@@ -1,7 +1,12 @@
 import React from "react";
 import { Bars } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
 const LiveMeetingsTable = () => {
+  const navigate = useNavigate();
+  const navigateToReservationDetailPage = (tag) => {
+    navigate(`/reservations/${tag}`);
+  };
   return (
     <>
       <div className="w-[100%] shadow p-2 font-[Roboto] overflow-auto md:overflow-hidden scroll-smooth">
@@ -29,11 +34,16 @@ const LiveMeetingsTable = () => {
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
                 Department
               </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left"></th>
+              <th className="p-3 text-sm font-semibold tracking-wide text-center">
+                Live
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            <tr className="bg-white cursor-pointer hover:bg-red-50">
+            <tr
+              onClick={() => navigateToReservationDetailPage(1)}
+              className="bg-white cursor-pointer hover:bg-red-50"
+            >
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -55,7 +65,7 @@ const LiveMeetingsTable = () => {
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 Graduate School
               </td>
-              <td className="text-[#06ABDD]">
+              <td className="text-[#06ABDD] flex justify-center">
                 <div className="">
                   <Bars
                     height="20"
@@ -92,7 +102,7 @@ const LiveMeetingsTable = () => {
                 Graduate School
               </td>
               <td className="text-[#DD0606]">
-                <div className="">
+                <div className="flex justify-center">
                   <Bars
                     height="20"
                     width="20"
@@ -129,7 +139,7 @@ const LiveMeetingsTable = () => {
               </td>
 
               <td className="text-[#DDC706]">
-                <div className="">
+                <div className="flex justify-center">
                   <Bars
                     height="20"
                     width="20"

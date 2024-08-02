@@ -3,13 +3,13 @@ import { NavLink } from "react-router-dom";
 
 const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
   return (
-    <div className="w-max h-max absolute top-[75px] right-0 bg-white z-10 shadow rounded">
-      <div className="flex justify-between items-center border-b-2 bg-[#06ABDD] px-2">
-        <div className="flex justify-between items-center gap-2 mr-5 my-1 font-[Nunito]">
-          <span className="w-7 h-7 rounded-full bg-gray-100 flex justify-center items-center text-sm p-2">
+    <div className="w-max max-w-[400px] h-auto absolute top-[75px] right-0 bg-white z-10 shadow rounded-md">
+      <div className="flex justify-between items-center border-b-2 bg-[#06ABDD] px-2 py-2">
+        <div className="flex items-center gap-2 mr-5 font-[Nunito]">
+          <span className="w-7 h-7 rounded-full bg-gray-100 flex justify-center items-center text-sm">
             JM
           </span>
-          <span className="text-sm text-opacity-4 uppercase tracking-wide">
+          <span className="text-sm text-white uppercase tracking-wide">
             John Maluki
           </span>
         </div>
@@ -25,7 +25,8 @@ const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
           <path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z" />
         </svg>
       </div>
-      <NavLink className="text-sm block w-[100%] border-b border-gray-400 border-solid p-1 pb-2 pl-4 transition duration-1000 ease-out font-[Inter] hover:bg-gray-100">
+
+      <NavLink className="text-sm block w-full border-b border-solid border-gray-400 p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100">
         <svg
           className="inline-block"
           xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +39,8 @@ const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
         </svg>
         <span className="ml-2">Your timezone</span>
       </NavLink>
-      <NavLink className="text-sm block w-[100%] border-b border-gray-400 border-solid p-1 pb-2 pl-4 transition duration-1000 ease-out font-[Inter] hover:bg-gray-100">
+
+      <NavLink className="text-sm block w-full border-b border-solid border-gray-400 p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100">
         <svg
           className="inline-block"
           xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +53,8 @@ const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
         </svg>
         <span className="ml-2">System admins</span>
       </NavLink>
-      <NavLink className="block w-[100%] text-sm p-1 pb-2 pl-4 transition duration-1000 ease-out font-[Inter] hover:bg-gray-100">
+
+      <NavLink className="block w-full text-sm p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100">
         <svg
           className="inline-block"
           xmlns="http://www.w3.org/2000/svg"

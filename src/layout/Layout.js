@@ -15,6 +15,7 @@ import BoardroomEquipment from "../pages/boardroom_detail_page/BoardroomEquipmen
 import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdminDetails";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useSelector } from "react-redux";
+import ReservationDetailPage from "../pages/reservation_detail_page/ReservationDetailPage";
 
 const Layout = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -52,6 +53,7 @@ const Layout = () => {
         <Route path="equipments" element={<BoardroomEquipment />} />
         <Route path="admin-info" element={<BoardroomAdminDetails />} />
       </Route>
+      <Route path="/reservations/:tag" element={<ReservationDetailPage />} />
     </Routes>
   );
 };

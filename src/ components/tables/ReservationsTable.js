@@ -1,6 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ReservationsTable = () => {
+  const navigate = useNavigate();
+  const navigateToReservationDetailPage = (tag) => {
+    navigate(`/reservations/${tag}`);
+  };
   return (
     <>
       <div className="w-full flex justify-end mb-5">
@@ -55,7 +60,10 @@ const ReservationsTable = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            <tr className="bg-white cursor-pointer hover:bg-red-50">
+            <tr
+              onClick={() => navigateToReservationDetailPage(1)}
+              className="bg-white cursor-pointer hover:bg-red-50"
+            >
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -83,7 +91,10 @@ const ReservationsTable = () => {
                 </span>
               </td>
             </tr>
-            <tr className="text-nowrap bg-gray-50 mt-10 cursor-pointer hover:bg-red-50">
+            <tr
+              onClick={() => navigateToReservationDetailPage(2)}
+              className="text-nowrap bg-gray-50 mt-10 cursor-pointer hover:bg-red-50"
+            >
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
@@ -111,7 +122,10 @@ const ReservationsTable = () => {
                 </span>
               </td>
             </tr>
-            <tr className="text-nowrap bg-white cursor-pointer hover:bg-red-50">
+            <tr
+              onClick={() => navigateToReservationDetailPage(3)}
+              className="text-nowrap bg-white cursor-pointer hover:bg-red-50"
+            >
               <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                 John Maluki
               </td>
