@@ -9,6 +9,7 @@ import AddEquipmentForm from "./AddEquipmentForm";
 import MakeReservationForm from "./MakeReservationForm";
 import LockRoomForm from "./LockRoomForm";
 import UnLockRoomForm from "./UnLockRoomForm";
+import PreviousPageButton from "../../ components/buttons/PreviousPageButton";
 
 const BoardRoomDetailPage = () => {
   const isRoomLocked = false;
@@ -63,23 +64,26 @@ const BoardRoomDetailPage = () => {
     <>
       <Header />
       <main id="main" className="relative">
-        <div className="w-[100%] h-max flex justify-between my-2 bg-[#f7f7f7] pr-4 items-center shadow-sm rounded-[0.4rem]">
-          <div className="w-[90%] h-[100%] bg-gradient-to-tr from-[#06ABDE] to-[#8fdef8] bg-opacity-50 mr-2 p-2 text-white font-[Inter]">
-            <h2 className="text-sm ml-4 font-bold">CBRD BOARDROOM</h2>
-            <span className="ml-4">
-              This boardroom is available for booking
-            </span>
-          </div>
-          <div className="mr-0">
-            <Bars
-              height="30"
-              width="100"
-              color="#00ff00"
-              ariaLabel="bars-loading"
-              wrapperStyle={{}}
-              wrapperClass="bg-white shadow-sm"
-              visible={true}
-            />
+        <div className="flex items-center gap-5">
+          <PreviousPageButton />
+          <div className="w-[100%] h-max flex justify-between my-2 ml-10 bg-[#f7f7f7] pr-4 items-center shadow-sm rounded-[0.4rem]">
+            <div className="w-[90%] h-[100%] bg-gradient-to-tr from-[#06ABDE] to-[#8fdef8] bg-opacity-50 mr-2 p-2 text-white font-[Inter]">
+              <h2 className="text-sm ml-4 font-bold">CBRD BOARDROOM</h2>
+              <span className="ml-4">
+                This boardroom is available for booking
+              </span>
+            </div>
+            <div className="mr-0">
+              <Bars
+                height="30"
+                width="100"
+                color="#00ff00"
+                ariaLabel="bars-loading"
+                wrapperStyle={{}}
+                wrapperClass="bg-white shadow-sm"
+                visible={true}
+              />
+            </div>
           </div>
         </div>
         <section

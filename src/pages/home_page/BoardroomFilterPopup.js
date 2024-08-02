@@ -15,32 +15,38 @@ const BoardroomFilterPopup = () => {
   };
   return (
     <>
-      <div id="filter-search" className="flex justify-between p-2 mb-4">
-        <div id="boardroom-search" className="flex shadow">
+      <div
+        id="filter-search"
+        className="flex flex-wrap justify-between p-2 mb-4 gap-4 lg:gap-0"
+      >
+        <div id="boardroom-search" className="flex shadow w-full lg:w-auto">
           <input
             type="search"
-            className="h-8 border border-solid p-2 outline-none"
+            className="h-10 w-full lg:w-auto border border-solid p-2 outline-none"
             placeholder="Search boardroom..."
           />
-          <span className="material-symbols-outlined w-12 h-8 bg-[#ff956c] flex justify-center items-center cursor-pointer pl-0">
+          <span className="material-symbols-outlined w-12 h-10 bg-[#ff956c] flex justify-center items-center cursor-pointer">
             search
           </span>
         </div>
-        <div id="filter-reset" className="flex justify-center items-center">
-          {isFilterApplied ? (
+        <div
+          id="filter-reset"
+          className="flex items-center justify-end gap-4 w-full lg:w-auto"
+        >
+          {isFilterApplied && (
             <div
               onClick={removeFilters}
               id="reset-filter"
-              className="w-8 h-8 shadow-lg rounded-full text-red-400 mr-2 flex items-center justify-center cursor-pointer"
+              className="w-10 h-10 shadow-lg rounded-full text-red-400 flex items-center justify-center cursor-pointer"
             >
-              <span title="reset filter" className="material-symbols-outlined ">
+              <span title="reset filter" className="material-symbols-outlined">
                 history
               </span>
             </div>
-          ) : null}
+          )}
           <div
             onClick={toggleFiltetPopup}
-            className="bg-[#C0F3FE] shadow-md flex items-center p-1 px-4 rounded-sm cursor-pointer"
+            className="bg-[#C0F3FE] shadow-md flex items-center p-2 px-4 rounded-sm cursor-pointer"
           >
             <span className="material-symbols-outlined mr-2">filter_list</span>
             <h4 className="font-semibold opacity-60">Filters</h4>
@@ -54,24 +60,24 @@ const BoardroomFilterPopup = () => {
       >
         <div
           id="boardroom-filter-header"
-          className="w-[100%] bg-[#06ABDD] flex justify-between p-1 text-white"
+          className="w-full bg-[#06ABDD] flex justify-between p-1 text-white"
         >
           <h4>Filters</h4>
           <span
             onClick={toggleFiltetPopup}
             title="close"
-            className="material-symbols-outlined cursor-pointer hover:bg-slate-700 pr-0 opacity-80 transition-all duration-500 line-clamp-4"
+            className="material-symbols-outlined cursor-pointer hover:bg-slate-700 opacity-80 transition-all duration-500"
           >
             close
           </span>
         </div>
         <div id="boardroom-filter-body" className="h-max py-2 font-[Nunito]">
-          <div className="p-1">
+          <div className="p-2">
             <span className="block text-sm mb-1">Capacity</span>
             <input
-              className="estimated-capacity w-[100%] p-1 border rounded shadow text-sm mb-1 outline-none hover:rounded-sm"
+              className="estimated-capacity w-full p-2 border rounded shadow text-sm outline-none"
               type="number"
-              name="estimted-capacity"
+              name="estimated-capacity"
               min={2}
             />
           </div>
