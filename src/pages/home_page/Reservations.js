@@ -1,5 +1,4 @@
 import React from "react";
-import BoardroomReservations from "../boardroom_detail_page/BoardroomReservations";
 import ReservationsTable from "../../ components/tables/ReservationsTable";
 
 const Reservations = () => {

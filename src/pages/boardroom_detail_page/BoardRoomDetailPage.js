@@ -90,7 +90,7 @@ const BoardRoomDetailPage = () => {
           id="boardroom-basic-info"
           className="flex justify-between mb-6"
         >
-          <div id="boardroom-image" className="w-[49%] h-[100%]">
+          <div id="boardroom-image" className="w-[49%] h-[100%] mt-1">
             <img
               src={boardroomImage}
               alt="boardroom"
@@ -164,7 +164,10 @@ const BoardRoomDetailPage = () => {
           <AddEquipmentForm toggleEquipmentForm={toggleEquipmentForm} />
         ) : null}
         {showReservationForm ? (
-          <MakeReservationForm toggleReservationForm={toggleReservationForm} />
+          <MakeReservationForm
+            toggleReservationForm={toggleReservationForm}
+            boardroom={"CBRD Boardroom"}
+          />
         ) : null}
         {showLockRoomForm ? (
           <LockRoomForm toggleLockRoomForm={toggleLockRoomForm} />
