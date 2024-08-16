@@ -10,8 +10,10 @@ import MakeReservationForm from "./MakeReservationForm";
 import LockRoomForm from "./LockRoomForm";
 import UnLockRoomForm from "./UnLockRoomForm";
 import PreviousPageButton from "../../ components/buttons/PreviousPageButton";
+import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
 
 const BoardRoomDetailPage = () => {
+  useTrackPreviousUrl();
   const isRoomLocked = false;
   const [showAdminForm, setShowAdminForm] = useState(false);
   const [showEquipmentForm, setShowEquipmentForm] = useState(false);

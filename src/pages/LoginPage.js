@@ -1,13 +1,70 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { Oval } from "react-loader-spinner";
 import login_image from "../assets/kemri-logo.png";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { authenticate } from "../context/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  authenticate,
+  authenticateUser,
+  updateUserInfoFromLocalToken,
+} from "../context/auth/authSlice";
+import {
+  decodeToken,
+  getUserInfoFromDecodedToken,
+  isTokenExpired,
+  retrieveToken,
+} from "../functions";
 
 const LoginPage = () => {
+  const isLoading = useSelector((state) => state.auth.isLoading);
+  const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const validationSchema = Yup.object({
+    username: Yup.string().required("Username is required!"),
+    password: Yup.string().required("Password is required!"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: (userData, { setSubmitting }) => {
+      setSubmitting(true);
+      autheticateUserFromServer(userData);
+      setSubmitting(false);
+    },
+  });
+
+  const autheticateUserFromServer = (userData) => {
+    dispatch(authenticateUser(userData)).then((action) => {
+      if (action.type === "auth/authenticate/fulfilled") {
+        navigate("/home"); // Navigate to the home page on successful login
+      }
+    });
+  };
+
+  const loginFromLocalStorage = () => {
+    const token = retrieveToken();
+    console.log(token);
+    const tokenExpired = isTokenExpired(token);
+
+    if (!tokenExpired) {
+      const userInfo = getUserInfoFromDecodedToken(token);
+      dispatch(authenticate(true));
+      dispatch(updateUserInfoFromLocalToken(userInfo));
+      const previousUrl = sessionStorage.getItem("previousUrl");
+      navigate(previousUrl);
+    }
+  };
+
+  useEffect(() => {
+    loginFromLocalStorage();
+  }, []);
   return (
     <>
       <header className="flex justify-center items-center h-[70px] p-2 shadow-sm">
@@ -17,20 +74,34 @@ const LoginPage = () => {
       </header>
       <section
         id="login-area"
-        className="flex flex-col justify-center items-center my-8"
+        className="w-96 mx-auto flex flex-col justify-center items-center my-8 px-4 md:px-0"
       >
         <div
-          id="top-loging-area"
+          id="top-login-area"
           className="flex flex-col justify-center items-center"
         >
-          <img src={login_image} alt="logo" className="w-40 h-40 mb-4" />
-          <h4 className="text-[#DD0606] text-[1.5rem] mb-9 font-bold font-[Poppins] italic drop-shadow-lg">
+          <img
+            src={login_image}
+            alt="logo"
+            className="w-32 h-32 mb-4 md:w-40 md:h-40"
+          />
+          <h4 className="text-[#DD0606] text-[1.25rem] md:text-[1.5rem] mb-6 font-bold font-[Poppins] italic drop-shadow-lg">
             In Search Of Better Health
           </h4>
         </div>
-        <form id="login-form" className="font-[Inter]" action="">
-          <div id="login-username" className="">
-            <div className="bg-[#D9D9D9] bg-opacity-[50%] flex justify-around p-1 items-center rounded-sm">
+        {error && (
+          <div className="w-full bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded relative m-4">
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">Bad credentials!!!</span>
+          </div>
+        )}
+        <form
+          id="login-form"
+          className="font-[Inter] w-full"
+          onSubmit={formik.handleSubmit}
+        >
+          <div id="login-username" className="mb-4">
+            <div className="bg-[#D9D9D9] bg-opacity-[50%] flex justify-around p-2 items-center rounded-sm">
               <span className="material-symbols-outlined opacity-50 mx-1 mr-2">
                 person
               </span>
@@ -38,57 +109,79 @@ const LoginPage = () => {
                 type="text"
                 name="username"
                 placeholder="Username"
-                className="outline-none p-1 bg-[#D9D9D9] bg-opacity-[10%]"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.username}
+                className={`outline-none p-1 bg-[#D9D9D9] bg-opacity-[10%] w-full ${
+                  formik.errors.username && formik.touched.username
+                    ? "border-red-500 border"
+                    : ""
+                }`}
               />
-              <span className="material-symbols-outlined text-green-500 mx-1">
-                check
-              </span>
+              {formik.touched.username && !formik.errors.username && (
+                <span className="material-symbols-outlined text-green-500 mx-1">
+                  check
+                </span>
+              )}
             </div>
-            <span id="error" className="font-thin text-sm text-red-600 mb-2">
-              username required!
-            </span>
+            {formik.touched.username && formik.errors.username && (
+              <span id="error" className="font-thin text-sm text-red-600 mb-2">
+                {formik.errors.username}
+              </span>
+            )}
           </div>
-          <div id="login-password" className="mt-2">
-            <div className="bg-[#D9D9D9] bg-opacity-[50%] mb-1 flex justify-around p-1 items-center rounded-sm">
+          <div id="login-password" className="mb-4">
+            <div className="bg-[#D9D9D9] bg-opacity-[50%] mb-1 flex justify-around p-2 items-center rounded-sm">
               <span className="material-symbols-outlined opacity-50 mx-1 mr-2">
                 lock
               </span>
               <input
                 type="password"
                 name="password"
-                placeholder="password"
-                className="outline-none p-1 bg-[#D9D9D9] bg-opacity-[10%]"
+                placeholder="Password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+                className={`outline-none p-1 bg-[#D9D9D9] bg-opacity-[10%] w-full ${
+                  formik.errors.password && formik.touched.password
+                    ? "border-red-500 border"
+                    : ""
+                }`}
               />
-              <span className="material-symbols-outlined text-green-500 mx-1">
-                check
-              </span>
+              {formik.touched.password && !formik.errors.password && (
+                <span className="material-symbols-outlined text-green-500 mx-1">
+                  check
+                </span>
+              )}
             </div>
-            <span id="error" className="font-thin text-sm text-red-600 mb-2">
-              password required!
-            </span>
+            {formik.touched.password && formik.errors.password && (
+              <span id="error" className="font-thin text-sm text-red-600 mb-2">
+                {formik.errors.password}
+              </span>
+            )}
           </div>
           <div
             id="login-submit"
             className="relative flex justify-center items-center mt-5"
           >
-            <input
-              onClick={() => {
-                dispatch(authenticate(true));
-                navigation("/home");
-              }}
+            <button
               type="submit"
-              value="Login"
-              className="bg-[#06ABDD] text-white font-bold p-2 mr-2 w-24 cursor-pointer rounded-sm"
-            />
-            <Oval
-              visible={true}
-              height="32"
-              width="32"
-              color="#FF956C"
-              ariaLabel="oval-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-            />
+              disabled={formik.isSubmitting}
+              className="bg-[#06ABDD] text-white font-bold mr-6 p-2 w-24 cursor-pointer rounded-sm disabled:opacity-50"
+            >
+              Login
+            </button>
+            {isLoading && (
+              <Oval
+                visible={true}
+                height="32"
+                width="32"
+                color="#FF956C"
+                ariaLabel="oval-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            )}
           </div>
         </form>
       </section>

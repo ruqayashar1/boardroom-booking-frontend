@@ -3,8 +3,10 @@ import Header from "../../ components/header/Header";
 import ReservationDetails from "./ReservationDetails";
 import PreviousPageButton from "../../ components/buttons/PreviousPageButton";
 import ReservationForm from "../../ components/forms/ReservationForm";
+import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
 
 const ReservationDetailPage = () => {
+  useTrackPreviousUrl();
   return (
     <>
       <Header />
