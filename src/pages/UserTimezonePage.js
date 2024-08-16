@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import PreviousPageButton from "../ components/buttons/PreviousPageButton";
 import Header from "../ components/header/Header";
+import useTrackPreviousUrl from "../hooks/useTrackPreviousUrl";
 
 const UserTimezonePage = () => {
+  useTrackPreviousUrl();
   const [searchQuery, setSearchQuery] = useState("");
   const [yourTimezone, setYourTimezone] = useState("Africa/Nairobi");
   const [filteredTimezones, setFilteredTimezones] = useState([]);

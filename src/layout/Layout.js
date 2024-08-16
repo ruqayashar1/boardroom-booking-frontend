@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import HomePage from "../pages/home_page/HomePage";
 import LoginPage from "../pages/LoginPage";
 import { Route, Routes } from "react-router-dom";
@@ -56,8 +56,22 @@ const Layout = () => {
         <Route path="admin-info" element={<BoardroomAdminDetails />} />
       </Route>
       <Route path="/reservations/:tag" element={<ReservationDetailPage />} />
-      <Route path="/system-adms" element={<SystemAdminsPage />} />
-      <Route path="/user-timezone" element={<UserTimezonePage />} />
+      <Route
+        path="/system-adms"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <SystemAdminsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user-timezone"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <UserTimezonePage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };
