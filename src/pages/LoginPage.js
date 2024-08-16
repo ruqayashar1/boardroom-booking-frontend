@@ -11,10 +11,9 @@ import {
   updateUserInfoFromLocalToken,
 } from "../context/auth/authSlice";
 import {
-  decodeToken,
   getUserInfoFromDecodedToken,
   isTokenExpired,
-  retrieveToken,
+  retrieveAccessToken,
 } from "../functions";
 
 const LoginPage = () => {
@@ -49,8 +48,7 @@ const LoginPage = () => {
   };
 
   const loginFromLocalStorage = () => {
-    const token = retrieveToken();
-    console.log(token);
+    const token = retrieveAccessToken();
     const tokenExpired = isTokenExpired(token);
 
     if (!tokenExpired) {

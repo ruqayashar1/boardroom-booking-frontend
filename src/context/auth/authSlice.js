@@ -23,9 +23,9 @@ const authenticateUser = createAsyncThunk(
       const response = await axios.post(CONSTANT_VALUES.AUTH_URL, userData, {
         headers: { "Content-Type": "application/json" },
       });
-      const accessToken = response.data.access_token;
-      storeToken(accessToken);
-      return accessToken;
+      const tokenInstance = response.data;
+      storeToken(tokenInstance);
+      return tokenInstance.accessToken;
     } catch (error) {
       return rejectWithValue(
         error.response && error.response.data.message

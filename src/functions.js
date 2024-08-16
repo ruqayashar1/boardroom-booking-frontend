@@ -2,27 +2,35 @@ import { jwtDecode } from "jwt-decode";
 
 const tokenKeyName = "authToken";
 
-export const storeToken = (token) => {
+const retrieveToken = () => {
   try {
-    localStorage.setItem(tokenKeyName, token);
+    const tokenInstanceString = localStorage.getItem(tokenKeyName);
+    const tokenInstance = JSON.parse(tokenInstanceString);
+    return tokenInstance;
+  } catch (error) {
+    console.error("Failed to retrieve tokenInstance:", error);
+    return null;
+  }
+};
+
+export const storeToken = (tokenInstance) => {
+  try {
+    localStorage.setItem(tokenKeyName, JSON.stringify(tokenInstance));
   } catch (error) {
     console.error("Failed to store token:", error);
   }
 };
 
-export const retrieveToken = () => {
-  try {
-    const token = localStorage.getItem(tokenKeyName);
-    if (token) {
-      return token;
-    } else {
-      console.warn("No token found.");
-      return null;
-    }
-  } catch (error) {
-    console.error("Failed to retrieve token:", error);
-    return null;
-  }
+export const retrieveAccessToken = () => {
+  const tokenInstance = retrieveToken();
+  const token = tokenInstance?.accessToken;
+  return token;
+};
+
+export const retrieveRefreshToken = () => {
+  const tokenInstance = retrieveToken();
+  const token = tokenInstance?.refreshToken;
+  return token;
 };
 
 export const deleteToken = () => {
