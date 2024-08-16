@@ -10,7 +10,6 @@ const Header = () => {
   const [userPopupOpen, setUserPopupOpen] = useState(false);
   const [numberOfNotifications, setNumberOfNotifications] = useState(4);
   const notificationPaneRef = useRef();
-  const userProfilePopupRef = useRef();
   const openNotificationPopUp = (e) => {
     e.preventDefault();
     notificationPaneRef.current.classList.toggle("hidden");
@@ -22,10 +21,6 @@ const Header = () => {
     if (!hidden) {
       notificationPaneRef.current.classList.add("hidden");
     }
-  });
-
-  useClickAway(userProfilePopupRef, () => {
-    setUserPopupOpen(false);
   });
 
   const toggleUserProfilePopup = (e) => {
@@ -58,7 +53,6 @@ const Header = () => {
           BOARDROOMS
         </NavLink>
         <div
-          ref={userProfilePopupRef}
           onClick={toggleUserProfilePopup}
           id="user-profile"
           className="flex items-center font-[Inter] cursor-pointer opacity-70 hover:opacity-100 gap-2"
@@ -69,7 +63,10 @@ const Header = () => {
         </div>
       </div>
       {userPopupOpen ? (
-        <UserProfilePopup closeUserProfilePopup={closeUserProfilePopup} />
+        <UserProfilePopup
+          closeUserProfilePopup={closeUserProfilePopup}
+          setUserPopupOpen={setUserPopupOpen}
+        />
       ) : null}
       <Notifications
         notificationPaneRef={notificationPaneRef}
