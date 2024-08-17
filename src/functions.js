@@ -1,4 +1,6 @@
+import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL, REFRESH_TOKEN_URL } from "./constants";
 
 const tokenKeyName = "authToken";
 
@@ -71,5 +73,20 @@ export const isTokenExpired = (token) => {
     return decoded.exp < currentTime;
   } catch (error) {
     return true;
+  }
+};
+
+// Function to refresh the token
+export const refreshTokenFromServer = async () => {
+  try {
+    const response = await axios.post(BASE_URL.concat(REFRESH_TOKEN_URL), {
+      refreshToken: retrieveRefreshToken(), // Pass refresh token
+    });
+    const { accessToken } = response.data;
+    storeToken(response.data); // Store the new token
+    return accessToken;
+  } catch (error) {
+    console.error("Token refresh failed:", error);
+    throw error;
   }
 };

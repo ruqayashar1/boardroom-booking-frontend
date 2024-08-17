@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import CONSTANT_VALUES from "../../constants";
 import { getUserInfoFromDecodedToken, storeToken } from "../../functions";
+import { AUTH_URL, BASE_URL } from "../../constants";
+import axios from "axios";
 
 const initialState = {
   isLoading: false,
@@ -20,7 +20,7 @@ const authenticateUser = createAsyncThunk(
   "auth/authenticate",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(CONSTANT_VALUES.AUTH_URL, userData, {
+      const response = await axios.post(BASE_URL.concat(AUTH_URL), userData, {
         headers: { "Content-Type": "application/json" },
       });
       const tokenInstance = response.data;

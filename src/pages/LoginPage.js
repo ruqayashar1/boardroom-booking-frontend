@@ -13,6 +13,7 @@ import {
 import {
   getUserInfoFromDecodedToken,
   isTokenExpired,
+  refreshTokenFromServer,
   retrieveAccessToken,
 } from "../functions";
 
@@ -47,16 +48,28 @@ const LoginPage = () => {
     });
   };
 
+  const makeUserAuthenticated = (token) => {
+    const userInfo = getUserInfoFromDecodedToken(token);
+    dispatch(authenticate(true));
+    dispatch(updateUserInfoFromLocalToken(userInfo));
+    const previousUrl = sessionStorage.getItem("previousUrl");
+    navigate(previousUrl);
+  };
+
   const loginFromLocalStorage = () => {
     const token = retrieveAccessToken();
     const tokenExpired = isTokenExpired(token);
 
     if (!tokenExpired) {
-      const userInfo = getUserInfoFromDecodedToken(token);
-      dispatch(authenticate(true));
-      dispatch(updateUserInfoFromLocalToken(userInfo));
-      const previousUrl = sessionStorage.getItem("previousUrl");
-      navigate(previousUrl);
+      makeUserAuthenticated(token);
+    } else {
+      if (token) {
+        refreshTokenFromServer()
+          .then((token) => {
+            makeUserAuthenticated(token);
+          })
+          .catch((error) => console.error(error));
+      }
     }
   };
 

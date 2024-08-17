@@ -1,45 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PreviousPageButton from "../ components/buttons/PreviousPageButton";
 import Header from "../ components/header/Header";
 import useTrackPreviousUrl from "../hooks/useTrackPreviousUrl";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTimezones } from "../context/timezone/timezoneSlice";
 
 const UserTimezonePage = () => {
   useTrackPreviousUrl();
   const [searchQuery, setSearchQuery] = useState("");
   const [yourTimezone, setYourTimezone] = useState("Africa/Nairobi");
   const [filteredTimezones, setFilteredTimezones] = useState([]);
-  const timezones = [
-    "Africa/Nairobi",
-    "America/New_York",
-    "Asia/Tokyo",
-    "Europe/London",
-    "Australia/Sydney",
-    "Europe/Paris",
-    "Asia/Dubai",
-    "America/Los_Angeles",
-    "Europe/Berlin",
-    "Asia/Shanghai",
-    "America/Chicago",
-    "America/Sao_Paulo",
-    "Asia/Kolkata",
-    "Africa/Cairo",
-    "America/Toronto",
-    "Europe/Moscow",
-    "Asia/Singapore",
-    "Pacific/Auckland",
-    "Europe/Zurich",
-    "Africa/Johannesburg",
-  ];
+  const timezones = useSelector((state) => state.timezone.timezones);
+  // const error = useSelector((state) => state.timezone.error);
+  const dispatch = useDispatch();
+
+  // console.log(error);
+  console.log(timezones);
+
   const changeUserTimezone = (timezone) => {
     setYourTimezone(timezone);
     setSearchQuery("");
   };
 
+  const fetchTimezonesFromServer = () => {
+    dispatch(fetchTimezones());
+  };
+
+  useEffect(() => {
+    fetchTimezonesFromServer();
+  }, []);
+
   const handleSearch = (e) => {
     e.preventDefault();
     const searchValue = e.target.value;
     const zones = timezones.filter((timezone) =>
-      timezone.toLowerCase().includes(searchValue.toLowerCase())
+      timezone?.timezone.toLowerCase().includes(searchValue.toLowerCase())
     );
     setSearchQuery(searchValue);
     setFilteredTimezones(zones);
@@ -48,7 +43,8 @@ const UserTimezonePage = () => {
   const filteredTimezonesByUserTimezone = timezones.filter((timezone) => {
     const filterTexts = yourTimezone.split("/");
     return (
-      timezone.includes(filterTexts[0]) || timezone.includes(filterTexts[1])
+      timezone.timezone.toLowerCase().includes(filterTexts[0].toLowerCase()) ||
+      timezone.timezone.toLowerCase().includes(filterTexts[1].toLowerCase())
     );
   });
 
@@ -82,28 +78,28 @@ const UserTimezonePage = () => {
         {searchQuery === ""
           ? filteredTimezonesByUserTimezone.map((timezone) => (
               <button
-                onClick={() => changeUserTimezone(timezone)}
-                key={timezone}
+                onClick={() => changeUserTimezone(timezone.timezone)}
+                key={timezone.timezone}
                 className={
-                  yourTimezone === timezone
+                  yourTimezone === timezone.timezone
                     ? "bg-red-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                     : "bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                 }
               >
-                {timezone}
+                {timezone.timezone}
               </button>
             ))
           : filteredTimezones.map((timezone) => (
               <button
-                onClick={() => changeUserTimezone(timezone)}
-                key={timezone}
+                onClick={() => changeUserTimezone(timezone.timezone)}
+                key={timezone.timezone}
                 className={
-                  yourTimezone === timezone
+                  yourTimezone === timezone.timezone
                     ? "bg-red-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                     : "bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                 }
               >
-                {timezone}
+                {timezone.timezone}
               </button>
             ))}
       </div>

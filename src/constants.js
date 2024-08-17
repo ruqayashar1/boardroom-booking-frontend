@@ -1,8 +1,4 @@
-const BASE_URL = "http://localhost:8080/";
-const AUTH_URL = BASE_URL.concat("auth/login");
-
-const CONSTANT_VALUES = {
-  AUTH_URL,
-};
-
-export default CONSTANT_VALUES;
+export const BASE_URL = "http://localhost:8080";
+export const AUTH_URL = "/auth/login";
+export const REFRESH_TOKEN_URL = "/auth/refresh-token";
+export const TIMEZONES_FETCH_URL = "/user-timezones";
