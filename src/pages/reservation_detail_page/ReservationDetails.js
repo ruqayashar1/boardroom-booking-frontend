@@ -5,12 +5,14 @@ import ConfirmDeleteAlert from "../../ components/alerts/ConfirmDeleteAlert";
 import ConfirmReservationApprovalAlert from "../../ components/alerts/ConfirmReservationApprovalAlert";
 import ConfirmVenueChangeAlert from "../../ components/alerts/ConfirmVenueChangeAlert";
 import MeetingLink from "./MeetingLink";
+import EditReservationForm from "./EditReservationForm";
 
 const ReservationDetails = ({
   selectedItemId,
   hideReservationDetailsPopup,
 }) => {
   const [reservationVenue, setReservationVenue] = useState("CBRD Boardroom");
+  const [reservationFormOpen, setReservationFormOpen] = useState(false);
   const meetingDescriptionRef = useRef();
   const attendeesRef = useRef();
   const toggleMeetingDescription = (e) => {
@@ -21,6 +23,11 @@ const ReservationDetails = ({
     e.preventDefault();
     attendeesRef.current.classList.toggle("hidden");
     attendeesRef.current.classList.toggle("flex");
+  };
+
+  const toggleResevationEditForm = (e) => {
+    e.preventDefault();
+    setReservationFormOpen((prev) => !prev);
   };
 
   const updateResevationVenueFromServer = (venue) => {
@@ -237,7 +244,12 @@ const ReservationDetails = ({
             </button>
           </div>
           <div className="flex justify-end items-center w-[50%] font-bold text-white mb-4">
-            <button className="bg-blue-300 w-24 h-max p-2 mr-2">EDIT</button>
+            <button
+              onClick={toggleResevationEditForm}
+              className="bg-blue-300 w-24 h-max p-2 mr-2"
+            >
+              EDIT
+            </button>
             <button
               onClick={confirmDeletion}
               className="bg-[#D4342C] w-24 h-max p-2"
@@ -261,6 +273,12 @@ const ReservationDetails = ({
           </div>
         </div>
       </div>
+      {reservationFormOpen ? (
+        <EditReservationForm
+          toggleForm={toggleResevationEditForm}
+          boardroom={"CBRD Boardroom"}
+        />
+      ) : null}
     </section>
   );
 };

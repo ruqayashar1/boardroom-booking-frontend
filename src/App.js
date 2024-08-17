@@ -3,7 +3,7 @@ import Layout from "./layout/Layout";
 
 const App = () => {
   return (
-    <div className="w-[85%] m-auto">
+    <div className="w-[90%] m-auto md:w-[85%] 2xl:w-[60%]">
       <Layout />
     </div>
   );

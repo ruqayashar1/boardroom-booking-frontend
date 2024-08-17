@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useRef } from "react";
 import { NavLink } from "react-router-dom";
+import { useClickAway } from "react-use";
+import { deleteToken } from "../../functions";
+import { useDispatch } from "react-redux";
+import { authenticate } from "../../context/auth/authSlice";
 
-const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
+const UserProfilePopup = ({ closeUserProfilePopup, setUserPopupOpen }) => {
+  const dispatch = useDispatch();
+  const userProfilePopupRef = useRef();
+  useClickAway(userProfilePopupRef, () => {
+    setUserPopupOpen(false);
+  });
+
+  const logoutUser = () => {
+    deleteToken();
+    dispatch(authenticate(false));
+  };
   return (
-    <div className="w-max max-w-[400px] h-auto absolute top-[75px] right-0 bg-white z-10 shadow rounded-md">
+    <div
+      ref={userProfilePopupRef}
+      className="w-max max-w-[400px] h-auto absolute top-[75px] right-0 bg-white z-10 shadow rounded-md"
+    >
       <div className="flex justify-between items-center border-b-2 bg-[#06ABDD] px-2 py-2">
         <div className="flex items-center gap-2 mr-5 font-[Nunito]">
           <span className="w-7 h-7 rounded-full bg-gray-100 flex justify-center items-center text-sm">
@@ -26,7 +43,10 @@ const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
         </svg>
       </div>
 
-      <NavLink className="text-sm block w-full border-b border-solid border-gray-400 p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100">
+      <NavLink
+        to="/user-timezone"
+        className="text-sm block w-full border-b border-solid border-gray-400 p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100"
+      >
         <svg
           className="inline-block"
           xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +60,10 @@ const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
         <span className="ml-2">Your timezone</span>
       </NavLink>
 
-      <NavLink className="text-sm block w-full border-b border-solid border-gray-400 p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100">
+      <NavLink
+        to="/system-adms"
+        className="text-sm block w-full border-b border-solid border-gray-400 p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100"
+      >
         <svg
           className="inline-block"
           xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +77,10 @@ const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
         <span className="ml-2">System admins</span>
       </NavLink>
 
-      <NavLink className="block w-full text-sm p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100">
+      <div
+        onClick={logoutUser}
+        className="cursor-pointer block w-full text-sm p-3 pb-2 pl-4 transition duration-300 ease-out font-[Inter] hover:bg-gray-100"
+      >
         <svg
           className="inline-block"
           xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +92,7 @@ const UserProfilePopup = ({ userProfilePopupRef, closeUserProfilePopup }) => {
           <path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h264v72H216v528h264v72H216Zm432-168-51-51 81-81H384v-72h294l-81-81 51-51 168 168-168 168Z" />
         </svg>
         <span className="ml-2">Sign out</span>
-      </NavLink>
+      </div>
     </div>
   );
 };

@@ -16,6 +16,8 @@ import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdmin
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useSelector } from "react-redux";
 import ReservationDetailPage from "../pages/reservation_detail_page/ReservationDetailPage";
+import SystemAdminsPage from "../pages/system_admins_page/SystemAdminsPage";
+import UserTimezonePage from "../pages/UserTimezonePage";
 
 const Layout = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -54,6 +56,22 @@ const Layout = () => {
         <Route path="admin-info" element={<BoardroomAdminDetails />} />
       </Route>
       <Route path="/reservations/:tag" element={<ReservationDetailPage />} />
+      <Route
+        path="/system-adms"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <SystemAdminsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user-timezone"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <UserTimezonePage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

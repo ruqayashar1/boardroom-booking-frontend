@@ -1,8 +1,10 @@
 import React from "react";
 import Header from "../../ components/header/Header";
 import { NavLink, Outlet } from "react-router-dom";
+import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
 
 const HomePage = () => {
+  useTrackPreviousUrl();
   return (
     <>
       <Header />
