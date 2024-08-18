@@ -1,18 +1,39 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  filterByCapacity,
+  filterBySearchedString,
+} from "../../context/boardroom/boardroomSlice";
 
-const BoardroomFilterPopup = () => {
-  const [isFilterApplied, setIsFilterApplied] = useState(true);
+const BoardroomFilterPopup = ({ isEnabled }) => {
+  const capacityInputRef = useRef();
+  const capacityFilter = useSelector(
+    (state) => state.boardroom.filter.capacityFilter
+  );
+  const dispatch = useDispatch();
   const filterPanePopupRef = useRef();
 
   const removeFilters = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    setIsFilterApplied(false);
+    capacityInputRef.current.value = "";
+    filterPanePopupRef.current.classList.add("hidden");
+    dispatch(filterByCapacity(null));
+  };
+
+  const handleCapacityFilterChange = (e) => {
+    dispatch(filterByCapacity(e.target.value));
   };
 
   const toggleFiltetPopup = () => {
     filterPanePopupRef.current.classList.toggle("hidden");
   };
+
+  const handleSearchInputChange = (e) => {
+    e.preventDefault();
+    dispatch(filterBySearchedString(e.target.value));
+  };
+
   return (
     <>
       <div
@@ -24,6 +45,8 @@ const BoardroomFilterPopup = () => {
             type="search"
             className="h-10 w-full lg:w-auto border border-solid p-2 outline-none"
             placeholder="Search boardroom..."
+            disabled={isEnabled ? true : false}
+            onChange={handleSearchInputChange}
           />
           <span className="material-symbols-outlined w-12 h-10 bg-[#ff956c] flex justify-center items-center cursor-pointer">
             search
@@ -33,7 +56,7 @@ const BoardroomFilterPopup = () => {
           id="filter-reset"
           className="flex items-center justify-end gap-4 w-full lg:w-auto"
         >
-          {isFilterApplied && (
+          {capacityFilter && (
             <div
               onClick={removeFilters}
               id="reset-filter"
@@ -45,7 +68,7 @@ const BoardroomFilterPopup = () => {
             </div>
           )}
           <div
-            onClick={toggleFiltetPopup}
+            onClick={!isEnabled ? toggleFiltetPopup : null}
             className="bg-[#C0F3FE] shadow-md flex items-center p-2 px-4 rounded-sm cursor-pointer"
           >
             <span className="material-symbols-outlined mr-2">filter_list</span>
@@ -75,10 +98,12 @@ const BoardroomFilterPopup = () => {
           <div className="p-2">
             <span className="block text-sm mb-1">Capacity</span>
             <input
+              ref={capacityInputRef}
               className="estimated-capacity w-full p-2 border rounded shadow text-sm outline-none"
               type="number"
               name="estimated-capacity"
               min={2}
+              onChange={handleCapacityFilterChange}
             />
           </div>
         </div>

@@ -90,3 +90,22 @@ export const refreshTokenFromServer = async () => {
     throw error;
   }
 };
+
+// Function to convert base64 string to image url
+/**
+ * Converts a Base64 encoded string to a URL.
+ * @param {string} base64String - The Base64 encoded string.
+ * @returns {string} - The decoded URL.
+ */
+export const base64ToUrl = (base64String) => {
+  try {
+    // Decode the Base64 string
+    const decodedString = atob(base64String);
+
+    // Return the decoded URL
+    return decodedString;
+  } catch (error) {
+    console.error("Failed to decode Base64 string:", error);
+    return null;
+  }
+};
