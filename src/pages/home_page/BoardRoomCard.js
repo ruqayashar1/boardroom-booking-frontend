@@ -2,16 +2,13 @@ import React from "react";
 import { Bars } from "react-loader-spinner";
 import { NavLink } from "react-router-dom";
 import { base64ToUrl } from "../../functions";
+import BoardroomImage from "./BoardroomImage";
 
 const BoardRoomCard = ({ boardroom }) => {
   const decodedUrl = base64ToUrl(boardroom?.picture);
   return (
     <NavLink to="/boardrooms/1" className="boardroom-card cursor-pointer">
-      <img
-        src={decodedUrl}
-        alt="boardroom"
-        className="h-32 sm:h-48 w-full object-cover"
-      />
+      <BoardroomImage base64String={boardroom.picture} />
       <div className="mx-2 my-6">
         <span className="block font-bold w-full text-sm">
           {boardroom?.name}
