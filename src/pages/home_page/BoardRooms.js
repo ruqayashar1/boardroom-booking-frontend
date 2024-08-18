@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
+import { motion } from "framer-motion";
 import BoardroomFilterPopup from "./BoardroomFilterPopup";
 import BoardRoomCard from "./BoardRoomCard";
 import { useDispatch, useSelector } from "react-redux";
 import LoaderIndicator from "../../ components/loaders/LoaderIndicator";
 import EmptyBoxMessager from "../../ components/EmptyBoxMessager";
 import { fetchBoardrooms } from "../../context/boardroom/boardroomSlice";
+
+const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1 } };
 
 const BoardRooms = () => {
   const boardrooms = useSelector((state) => state.boardroom.boardrooms);
@@ -45,14 +48,18 @@ const BoardRooms = () => {
         <LoaderIndicator />
       ) : (
         <>
-          <div
+          <motion.div
             id="all-boardrooms"
             className="p-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            transition={{ duration: 0.5 }}
           >
             {filteredBoardrooms.map((boardroom) => (
               <BoardRoomCard key={boardroom?.id} boardroom={boardroom} />
             ))}
-          </div>
+          </motion.div>
         </>
       )}
     </section>
