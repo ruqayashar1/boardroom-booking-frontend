@@ -14,6 +14,8 @@ const fetchBoardrooms = createAsyncThunk(
   async () => {
     try {
       const resp = await apiClient.get(BASE_URL.concat(BOARDROOM_URL));
+      console.log("called");
+
       return resp.data;
     } catch (error) {
       console.error(error);

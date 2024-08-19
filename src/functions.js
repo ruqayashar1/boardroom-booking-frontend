@@ -59,6 +59,7 @@ export const getUserInfoFromDecodedToken = (token) => {
     username: decodedToken?.sub,
     name: decodedToken?.fullName,
     role: decodedToken?.role,
+    email: decodedToken?.email,
   };
 };
 
@@ -101,11 +102,24 @@ export const base64ToUrl = (base64String) => {
   try {
     // Decode the Base64 string
     const decodedString = atob(base64String);
-
     // Return the decoded URL
     return decodedString;
   } catch (error) {
     console.error("Failed to decode Base64 string:", error);
     return null;
   }
+};
+
+export const getTwoLettersFromName = (name) => {
+  const parts = name.trim().split(" ");
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  if (parts.length > 1) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
+  return "";
 };

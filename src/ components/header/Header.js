@@ -5,8 +5,10 @@ import Notifications from "./Notifications";
 import { NavLink } from "react-router-dom";
 import { useClickAway } from "react-use";
 import UserProfilePopup from "./UserProfilePopup";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const authUser = useSelector((state) => state.auth.user);
   const [userPopupOpen, setUserPopupOpen] = useState(false);
   const [numberOfNotifications, setNumberOfNotifications] = useState(4);
   const notificationPaneRef = useRef();
@@ -58,7 +60,9 @@ const Header = () => {
           className="flex items-center font-[Inter] cursor-pointer opacity-70 hover:opacity-100 gap-2"
         >
           <span className="material-symbols-outlined">person</span>
-          <h3 className="font-bold opacity-80 text-sm md:text-base">Rukia</h3>
+          <h3 className="font-bold opacity-80 text-sm md:text-base">
+            {authUser?.username}
+          </h3>
           <span className="material-symbols-outlined">arrow_drop_down</span>
         </div>
       </div>
