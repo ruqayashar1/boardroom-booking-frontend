@@ -39,7 +39,7 @@ const HomePage = () => {
             className="flex items-center gap-2 h-10 bg-[#D9D9D9] shadow-md rounded px-4 bg-opacity-40 text-xs font-bold uppercase"
           >
             <span className="material-symbols-outlined">groups</span>
-            <h4>Live Meeting</h4>
+            <h4>Continuing Meetings</h4>
           </NavLink>
           <NavLink
             to="locked"

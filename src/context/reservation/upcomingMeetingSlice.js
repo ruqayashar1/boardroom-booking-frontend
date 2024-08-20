@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../utils/axiosClient";
-import { BASE_URL, UPCOMING_RESERVATIONS } from "../../constants";
+import { BASE_URL, UPCOMING_RESERVATIONS_URL } from "../../constants";
 
 const initialState = {
   isLoading: false,
@@ -12,7 +12,9 @@ const fetchUpcomingMeetings = createAsyncThunk(
   "upcomingMeeting/fetchUpcomingMeetings",
   async () => {
     try {
-      const resp = await apiClient.get(BASE_URL.concat(UPCOMING_RESERVATIONS));
+      const resp = await apiClient.get(
+        BASE_URL.concat(UPCOMING_RESERVATIONS_URL)
+      );
       return resp.data;
     } catch (error) {
       console.error(error);

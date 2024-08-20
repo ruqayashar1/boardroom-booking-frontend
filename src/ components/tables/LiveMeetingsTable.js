@@ -1,8 +1,8 @@
 import React from "react";
-import { Bars } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
+import LiveMeetingTableRow from "./LiveMeetingTableRow";
 
-const LiveMeetingsTable = () => {
+const LiveMeetingsTable = ({ liveMeetings }) => {
   const navigate = useNavigate();
   const navigateToReservationDetailPage = (tag) => {
     navigate(`/reservations/${tag}`);
@@ -29,129 +29,24 @@ const LiveMeetingsTable = () => {
                 End Time
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Centre
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Department
+                Boardroom
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-center">
-                Live
+                Continuing
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            <tr
-              onClick={() => navigateToReservationDetailPage(1)}
-              className="bg-white cursor-pointer hover:bg-red-50"
-            >
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                John Maluki
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                8 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                11 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                HQ Nairobi
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                Graduate School
-              </td>
-              <td className="text-[#06ABDD] flex justify-center">
-                <div className="">
-                  <Bars
-                    height="20"
-                    width="20"
-                    color="#4fa94d"
-                    ariaLabel="bars-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    visible={true}
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr className="text-nowrap bg-gray-50 mt-10 cursor-pointer hover:bg-red-50">
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                John Maluki
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                8 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                11 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                HQ Nairobi
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                Graduate School
-              </td>
-              <td className="text-[#DD0606]">
-                <div className="flex justify-center">
-                  <Bars
-                    height="20"
-                    width="20"
-                    color="#4fa94d"
-                    ariaLabel="bars-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    visible={true}
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr className="text-nowrap bg-white cursor-pointer hover:bg-red-50">
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                John Maluki
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                8 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                11 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                HQ Nairobi
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                Graduate School
-              </td>
-
-              <td className="text-[#DDC706]">
-                <div className="flex justify-center">
-                  <Bars
-                    height="20"
-                    width="20"
-                    color="#4fa94d"
-                    ariaLabel="bars-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    visible={true}
-                  />
-                </div>
-              </td>
-            </tr>
+            {liveMeetings.map((meeting, index) => (
+              <LiveMeetingTableRow
+                key={meeting.id}
+                index={index}
+                record={meeting}
+                navigateToReservationDetailPage={
+                  navigateToReservationDetailPage
+                }
+              />
+            ))}
           </tbody>
         </table>
       </div>
