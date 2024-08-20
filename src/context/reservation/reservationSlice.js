@@ -5,7 +5,6 @@ import { BASE_URL, RESERVATION_URL } from "../../constants";
 const initialState = {
   isLoading: false,
   reservations: [],
-  filter: { approved: false, pending: false, declined: false },
   error: null,
 };
 
@@ -25,18 +24,7 @@ const fetchReservations = createAsyncThunk(
 const reservationSlice = createSlice({
   name: "reservation",
   initialState: initialState,
-  reducers: {
-    filterByApproved: (state, action) => {
-      state.filter.approved = action.payload;
-    },
-    filterByPending: (state, action) => {
-      state.filter.pending = action.payload;
-    },
-
-    filterByDeclined: (state, action) => {
-      state.filter.declined = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchReservations.pending, (state) => {
       state.isLoading = true;
@@ -55,6 +43,4 @@ const reservationSlice = createSlice({
 });
 
 export default reservationSlice.reducer;
-export const { filterByApproved, filterByPending, filterByDeclined } =
-  reservationSlice.actions;
 export { fetchReservations };

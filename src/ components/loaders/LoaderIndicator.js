@@ -1,5 +1,5 @@
 import React from "react";
-import { Oval, Puff } from "react-loader-spinner";
+import { Puff } from "react-loader-spinner";
 
 const LoaderIndicator = () => {
   return (

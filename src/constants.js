@@ -4,3 +4,4 @@ export const REFRESH_TOKEN_URL = "/auth/refresh-token";
 export const TIMEZONES_FETCH_URL = "/user-timezones";
 export const BOARDROOM_URL = "/boardrooms";
 export const RESERVATION_URL = "/reservations";
+export const UPCOMING_RESERVATIONS = "/upcoming-reservations";
