@@ -1,6 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { BASE_URL, REFRESH_TOKEN_URL } from "./constants";
+import { format, parse } from "date-fns";
 
 const tokenKeyName = "authToken";
 
@@ -122,4 +123,17 @@ export const getTwoLettersFromName = (name) => {
   }
 
   return "";
+};
+
+export const formatDateToHumanReadableForm = (date) => {
+  const formattedDate = format(date, "MMMM do, yyyy");
+  return formattedDate;
+};
+
+export const formatTimeToHumanReadableForm = (date, time) => {
+  const timeWithoutMilliseconds = time.split(".")[0];
+  const dateTimeString = `${date} ${timeWithoutMilliseconds}`;
+  const parsedDate = parse(dateTimeString, "yyyy-MM-dd HH:mm:ss", new Date());
+  const time12Hour = format(parsedDate, "hh:mm a");
+  return time12Hour;
 };

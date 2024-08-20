@@ -17,16 +17,22 @@ const BoardroomImage = ({ base64String }) => {
 
   useEffect(() => {
     if (decodedUrl) {
-      controls.start({ opacity: 0.5, scale: 1.05 });
       const img = new Image();
       img.src = decodedUrl;
       img.onload = () => {
         setLoading(false);
-        controls.start({ opacity: 1, scale: 1 });
+        // controls.start({ opacity: 1, scale: 1 });
       };
       img.onerror = () => setLoading(false); // Handle errors by stopping the loader
     }
   }, [decodedUrl, controls]);
+
+  // Start animation after component mounts
+  useEffect(() => {
+    if (!loading) {
+      controls.start({ opacity: 0.5, scale: 1.05 });
+    }
+  }, [loading, controls]);
 
   return (
     <div className="relative w-full">

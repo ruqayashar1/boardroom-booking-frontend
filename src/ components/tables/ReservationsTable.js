@@ -1,7 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import ReservationTableRow from "./ReservationTableRow";
 
-const ReservationsTable = () => {
+const ReservationsTable = ({
+  reservations,
+  filters,
+  handleApprovalFilterFunc,
+}) => {
   const navigate = useNavigate();
   const navigateToReservationDetailPage = (tag) => {
     navigate(`/reservations/${tag}`);
@@ -10,21 +15,34 @@ const ReservationsTable = () => {
     <>
       <div className="w-full flex justify-end mb-5">
         <div className="flex items-center bg-gray-100 shadow p-2">
-          <span className="block border-r border-solid h-full p-1 bg-blue-200 shadow">
-            Filters
-          </span>
+          <span className="block h-full p-1 bg-blue-200 shadow">Filters</span>
           <div className="flex gap-2">
             <div>
               <span className="m-2 text-[#06ABDD]">Approved</span>
-              <input type="checkbox" checked />
+              <input
+                type="checkbox"
+                name="approved"
+                checked={filters.approved}
+                onChange={handleApprovalFilterFunc}
+              />
             </div>
             <div>
               <span className="m-2 text-[#DDC706]">Pending</span>
-              <input type="checkbox" checked />
+              <input
+                type="checkbox"
+                name="pending"
+                checked={filters.pending}
+                onChange={handleApprovalFilterFunc}
+              />
             </div>
             <div>
               <span className="m-2 text-[#DD0606]">Canceled</span>
-              <input type="checkbox" checked />
+              <input
+                type="checkbox"
+                name="declined"
+                checked={filters.declined}
+                onChange={handleApprovalFilterFunc}
+              />
             </div>
           </div>
         </div>
@@ -40,19 +58,16 @@ const ReservationsTable = () => {
                 Start Date
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                End Date
+                Start Time
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Start Time
+                End Date
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
                 End Time
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Centre
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Department
+                Boardroom
               </th>
               <th className="p-3 text-sm font-semibold tracking-wide text-left">
                 Approval Status
@@ -60,99 +75,16 @@ const ReservationsTable = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            <tr
-              onClick={() => navigateToReservationDetailPage(1)}
-              className="bg-white cursor-pointer hover:bg-red-50"
-            >
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                John Maluki
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                8 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                11 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                HQ Nairobi
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                Graduate School
-              </td>
-              <td className="text-[#06ABDD]">
-                <span className="block bg-[#06ABDD] bg-opacity-10 p-1 px-4 rounded font-bold w-[7rem] text-center">
-                  Approved
-                </span>
-              </td>
-            </tr>
-            <tr
-              onClick={() => navigateToReservationDetailPage(2)}
-              className="text-nowrap bg-gray-50 mt-10 cursor-pointer hover:bg-red-50"
-            >
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                John Maluki
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                8 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                11 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                HQ Nairobi
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                Graduate School
-              </td>
-              <td className="text-[#DD0606]">
-                <span className="block bg-[#DD0606] bg-opacity-10 p-1 px-4 rounded font-bold w-[7rem] text-center">
-                  Canceled
-                </span>
-              </td>
-            </tr>
-            <tr
-              onClick={() => navigateToReservationDetailPage(3)}
-              className="text-nowrap bg-white cursor-pointer hover:bg-red-50"
-            >
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                John Maluki
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                8 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                6/6/2024
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                11 am
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                HQ Nairobi
-              </td>
-              <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                Graduate School
-              </td>
-              <td className="text-[#DDC706]">
-                <span className="block bg-[#DDC706] bg-opacity-10 p-1 px-4 rounded font-bold w-[7rem] text-center">
-                  Pending
-                </span>
-              </td>
-            </tr>
+            {reservations.map((reservation, index) => (
+              <ReservationTableRow
+                key={reservation?.id}
+                index={index}
+                record={reservation}
+                navigateToReservationDetailPage={
+                  navigateToReservationDetailPage
+                }
+              />
+            ))}
           </tbody>
         </table>
       </div>

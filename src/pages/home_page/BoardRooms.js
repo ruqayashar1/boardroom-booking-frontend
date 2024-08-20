@@ -43,7 +43,7 @@ const BoardRooms = () => {
     <section id="boardrooms" className="w-full relative">
       <BoardroomFilterPopup isEnabled={boardrooms.length === 0 || isLoading} />
       {filteredBoardrooms.length === 0 && !isLoading ? (
-        <EmptyBoxMessager displayText={"No Boardrooms to display!!!"} />
+        <EmptyBoxMessager displayText={"No Boardrooms to display!"} />
       ) : isLoading ? (
         <LoaderIndicator />
       ) : (

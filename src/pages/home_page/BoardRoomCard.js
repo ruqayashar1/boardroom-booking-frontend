@@ -12,7 +12,10 @@ const itemVariants = {
 
 const BoardRoomCard = ({ boardroom }) => {
   return (
-    <NavLink to="/boardrooms/1" className="boardroom-card cursor-pointer">
+    <NavLink
+      to={`/boardrooms/${boardroom?.tag}`}
+      className="boardroom-card cursor-pointer"
+    >
       <motion.div
         variants={itemVariants}
         initial="hidden"
