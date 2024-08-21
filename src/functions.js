@@ -1,6 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { BASE_URL, REFRESH_TOKEN_URL } from "./constants";
+import { format, parse } from "date-fns";
 
 const tokenKeyName = "authToken";
 
@@ -59,6 +60,7 @@ export const getUserInfoFromDecodedToken = (token) => {
     username: decodedToken?.sub,
     name: decodedToken?.fullName,
     role: decodedToken?.role,
+    email: decodedToken?.email,
   };
 };
 
@@ -89,4 +91,49 @@ export const refreshTokenFromServer = async () => {
     console.error("Token refresh failed:", error);
     throw error;
   }
+};
+
+// Function to convert base64 string to image url
+/**
+ * Converts a Base64 encoded string to a URL.
+ * @param {string} base64String - The Base64 encoded string.
+ * @returns {string} - The decoded URL.
+ */
+export const base64ToUrl = (base64String) => {
+  try {
+    // Decode the Base64 string
+    const decodedString = atob(base64String);
+    // Return the decoded URL
+    return decodedString;
+  } catch (error) {
+    console.error("Failed to decode Base64 string:", error);
+    return null;
+  }
+};
+
+export const getTwoLettersFromName = (name) => {
+  const parts = name.trim().split(" ");
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  if (parts.length > 1) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
+  return "";
+};
+
+export const formatDateToHumanReadableForm = (date) => {
+  const formattedDate = format(date, "MMMM do, yyyy");
+  return formattedDate;
+};
+
+export const formatTimeToHumanReadableForm = (date, time) => {
+  const timeWithoutMilliseconds = time.split(".")[0];
+  const dateTimeString = `${date} ${timeWithoutMilliseconds}`;
+  const parsedDate = parse(dateTimeString, "yyyy-MM-dd HH:mm:ss", new Date());
+  const time12Hour = format(parsedDate, "hh:mm a");
+  return time12Hour;
 };

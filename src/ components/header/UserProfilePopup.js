@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useClickAway } from "react-use";
-import { deleteToken } from "../../functions";
-import { useDispatch } from "react-redux";
+import { deleteToken, getTwoLettersFromName } from "../../functions";
+import { useDispatch, useSelector } from "react-redux";
 import { authenticate } from "../../context/auth/authSlice";
 
 const UserProfilePopup = ({ closeUserProfilePopup, setUserPopupOpen }) => {
+  const authUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const userProfilePopupRef = useRef();
   useClickAway(userProfilePopupRef, () => {
@@ -24,10 +25,10 @@ const UserProfilePopup = ({ closeUserProfilePopup, setUserPopupOpen }) => {
       <div className="flex justify-between items-center border-b-2 bg-[#06ABDD] px-2 py-2">
         <div className="flex items-center gap-2 mr-5 font-[Nunito]">
           <span className="w-7 h-7 rounded-full bg-gray-100 flex justify-center items-center text-sm">
-            JM
+            {getTwoLettersFromName(authUser?.name)}
           </span>
           <span className="text-sm text-white uppercase tracking-wide">
-            John Maluki
+            {authUser.name}
           </span>
         </div>
         <svg

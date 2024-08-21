@@ -1,61 +1,92 @@
-import React from "react";
-import { Bars } from "react-loader-spinner";
+import React, { useCallback, useEffect } from "react";
+import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
+import BoardroomImage from "./BoardroomImage";
+import { useDispatch, useSelector } from "react-redux";
+import { ColorRing } from "react-loader-spinner";
+import { fetchLockedBoardroomMessageById } from "../../context/boardroom/lockedBoardroomMessageSlice";
 
-const BoardroomLockedCard = ({
-  boardroomImage,
-  locked = false,
-  hasInternet = true,
-  anyLiveMeeting = false,
-}) => {
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const BoardroomLockedCard = ({ boardroom }) => {
+  const dispatch = useDispatch();
+  const lockedMessage = useSelector(
+    (state) =>
+      state.lockedBoardroomMessage.lockedBoardroomMessage?.[boardroom?.id]
+  );
+  const isLoading = useSelector(
+    (state) => state.lockedBoardroomMessage.isLoading
+  );
+
+  const fetchBoardroomLockMessageFromServer = useCallback(
+    (id) => {
+      dispatch(fetchLockedBoardroomMessageById(id));
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    fetchBoardroomLockMessageFromServer(boardroom?.id);
+  }, [fetchBoardroomLockMessageFromServer, boardroom?.id]);
+
   return (
-    <NavLink className="boardroom-card cursor-pointer">
-      <img
-        src={boardroomImage}
-        alt="boardroom"
-        className="h-32 sm:h-48 w-full object-cover"
-      />
-      <div className="mx-2 my-6">
-        <span className="block font-bold w-full text-sm">CBRD Boardroom</span>
-        {locked ? (
-          <span className="block w-full text-sm bg-red-100 p-2 mt-2">
-            It is under renovation
+    <NavLink
+      to={`/boardrooms/${boardroom?.tag}`}
+      className="boardroom-card cursor-pointer"
+    >
+      <motion.div
+        variants={itemVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.5, delay: boardroom?.id * 0.1 }}
+      >
+        <BoardroomImage base64String={boardroom?.picture} />
+        <div className="mx-2 my-6">
+          <span className="block font-bold w-full text-sm">
+            {boardroom?.name}
           </span>
-        ) : null}
-        <div className=" w-[50%] flex mt-2 justify-between items-center">
-          <div className="flex mt-2">
-            {hasInternet ? (
-              <span className="material-symbols-outlined block text-green-500 text-sm mr-2">
-                wifi
-              </span>
-            ) : (
-              <span className="material-symbols-outlined block text-red-500 text-sm mr-2">
-                wifi
-              </span>
-            )}
-            <span className="block text-gray-500 text-sm">Wifi</span>
-          </div>
-          {anyLiveMeeting ? (
-            <Bars
-              height="30"
-              width="30"
-              color="#4fa94d"
-              ariaLabel="bars-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
+          {isLoading ? (
+            <ColorRing
               visible={true}
+              height="60"
+              width="60"
+              ariaLabel="color-ring-loading"
+              wrapperStyle={{}}
+              wrapperClass="color-ring-wrapper"
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
-          ) : null}
+          ) : (
+            <span className="block w-full text-sm bg-red-100 p-2 mt-2">
+              {lockedMessage}
+            </span>
+          )}
+          <div className=" w-[50%] flex mt-2 justify-between items-center">
+            <div className="flex mt-2">
+              {boardroom?.internetEnabled ? (
+                <span className="material-symbols-outlined block text-green-500 text-sm mr-2">
+                  wifi
+                </span>
+              ) : (
+                <span className="material-symbols-outlined block text-red-500 text-sm mr-2">
+                  wifi
+                </span>
+              )}
+              <span className="block text-gray-500 text-sm">Wifi</span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="capacity-badge">
-        <span> Capacity 25</span>
-      </div>
-      {locked ? (
-        <span className="boardroom-not-available">Locked</span>
-      ) : (
-        <span className="boardroom-available">Available</span>
-      )}
+        <div className="capacity-badge">
+          <span> {`Capacity ${boardroom?.capacity}`} </span>
+        </div>
+        {boardroom?.locked ? (
+          <span className="boardroom-not-available">Locked</span>
+        ) : (
+          <span className="boardroom-available">Available</span>
+        )}
+      </motion.div>
     </NavLink>
   );
 };

@@ -1,7 +1,11 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { BASE_URL } from "../constants";
-import { refreshTokenFromServer, retrieveAccessToken } from "../functions";
+import {
+  deleteToken,
+  refreshTokenFromServer,
+  retrieveAccessToken,
+} from "../functions";
 
 // Create an Axios instance
 const apiClient = axios.create({
@@ -29,7 +33,7 @@ axiosRetry(apiClient, {
       } catch (refreshError) {
         // If refreshing token fails, navigate to login page
         console.error("Refresh token error:", refreshError);
-        // navigate("/login");
+        deleteToken();
         window.location.href = "/";
         return false; // Don't retry the request
       }
