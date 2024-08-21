@@ -6,3 +6,7 @@ export const BOARDROOM_URL = "/boardrooms";
 export const RESERVATION_URL = "/reservations";
 export const UPCOMING_RESERVATIONS_URL = "/upcoming-reservations";
 export const LIVE_MEETINGS_URL = "/live-meetings";
+export const LOCKED_BOARDROOM_URL = "/locked-boardrooms";
+
+export const LOCKED_BOARDROOM_MESSAGE_URL = (boardroomId) =>
+  `/boardrooms/${boardroomId}/lock-message`;

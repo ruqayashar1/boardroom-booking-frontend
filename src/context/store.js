@@ -5,6 +5,8 @@ import boardroomSlice from "./boardroom/boardroomSlice";
 import reservationSlice from "./reservation/reservationSlice";
 import upcomingMeetingSlice from "./reservation/upcomingMeetingSlice";
 import liveMeetingSlice from "./reservation/liveMeetingSlice";
+import lockedBoardroomMessageSlice from "./boardroom/lockedBoardroomMessageSlice";
+import lockedBoardroomSLice from "./boardroom/lockedBoardroomSLice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ const store = configureStore({
     reservation: reservationSlice,
     upcomingMeeting: upcomingMeetingSlice,
     liveMeeting: liveMeetingSlice,
+    lockedBoardroomMessage: lockedBoardroomMessageSlice,
+    lockedBoardroom: lockedBoardroomSLice,
   },
 });
 
