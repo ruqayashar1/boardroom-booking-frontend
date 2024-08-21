@@ -40,7 +40,7 @@ const Layout = () => {
         <Route path="upcoming" element={<UpcomingMeeting />} />
       </Route>
       <Route
-        path="boardrooms/:id"
+        path="boardrooms/:boardroomTag"
         element={
           <ProtectedRoute isAuthenticated={isAuthenticated}>
             <BoardRoomDetailPage />
@@ -55,7 +55,10 @@ const Layout = () => {
         <Route path="equipments" element={<BoardroomEquipment />} />
         <Route path="admin-info" element={<BoardroomAdminDetails />} />
       </Route>
-      <Route path="/reservations/:tag" element={<ReservationDetailPage />} />
+      <Route
+        path="/reservations/:reservationTag"
+        element={<ReservationDetailPage />}
+      />
       <Route
         path="/system-adms"
         element={

@@ -22,7 +22,7 @@ const ReservationsTable = ({
               <input
                 type="checkbox"
                 name="approved"
-                checked={filters.approved}
+                checked={filters?.approved}
                 onChange={handleApprovalFilterFunc}
               />
             </div>
@@ -31,7 +31,7 @@ const ReservationsTable = ({
               <input
                 type="checkbox"
                 name="pending"
-                checked={filters.pending}
+                checked={filters?.pending}
                 onChange={handleApprovalFilterFunc}
               />
             </div>
@@ -40,7 +40,7 @@ const ReservationsTable = ({
               <input
                 type="checkbox"
                 name="declined"
-                checked={filters.declined}
+                checked={filters?.declined}
                 onChange={handleApprovalFilterFunc}
               />
             </div>

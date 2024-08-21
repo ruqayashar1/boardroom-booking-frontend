@@ -10,3 +10,5 @@ export const LOCKED_BOARDROOM_URL = "/locked-boardrooms";
 
 export const LOCKED_BOARDROOM_MESSAGE_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/lock-message`;
+export const BOARDROOM_RESESERVATIONS_URL = (boardroomId) =>
+  `/boardrooms/${boardroomId}/reservations`;

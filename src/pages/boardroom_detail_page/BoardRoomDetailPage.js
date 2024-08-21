@@ -3,7 +3,7 @@ import Header from "../../ components/header/Header";
 import { Bars } from "react-loader-spinner";
 import boardroomImage from "../../assets/boardroom-img.jpg";
 import BoardroomSettings from "./BoardroomSettings";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
 import AdminCreateForm from "./AdminCreateForm";
 import AddEquipmentForm from "./AddEquipmentForm";
 import MakeReservationForm from "./MakeReservationForm";
@@ -11,9 +11,19 @@ import LockRoomForm from "./LockRoomForm";
 import UnLockRoomForm from "./UnLockRoomForm";
 import PreviousPageButton from "../../ components/buttons/PreviousPageButton";
 import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
+import {
+  getCurrentSelectedBoardroomId,
+  storeCurrentSelectedBoardroomId,
+} from "../../functions";
 
 const BoardRoomDetailPage = () => {
   useTrackPreviousUrl();
+  const location = useLocation();
+  let { boardroomId } = location.state || {};
+  storeCurrentSelectedBoardroomId(boardroomId);
+  boardroomId = getCurrentSelectedBoardroomId();
+  console.log(boardroomId);
+
   const isRoomLocked = false;
   const [showAdminForm, setShowAdminForm] = useState(false);
   const [showEquipmentForm, setShowEquipmentForm] = useState(false);
@@ -62,6 +72,14 @@ const BoardRoomDetailPage = () => {
     toggleLockRoomForm: toggleLockRoomForm,
     toggleUnLockRoomForm: toggleUnLockRoomForm,
   };
+
+  // const findBoardroomByTag = () => {
+  //   const boardroom = boardrooms.find(
+  //     (boardroom) => boardroom.tag === boardroomTag
+  //   );
+  //   setBoardroom(boardroom);
+  // };
+
   return (
     <>
       <Header />
@@ -72,7 +90,9 @@ const BoardRoomDetailPage = () => {
             <div className="w-[90%] h-[100%] bg-gradient-to-tr from-[#06ABDE] to-[#8fdef8] bg-opacity-50 mr-2 p-2 text-white font-[Inter]">
               <h2 className="text-sm ml-4 font-bold">CBRD BOARDROOM</h2>
               <span className="ml-4">
-                This boardroom is available for booking
+                {{}?.locked
+                  ? "This boardroom is not available for booking"
+                  : "This boardroom is available for booking"}
               </span>
             </div>
             <div className="mr-0">
@@ -137,13 +157,7 @@ const BoardRoomDetailPage = () => {
                 </div>
               </div>
               <div className="bg-gray-50 p-2 font-[Roboto]">
-                <p>
-                  The boardroom, located on the 10th floor, is a
-                  state-of-the-art facility designed for high-level executive
-                  meetings, strategic planning sessions, and important
-                  presentations. Equipped with cutting-edge technology, the room
-                  features a large conference table that can comfortably seat up
-                </p>
+                <p>{{}?.description}</p>
               </div>
             </div>
             <div
@@ -187,12 +201,12 @@ const BoardRoomDetailPage = () => {
           >
             <h3 className="font-bold text-sm">Reservations</h3>
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to="archived-reservations"
             className="w-max h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] bg-[#d9d9d9] bg-opacity-50 flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer mr-4"
           >
             <h3 className="font-bold text-sm">Archived Reservations</h3>
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to="equipments"
             className="w-max h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] bg-[#d9d9d9] bg-opacity-50 flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer mr-4"

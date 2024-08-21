@@ -137,3 +137,13 @@ export const formatTimeToHumanReadableForm = (date, time) => {
   const time12Hour = format(parsedDate, "hh:mm a");
   return time12Hour;
 };
+
+export const storeCurrentSelectedBoardroomId = (boardroomId) => {
+  if (boardroomId) {
+    sessionStorage.setItem("currentSelectedBoardroom", boardroomId);
+  }
+};
+
+export const getCurrentSelectedBoardroomId = () => {
+  return sessionStorage.getItem("currentSelectedBoardroom");
+};
