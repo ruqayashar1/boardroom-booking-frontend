@@ -4,6 +4,8 @@ import Header from "../components/header/Header";
 import useTrackPreviousUrl from "../hooks/useTrackPreviousUrl";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTimezones } from "../context/timezone/timezoneSlice";
+import EmptyBoxMessager from "../components/EmptyBoxMessager";
+import LoaderIndicator from "../components/loaders/LoaderIndicator";
 
 const UserTimezonePage = () => {
   useTrackPreviousUrl();
@@ -11,11 +13,8 @@ const UserTimezonePage = () => {
   const [yourTimezone, setYourTimezone] = useState("Africa/Nairobi");
   const [filteredTimezones, setFilteredTimezones] = useState([]);
   const timezones = useSelector((state) => state.timezone.timezones);
-  // const error = useSelector((state) => state.timezone.error);
+  const isLoading = useSelector((state) => state.timezone.isLoading);
   const dispatch = useDispatch();
-
-  // console.log(error);
-  console.log(timezones);
 
   const changeUserTimezone = (timezone) => {
     setYourTimezone(timezone);
@@ -57,52 +56,60 @@ const UserTimezonePage = () => {
           <h4 className="font-bold m-1">USER TIMEZONE</h4>
         </div>
       </div>
-      <div className="text-center mb-5">
-        <div className="flex justify-center">
-          <span className="inline-block w-max mr-2">
-            Your current timezone:
-          </span>
-          <span className="font-bold">{yourTimezone}</span>
-        </div>
-      </div>
-      <div className="w-3/4 mx-auto flex justify-center">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearch}
-          placeholder="Do you wish to change timezone?"
-          className="w-full p-2 border-2 border-gray-300 rounded shadow focus:outline-none focus:border-blue-500"
-        />
-      </div>
-      <div className="shadow bg-gray-100 p-4 w-3/4 mx-auto flex flex-wrap gap-2">
-        {searchQuery === ""
-          ? filteredTimezonesByUserTimezone.map((timezone) => (
-              <button
-                onClick={() => changeUserTimezone(timezone.timezone)}
-                key={timezone.timezone}
-                className={
-                  yourTimezone === timezone.timezone
-                    ? "bg-red-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    : "bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                }
-              >
-                {timezone.timezone}
-              </button>
-            ))
-          : filteredTimezones.map((timezone) => (
-              <button
-                onClick={() => changeUserTimezone(timezone.timezone)}
-                key={timezone.timezone}
-                className={
-                  yourTimezone === timezone.timezone
-                    ? "bg-red-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    : "bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                }
-              >
-                {timezone.timezone}
-              </button>
-            ))}
-      </div>
+      {timezones?.length === 0 && !isLoading ? (
+        <EmptyBoxMessager displayText={"No zone IDs to display!"} />
+      ) : isLoading ? (
+        <LoaderIndicator />
+      ) : (
+        <>
+          <div className="text-center mb-5">
+            <div className="flex justify-center">
+              <span className="inline-block w-max mr-2">
+                Your current timezone:
+              </span>
+              <span className="font-bold">{yourTimezone}</span>
+            </div>
+          </div>
+          <div className="w-3/4 mx-auto flex justify-center">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearch}
+              placeholder="Do you wish to change timezone?"
+              className="w-full p-2 border-2 border-gray-300 rounded shadow focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div className="shadow bg-gray-100 p-4 w-3/4 mx-auto flex flex-wrap gap-2">
+            {searchQuery === ""
+              ? filteredTimezonesByUserTimezone.map((timezone) => (
+                  <button
+                    onClick={() => changeUserTimezone(timezone.timezone)}
+                    key={timezone.timezone}
+                    className={
+                      yourTimezone === timezone.timezone
+                        ? "bg-red-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        : "bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    }
+                  >
+                    {timezone.timezone}
+                  </button>
+                ))
+              : filteredTimezones.map((timezone) => (
+                  <button
+                    onClick={() => changeUserTimezone(timezone.timezone)}
+                    key={timezone.timezone}
+                    className={
+                      yourTimezone === timezone.timezone
+                        ? "bg-red-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        : "bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    }
+                  >
+                    {timezone.timezone}
+                  </button>
+                ))}
+          </div>
+        </>
+      )}
     </>
   );
 };
