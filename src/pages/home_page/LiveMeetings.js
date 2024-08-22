@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from "react";
-import LiveMeetingsTable from "../../ components/tables/LiveMeetingsTable";
+import LiveMeetingsTable from "../../components/tables/LiveMeetingsTable";
 import { useDispatch, useSelector } from "react-redux";
-import EmptyBoxMessager from "../../ components/EmptyBoxMessager";
-import LoaderIndicator from "../../ components/loaders/LoaderIndicator";
+import EmptyBoxMessager from "../../components/EmptyBoxMessager";
+import LoaderIndicator from "../../components/loaders/LoaderIndicator";
 import { fetchLiveMeetings } from "../../context/reservation/liveMeetingSlice";
 
 const LiveMeetings = () => {

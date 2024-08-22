@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import BoardroomFilterPopup from "./BoardroomFilterPopup";
 import BoardRoomCard from "./BoardRoomCard";
 import { useDispatch, useSelector } from "react-redux";
-import LoaderIndicator from "../../ components/loaders/LoaderIndicator";
-import EmptyBoxMessager from "../../ components/EmptyBoxMessager";
+import LoaderIndicator from "../../components/loaders/LoaderIndicator";
+import EmptyBoxMessager from "../../components/EmptyBoxMessager";
 import { fetchBoardrooms } from "../../context/boardroom/boardroomSlice";
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1 } };

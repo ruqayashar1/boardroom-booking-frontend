@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import ConfirmDeleteAlert from "../../ components/alerts/ConfirmDeleteAlert";
-import ConfirmReservationApprovalAlert from "../../ components/alerts/ConfirmReservationApprovalAlert";
-import ConfirmVenueChangeAlert from "../../ components/alerts/ConfirmVenueChangeAlert";
+import ConfirmDeleteAlert from "../../components/alerts/ConfirmDeleteAlert";
+import ConfirmReservationApprovalAlert from "../../components/alerts/ConfirmReservationApprovalAlert";
+import ConfirmVenueChangeAlert from "../../components/alerts/ConfirmVenueChangeAlert";
 import MeetingLink from "./MeetingLink";
 import EditReservationForm from "./EditReservationForm";
 

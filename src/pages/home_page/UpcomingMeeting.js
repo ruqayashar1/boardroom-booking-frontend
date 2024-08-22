@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import ReservationsTable from "../../ components/tables/ReservationsTable";
+import ReservationsTable from "../../components/tables/ReservationsTable";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUpcomingMeetings } from "../../context/reservation/upcomingMeetingSlice";
-import EmptyBoxMessager from "../../ components/EmptyBoxMessager";
-import LoaderIndicator from "../../ components/loaders/LoaderIndicator";
+import EmptyBoxMessager from "../../components/EmptyBoxMessager";
+import LoaderIndicator from "../../components/loaders/LoaderIndicator";
 
 const UpcomingMeeting = () => {
   const dispatch = useDispatch();

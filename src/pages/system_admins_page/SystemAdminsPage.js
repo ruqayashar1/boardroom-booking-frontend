@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "../../ components/header/Header";
-import PreviousPageButton from "../../ components/buttons/PreviousPageButton";
+import Header from "../../components/header/Header";
+import PreviousPageButton from "../../components/buttons/PreviousPageButton";
 import SystemAdministratorSearch from "./SystemAdministratorSearch";
 import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
 

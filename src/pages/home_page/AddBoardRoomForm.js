@@ -1,6 +1,6 @@
 import React from "react";
 import BoardroomForm from "./BoardroomForm";
-import PreviousPageButton from "../../ components/buttons/PreviousPageButton";
+import PreviousPageButton from "../../components/buttons/PreviousPageButton";
 
 const AddBoardRoomForm = () => {
   return (

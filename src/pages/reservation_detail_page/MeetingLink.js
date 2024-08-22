@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import CopyToClipboard from "../../ components/CopyToClipboard";
+import CopyToClipboard from "../../components/CopyToClipboard";
 
 const MeetingLink = ({ meetingLinkUrl = "https://johnmaluki.dev" }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);

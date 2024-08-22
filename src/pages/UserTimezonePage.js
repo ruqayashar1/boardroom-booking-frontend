@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import PreviousPageButton from "../ components/buttons/PreviousPageButton";
-import Header from "../ components/header/Header";
+import PreviousPageButton from "../components/buttons/PreviousPageButton";
+import Header from "../components/header/Header";
 import useTrackPreviousUrl from "../hooks/useTrackPreviousUrl";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTimezones } from "../context/timezone/timezoneSlice";

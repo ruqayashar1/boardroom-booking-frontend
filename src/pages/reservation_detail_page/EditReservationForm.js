@@ -1,5 +1,5 @@
 import React from "react";
-import ReservationForm from "../../ components/forms/ReservationForm";
+import ReservationForm from "../../components/forms/ReservationForm";
 
 const EditReservationForm = ({ toggleForm, boardroom }) => {
   return (

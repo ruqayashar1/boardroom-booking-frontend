@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../ components/header/Header";
+import Header from "../../components/header/Header";
 import { Bars } from "react-loader-spinner";
 import boardroomImage from "../../assets/boardroom-img.jpg";
 import BoardroomSettings from "./BoardroomSettings";
@@ -9,7 +9,7 @@ import AddEquipmentForm from "./AddEquipmentForm";
 import MakeReservationForm from "./MakeReservationForm";
 import LockRoomForm from "./LockRoomForm";
 import UnLockRoomForm from "./UnLockRoomForm";
-import PreviousPageButton from "../../ components/buttons/PreviousPageButton";
+import PreviousPageButton from "../../components/buttons/PreviousPageButton";
 import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
 import {
   changeFromCSVToList,
@@ -20,8 +20,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBoardroomById } from "../../context/boardroom/selectedBoardroomSlice";
 import BoardroomImage from "../home_page/BoardroomImage";
 import BoardroomDetailImage from "./BoardroomDetailImage";
-import LoaderIndicator from "../../ components/loaders/LoaderIndicator";
-import EmptyBoxMessager from "../../ components/EmptyBoxMessager";
+import LoaderIndicator from "../../components/loaders/LoaderIndicator";
+import EmptyBoxMessager from "../../components/EmptyBoxMessager";
 
 const BoardRoomDetailPage = () => {
   useTrackPreviousUrl();

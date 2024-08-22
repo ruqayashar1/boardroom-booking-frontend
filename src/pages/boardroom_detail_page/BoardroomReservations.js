@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import ReservationsTable from "../../ components/tables/ReservationsTable";
+import ReservationsTable from "../../components/tables/ReservationsTable";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoardroomReservations } from "../../context/reservation/boardroomReservationSlice";
 import { getCurrentSelectedBoardroomId } from "../../functions";
-import EmptyBoxMessager from "../../ components/EmptyBoxMessager";
-import LoaderIndicator from "../../ components/loaders/LoaderIndicator";
+import EmptyBoxMessager from "../../components/EmptyBoxMessager";
+import LoaderIndicator from "../../components/loaders/LoaderIndicator";
 
 const BoardroomReservations = () => {
   const boardroomId = getCurrentSelectedBoardroomId();
