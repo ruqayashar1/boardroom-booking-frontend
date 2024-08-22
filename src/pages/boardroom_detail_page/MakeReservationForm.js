@@ -5,7 +5,7 @@ const MakeReservationForm = ({ toggleReservationForm, boardroom }) => {
   return (
     <aside
       id="make-reservation-popup"
-      className="w-full shadow shadow-slate-500 absolute bg-white top-16 left-0 z-10"
+      className="w-full h-full absolute bg-white top-16 left-0 z-10"
     >
       <div className="w-full bg-gray-50 absolute top-0 my-4 bg-opacity-95">
         <div className="w-[75%] bg-white shadow mb-4 mx-auto font-[Nunito]">

@@ -147,3 +147,7 @@ export const storeCurrentSelectedBoardroomId = (boardroomId) => {
 export const getCurrentSelectedBoardroomId = () => {
   return sessionStorage.getItem("currentSelectedBoardroom");
 };
+
+export const changeFromCSVToList = (csvString) => {
+  return csvString?.split(",");
+};

@@ -2,14 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../utils/axiosClient";
 import { BASE_URL, BOARDROOM_URL } from "../../constants";
 
-const retrieveLockedBoardrooms = (boardrooms) => {
-  return boardrooms.filter((boardroom) => boardroom.locked === true);
-};
-
 const initialState = {
   isLoading: false,
   boardrooms: [],
-  lockedBoardrooms: [],
   filter: { capacityFilter: null, searchedString: "" },
   error: null,
 };
@@ -37,9 +32,6 @@ const boardroomSlice = createSlice({
     filterBySearchedString: (state, action) => {
       state.filter.searchedString = action.payload;
     },
-    getLockedBoardrooms: (state) => {
-      state.lockedBoardrooms = retrieveLockedBoardrooms(state.boardrooms);
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchBoardrooms.pending, (state) => {
@@ -53,13 +45,12 @@ const boardroomSlice = createSlice({
     builder.addCase(fetchBoardrooms.rejected, (state, action) => {
       state.isLoading = false;
       state.boardrooms = [];
-      state.lockedBoardrooms = [];
       state.error = action.payload;
     });
   },
 });
 
 export default boardroomSlice.reducer;
-export const { filterByCapacity, filterBySearchedString, getLockedBoardrooms } =
+export const { filterByCapacity, filterBySearchedString } =
   boardroomSlice.actions;
 export { fetchBoardrooms };

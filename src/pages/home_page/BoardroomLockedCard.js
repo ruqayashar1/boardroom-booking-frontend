@@ -36,6 +36,7 @@ const BoardroomLockedCard = ({ boardroom }) => {
     <NavLink
       to={`/boardrooms/${boardroom?.tag}`}
       className="boardroom-card cursor-pointer"
+      state={{ boardroomId: boardroom?.id }}
     >
       <motion.div
         variants={itemVariants}
