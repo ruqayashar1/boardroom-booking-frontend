@@ -151,3 +151,8 @@ export const getCurrentSelectedBoardroomId = () => {
 export const changeFromCSVToList = (csvString) => {
   return csvString?.split(",");
 };
+
+export const checkEmailValidity = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
