@@ -11,7 +11,7 @@ import UpcomingMeeting from "../pages/home_page/UpcomingMeeting";
 import BoardRoomDetailPage from "../pages/boardroom_detail_page/BoardRoomDetailPage";
 import BoardroomReservations from "../pages/boardroom_detail_page/BoardroomReservations";
 import BoardroomArchivedReservations from "../pages/boardroom_detail_page/BoardroomArchivedReservations";
-import BoardroomEquipment from "../pages/boardroom_detail_page/BoardroomEquipment";
+import BoardroomEquipments from "../pages/boardroom_detail_page/BoardroomEquipments";
 import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdminDetails";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useSelector } from "react-redux";
@@ -52,7 +52,7 @@ const Layout = () => {
           path="archived-reservations"
           element={<BoardroomArchivedReservations />}
         />
-        <Route path="equipments" element={<BoardroomEquipment />} />
+        <Route path="equipments" element={<BoardroomEquipments />} />
         <Route path="admin-info" element={<BoardroomAdminDetails />} />
       </Route>
       <Route

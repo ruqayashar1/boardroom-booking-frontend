@@ -135,7 +135,7 @@ const BoardRoomDetailPage = () => {
             id="boardroom-basic-info"
             className="flex justify-between mb-6 mt-0"
           >
-            <div id="boardroom-image" className="w-[49%] h-[50vh]">
+            <div id="boardroom-image" className="w-[49%] h-[100%]">
               <BoardroomDetailImage base64String={boardroom?.picture} />
             </div>
             <div

@@ -15,8 +15,6 @@ const fetchBoardroomById = createAsyncThunk(
       const resp = await apiClient.get(
         BASE_URL.concat(FETCH_BOARDROOM_BY_ID_URL(boardroomId))
       );
-      console.log(resp.data);
-
       return resp.data;
     } catch (error) {
       console.error(error);

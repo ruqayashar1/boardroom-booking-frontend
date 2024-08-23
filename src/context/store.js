@@ -11,6 +11,7 @@ import boardroomReservationSlice from "./reservation/boardroomReservationSlice";
 import selectedBoardroomSlice from "./boardroom/selectedBoardroomSlice";
 import currentAdminSlice from "./users/systemAdminsSLice";
 import kemriEmployeeSlice from "./users/kemriEmployeeSlice";
+import equipmentSlice from "./equipments/equipmentSlice";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     selectedBoardroom: selectedBoardroomSlice,
     currentAdmin: currentAdminSlice,
     kemriEmployee: kemriEmployeeSlice,
+    equipment: equipmentSlice,
   },
 });
 
