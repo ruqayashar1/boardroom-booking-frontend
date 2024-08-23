@@ -18,3 +18,5 @@ export const FETCH_BOARDROOM_BY_ID_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}`;
 export const FETCH_BOARDROOM_EQUIPMENTS_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/equipments`;
+export const FETCH_BOARDROOM_ADMINISTRATOR_URL = (boardroomId) =>
+  `/boardrooms/${boardroomId}/administrator`;

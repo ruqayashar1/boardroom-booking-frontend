@@ -248,7 +248,7 @@ const BoardRoomDetailPage = () => {
               to="admin-info"
               className="w-max h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] bg-[#d9d9d9] bg-opacity-50 flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer mr-4"
             >
-              <h3 className="font-bold text-sm">Admin Info</h3>
+              <h3 className="font-bold text-sm">Superviser</h3>
             </NavLink>
           </section>
           <Outlet />

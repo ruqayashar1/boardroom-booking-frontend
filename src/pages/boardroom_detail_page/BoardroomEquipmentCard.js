@@ -1,4 +1,5 @@
 import React from "react";
+import samsung_img from "../../assets/sumsung.jpeg";
 import { Link } from "react-router-dom";
 import EquipmentImage from "./EquipmentImage";
 
@@ -6,7 +7,7 @@ const BoardroomEquipmentCard = ({ equipment }) => {
   return (
     <div
       id="equipment-card"
-      className="bg-[#d9d9d9] bg-opacity-21 w-80 h-max rounded-lg shadow-lg overflow-hidden"
+      className="bg-[#d6d5d53d] bg-opacity-21 w-80 h-max rounded-lg shadow-lg overflow-hidden"
     >
       <div
         id="card-image"
