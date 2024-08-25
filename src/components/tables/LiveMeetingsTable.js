@@ -1,10 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LiveMeetingTableRow from "./LiveMeetingTableRow";
+import { storeCurrentSelectedReservationId } from "../../functions";
 
 const LiveMeetingsTable = ({ liveMeetings }) => {
   const navigate = useNavigate();
-  const navigateToReservationDetailPage = (tag) => {
+  const navigateToReservationDetailPage = (tag, reservationId) => {
+    storeCurrentSelectedReservationId(reservationId);
     navigate(`/reservations/${tag}`);
   };
   return (

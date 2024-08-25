@@ -6,12 +6,19 @@ import ConfirmReservationApprovalAlert from "../../components/alerts/ConfirmRese
 import ConfirmVenueChangeAlert from "../../components/alerts/ConfirmVenueChangeAlert";
 import MeetingLink from "./MeetingLink";
 import EditReservationForm from "./EditReservationForm";
+import {
+  changeFromCSVToList,
+  formatDateToHumanReadableForm,
+  formatTimeToHumanReadableForm,
+} from "../../functions";
+import { useSelector } from "react-redux";
+import { boardroomSelectionList } from "../../context/customSelectors";
 
-const ReservationDetails = ({
-  selectedItemId,
-  hideReservationDetailsPopup,
-}) => {
-  const [reservationVenue, setReservationVenue] = useState("CBRD Boardroom");
+const ReservationDetails = ({ reservation }) => {
+  const boardroomSelection = useSelector(boardroomSelectionList);
+  const [reservationVenue, setReservationVenue] = useState(
+    reservation?.boardroomId
+  );
   const [reservationFormOpen, setReservationFormOpen] = useState(false);
   const meetingDescriptionRef = useRef();
   const attendeesRef = useRef();
@@ -77,6 +84,14 @@ const ReservationDetails = ({
     confirmVenueChange(e.target.value);
   };
 
+  const approvalStatus = {
+    APPROVED: ["APPROVED", "text-[#06ABDD]"],
+    PENDING: ["PENDING", "text-[#DDC706]"],
+    DECLINED: ["DECLINED", "text-[#DD0606]"],
+  };
+
+  const attendees = changeFromCSVToList(reservation?.attendees);
+
   return (
     <section className="w-[100%] h-max shadow mb-4 bg-white font-[Inter]">
       <div
@@ -88,7 +103,8 @@ const ReservationDetails = ({
           className="col-start-1 col-end-7 row-start-1 row-end-2 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
         >
           <h3 className="font-bold opacity-70 m-1">
-            Booked by: <b className="text-[#024458] ml-2">Levi Mulama</b>
+            Booked by:{" "}
+            <b className="text-[#024458] ml-2">{reservation?.reservedBy}</b>
           </h3>
         </div>
         <div
@@ -96,44 +112,76 @@ const ReservationDetails = ({
           className="col-start-1 col-end-7 row-start-2 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
         >
           <h3 className="font-bold opacity-70 m-1">
-            Email: <b className="text-[#024458] ml-2">mulama@kemri.com</b>
+            Email:{" "}
+            <b className="text-[#024458] ml-2">{reservation?.ownerEmail}</b>
           </h3>
         </div>
         <div
           id="approval-status"
           className="col-start-7 col-end-13 row-start-1 row-end-3 bg-[#D9D9D9] bg-opacity-[21%] shadow flex justify-center items-center"
         >
-          <h3 className="uppercase font-bold text-[#DDC706]">pending</h3>
-        </div>
-        <div
-          id="meeting-type"
-          className="col-start-1 col-end-7 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
-        >
-          <h3 className="font-bold opacity-70 m-1">
-            Meeting Type: <b className="text-[#024458] ml-2">hybrid</b>
+          <h3
+            className={`uppercase font-bold ${
+              approvalStatus[reservation?.approvalStatus][1]
+            }`}
+          >
+            {approvalStatus[reservation?.approvalStatus][0]}
           </h3>
         </div>
         <div
-          id="meeting-link"
-          className="col-start-7 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
+          id="meeting-type"
+          className={`col-start-1 ${
+            reservation?.approvalStatus === "APPROVED"
+              ? "col-end-7"
+              : "col-end-13"
+          } row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2`}
         >
-          <MeetingLink />
+          <h3 className="font-bold opacity-70 m-1">
+            Meeting Type:
+            <b className="text-[#024458] ml-2">{reservation?.meetingType}</b>
+          </h3>
         </div>
+        {reservation?.approvalStatus === "APPROVED" && (
+          <div
+            id="meeting-link"
+            className="col-start-7 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
+          >
+            <MeetingLink meetingLinkUrl={reservation?.meetingLink} />
+          </div>
+        )}
         <div
           id="meeting-dates"
           className="col-start-1 col-end-13 bg-[#D9D9D9] bg-opacity-[21%] shadow flex p-2"
         >
           <h3 className="font-bold opacity-70 m-1">
-            Start Date: <b className="text-[#024458] ml-2">5/7/2024</b>
+            Start Date:{" "}
+            <b className="text-[#024458] ml-2">
+              {formatDateToHumanReadableForm(reservation?.startDate)}
+            </b>
           </h3>
           <h3 className="font-bold opacity-70 m-1">
-            Start Time: <b className="text-[#024458] ml-2">9am</b>
+            Start Time:{" "}
+            <b className="text-[#024458] ml-2">
+              {formatTimeToHumanReadableForm(
+                reservation?.startDate,
+                reservation?.startTime
+              )}
+            </b>
           </h3>
           <h3 className="font-bold opacity-70 m-1">
-            End Date: <b className="text-[#024458] ml-2">5/7/2024</b>
+            End Date:{" "}
+            <b className="text-[#024458] ml-2">
+              {formatDateToHumanReadableForm(reservation?.endDate)}
+            </b>
           </h3>
           <h3 className="font-bold opacity-70 m-1">
-            End Time: <b className="text-[#024458] ml-2">10am</b>
+            End Time:{" "}
+            <b className="text-[#024458] ml-2">
+              {formatTimeToHumanReadableForm(
+                reservation?.endDate,
+                reservation?.endTime
+              )}
+            </b>
           </h3>
         </div>
         <div
@@ -141,7 +189,7 @@ const ReservationDetails = ({
           className="col-start-1 col-end-13 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
         >
           <h3 className="inline-block font-bold opacity-70 mr-2">Title: </h3>{" "}
-          <span className="text-sm">INTERNAL AUDIT MEETING</span>
+          <span className="text-sm">{reservation?.meetingTitle}</span>
         </div>
         <div
           id="meeting-description"
@@ -162,18 +210,7 @@ const ReservationDetails = ({
             ref={meetingDescriptionRef}
             className="text-md  p-2 indent-10 bg-white hidden"
           >
-            Our upcoming meeting will focus on the employee promotion process.
-            Key topics include the criteria for eligibility, the evaluation
-            timeline, and the specific performance metrics used in assessments.
-            We'll also discuss the roles of managers and HR in the
-            decision-making process and outline the support and resources
-            available for employees aiming for promotion. Attendees will learn
-            about the different promotion tracks available within the company
-            and how these align with our long-term strategic goals. We will also
-            address common questions and concerns regarding the promotion
-            process, ensuring transparency and clarity. This session aims to
-            provide a comprehensive understanding of how promotions are managed
-            and to encourage a fair and motivating work environment.
+            {reservation?.meetingDescription}
           </p>
         </div>
         <div
@@ -190,30 +227,14 @@ const ReservationDetails = ({
           </div>
           <h3 className="inline-block font-bold m-1">Attendees: </h3>{" "}
           <div ref={attendeesRef} className="hidden justify-evenly flex-wrap">
-            <span className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono">
-              john@test.com
-            </span>
-            <span className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono">
-              john@test.com
-            </span>
-            <span className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono">
-              john@test.com
-            </span>
-            <span className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono">
-              john@test.com
-            </span>
-            <span className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono">
-              john@test.com
-            </span>
-            <span className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono">
-              john@test.com
-            </span>
-            <span className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono">
-              john@test.com
-            </span>
-            <span className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono">
-              john@test.com
-            </span>
+            {attendees.map((attendee) => (
+              <span
+                key={attendee}
+                className="bg-[#06ABDD] bg-opacity-[21%] p-1 px-3 m-1 rounded-[25px] inline-block font-mono"
+              >
+                {attendee}
+              </span>
+            ))}
           </div>
         </div>
         <div
@@ -225,15 +246,35 @@ const ReservationDetails = ({
               <h3 className="font-bold opacity-70 m-1 absolute top-0">
                 Change venue
               </h3>
-              <div className="w-max h-max p-2 bg-[#D9D9D9]">
+              <div className="shadow w-max h-max bg-[#D9D9D9] relative inline-block px-2">
                 <select
                   onChange={handleInputChange}
                   value={reservationVenue}
-                  className="bg-[#D9D9D9]"
+                  className="bg-[#D9D9D9] cursor-pointer p-2 outline-none block appearance-none w-full px-4 mr-2"
                 >
-                  <option value="CVR Boardroom">CVR Boardroom</option>
-                  <option value="CBRD Boardroom">CBRD Boardroom</option>
+                  {boardroomSelection.map((boardroom) => (
+                    <option
+                      className={`${boardroom.locked && "bg-red-200"}`}
+                      key={boardroom.id}
+                      value={boardroom.id}
+                      disabled={boardroom.locked}
+                    >
+                      {boardroom.name}
+                    </option>
+                  ))}
                 </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 ml-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#5f6368"
+                    className="fill-current h-6 w-6"
+                  >
+                    <path d="M480-360 280-560h400L480-360Z" />
+                  </svg>
+                </div>
               </div>
             </div>
             <button className="flex justify-center items-center w-max h-max p-2 bg-[#D9D9D9]">

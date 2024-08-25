@@ -11,7 +11,7 @@ const ReservationTableRow = ({
 }) => {
   return (
     <tr
-      onClick={() => navigateToReservationDetailPage(record?.tag)}
+      onClick={() => navigateToReservationDetailPage(record?.tag, record?.id)}
       className={
         (index + 1) % 2 === 0
           ? "text-nowrap bg-gray-50 mt-10 cursor-pointer hover:bg-red-50"

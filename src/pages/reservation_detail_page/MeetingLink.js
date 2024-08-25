@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CopyToClipboard from "../../components/CopyToClipboard";
 
-const MeetingLink = ({ meetingLinkUrl = "https://johnmaluki.dev" }) => {
+const MeetingLink = ({ meetingLinkUrl }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isEditButtonClicked, setIsEditButtonClicked] = useState(false);
 

@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import BoardroomFilterPopup from "./BoardroomFilterPopup";
 import BoardRoomCard from "./BoardRoomCard";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import LoaderIndicator from "../../components/loaders/LoaderIndicator";
 import EmptyBoxMessager from "../../components/EmptyBoxMessager";
-import { fetchBoardrooms } from "../../context/boardroom/boardroomSlice";
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1 } };
 
@@ -18,15 +17,6 @@ const BoardRooms = () => {
   const searchedString = useSelector(
     (state) => state.boardroom.filter.searchedString
   );
-  const dispatch = useDispatch();
-
-  const fetchBoardroomdFromServer = () => {
-    dispatch(fetchBoardrooms());
-  };
-
-  useEffect(() => {
-    fetchBoardroomdFromServer();
-  }, []);
 
   const filteredBoardrooms = boardrooms?.filter((boardroom) => {
     const matchesCapacity = capacityFilter

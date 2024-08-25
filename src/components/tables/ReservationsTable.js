@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import ReservationTableRow from "./ReservationTableRow";
+import { storeCurrentSelectedReservationId } from "../../functions";
 
 const ReservationsTable = ({
   reservations,
@@ -8,7 +9,8 @@ const ReservationsTable = ({
   handleApprovalFilterFunc,
 }) => {
   const navigate = useNavigate();
-  const navigateToReservationDetailPage = (tag) => {
+  const navigateToReservationDetailPage = (tag, reservationId) => {
+    storeCurrentSelectedReservationId(reservationId);
     navigate(`/reservations/${tag}`);
   };
   return (

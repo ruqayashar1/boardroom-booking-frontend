@@ -148,6 +148,16 @@ export const getCurrentSelectedBoardroomId = () => {
   return sessionStorage.getItem("currentSelectedBoardroom");
 };
 
+export const storeCurrentSelectedReservationId = (reservationId) => {
+  if (reservationId) {
+    sessionStorage.setItem("currentSelectedReservation", reservationId);
+  }
+};
+
+export const getCurrentSelectedReservationId = () => {
+  return sessionStorage.getItem("currentSelectedReservation");
+};
+
 export const changeFromCSVToList = (csvString) => {
   return csvString?.split(",");
 };
