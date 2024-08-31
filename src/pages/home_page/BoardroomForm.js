@@ -1,9 +1,23 @@
 import React, { useState } from "react";
+import _ from "lodash";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { convertImageToBase64 } from "../../functions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createBoardroom,
+  updateBoardroom,
+} from "../../context/boardroom/boardroomSlice";
+import { ColorRing } from "react-loader-spinner";
+import { createBoardroomImage } from "../../context/upload/uploadFileSlice";
 
-function BoardroomForm() {
-  const [imagePreview, setImagePreview] = useState(null);
+function BoardroomForm({ boardroom }) {
+  const dispatch = useDispatch();
+  const isUploading = useSelector((state) => state.fileImage.isUploading);
+  const imageUrl = useSelector(
+    (state) => state.fileImage.boardroomImage[boardroom?.id]
+  );
+  const [imagePreview, setImagePreview] = useState(imageUrl);
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
@@ -18,34 +32,71 @@ function BoardroomForm() {
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      name: "",
-      centre: "",
-      department: "",
-      email: "",
-      capacity: "",
-      internet: false,
-      description: "",
-      boardroomImage: null,
+      id: boardroom?.id || null,
+      name: boardroom?.name || "",
+      centre: boardroom?.centre || "",
+      department: boardroom?.department || "",
+      email: boardroom?.email || "",
+      capacity: boardroom?.capacity || "",
+      internetEnabled: boardroom?.internetEnabled || true,
+      description: boardroom?.description || "",
+      boardroomImage: boardroom?.picture || null,
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log("Form Submitted:", values);
+      createBoardroomOnServer(values);
       // Handle form submission
     },
   });
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    formik.setFieldValue("boardroomImage", file);
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("file", file);
+      try {
+        const base64String = await convertImageToBase64(file);
+        setImagePreview(base64String);
+        const imageFileName = await createBoardroomImageOnServer(formData);
+        formik.setFieldValue("boardroomImage", imageFileName);
+      } catch (error) {
+        console.error("Error converting file to Base64:", error);
+      }
     } else {
       setImagePreview(null);
+    }
+  };
+
+  const createBoardroomOnServer = (data) => {
+    const newBoardroom = {
+      ...data,
+      meetingTypeSupported: "Physical,Hybrid",
+      picture: data.boardroomImage,
+    };
+    delete newBoardroom.boardroomImage;
+    console.log(newBoardroom);
+    const boardroomId = newBoardroom?.id;
+    console.log(boardroomId);
+
+    setTimeout(() => {
+      formik.setSubmitting(false);
+      console.log(boardroomId);
+      if (newBoardroom?.id !== null) {
+        dispatch(updateBoardroom({ boardroomId, newBoardroom }));
+      } else {
+        dispatch(createBoardroom(newBoardroom));
+      }
+    }, 1000);
+  };
+
+  const createBoardroomImageOnServer = async (formData) => {
+    try {
+      const result = await dispatch(createBoardroomImage(formData)).unwrap();
+      return result; // You can return the value here
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -106,9 +157,9 @@ function BoardroomForm() {
               <input
                 className="shadow-sm rounded focus:outline-none focus:ring focus:ring-blue-200"
                 type="checkbox"
-                name="internet"
+                name="internetEnabled"
                 onChange={formik.handleChange}
-                checked={formik.values.internet}
+                checked={formik.values.internetEnabled}
               />
             </div>
 
@@ -153,27 +204,64 @@ function BoardroomForm() {
                   {formik.errors.boardroomImage}
                 </span>
               ) : null}
-              {imagePreview && (
-                <div className="mt-4">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-48 object-cover rounded-lg border border-gray-300"
+              {isUploading ? (
+                <div className="flex justify-center items-center bg-gray-200">
+                  <ColorRing
+                    visible={true}
+                    height="60"
+                    width="60"
+                    ariaLabel="color-ring-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="color-ring-wrapper"
+                    colors={[
+                      "#e15b64",
+                      "#f47e60",
+                      "#f8b26a",
+                      "#abbd81",
+                      "#849b87",
+                    ]}
                   />
                 </div>
+              ) : (
+                imagePreview && (
+                  <div className="mt-4">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-48 object-cover rounded-lg border border-gray-300"
+                    />
+                  </div>
+                )
               )}
             </div>
 
             <input
               className="bg-blue-500 w-full p-2 font-bold text-white cursor-pointer rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200 transition"
               type="submit"
-              value="Create Boardroom"
+              value={boardroom ? "Update Boardroom" : "Create Boardroom"}
+              disabled={isUploading}
             />
             {formik.isSubmitting && (
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 border-4 border-t-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
                 <span className="text-xs italic text-yellow-500 tracking-wider">
-                  Creating item...
+                  <div className="flex justify-center items-center bg-gray-200">
+                    <ColorRing
+                      visible={true}
+                      height="60"
+                      width="60"
+                      ariaLabel="color-ring-loading"
+                      wrapperStyle={{}}
+                      wrapperClass="color-ring-wrapper"
+                      colors={[
+                        "#e15b64",
+                        "#f47e60",
+                        "#f8b26a",
+                        "#abbd81",
+                        "#849b87",
+                      ]}
+                    />
+                  </div>
                 </span>
               </div>
             )}

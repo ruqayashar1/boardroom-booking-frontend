@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../utils/axiosClient";
-import { BASE_URL, FETCH_BOARDROOM_BY_ID_URL } from "../../constants";
+import { BASE_URL, BOARDROOM_BY_ID_URL } from "../../constants";
 
 const initialState = {
   isLoading: false,
@@ -13,7 +13,7 @@ const fetchBoardroomById = createAsyncThunk(
   async (boardroomId) => {
     try {
       const resp = await apiClient.get(
-        BASE_URL.concat(FETCH_BOARDROOM_BY_ID_URL(boardroomId))
+        BASE_URL.concat(BOARDROOM_BY_ID_URL(boardroomId))
       );
       return resp.data;
     } catch (error) {

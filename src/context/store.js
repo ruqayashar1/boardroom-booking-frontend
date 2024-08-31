@@ -14,6 +14,7 @@ import kemriEmployeeSlice from "./users/kemriEmployeeSlice";
 import equipmentSlice from "./equipments/equipmentSlice";
 import boardroomAdminSlice from "./boardroom/boardroomAdminSlice";
 import reservationDetailSlice from "./reservation/reservationDetailSlice";
+import fileImageSlice from "./upload/uploadFileSlice";
 
 const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ const store = configureStore({
     equipment: equipmentSlice,
     boardroomAdmin: boardroomAdminSlice,
     selectedReservation: reservationDetailSlice,
+    fileImage: fileImageSlice,
   },
 });
 

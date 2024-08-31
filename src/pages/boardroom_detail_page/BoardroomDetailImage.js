@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { base64ToUrl } from "../../functions";
+import React, { useCallback, useEffect } from "react";
 import { ColorRing } from "react-loader-spinner";
-import { motion, useAnimation } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBoardroomImage } from "../../context/upload/uploadFileSlice";
 
-const BoardroomDetailImage = ({ base64String }) => {
-  const [decodedUrl, setDecodedUrl] = useState("");
-  const [loading, setLoading] = useState(true);
-  const controls = useAnimation();
+const BoardroomDetailImage = ({ boardroom }) => {
+  const dispatch = useDispatch();
+  const imageUrl = useSelector(
+    (state) => state.fileImage.boardroomImage[boardroom?.id]
+  );
+  const isLoading = useSelector((state) => state.fileImage.isLoading);
+
+  const fetchBoardroomImageFromServer = useCallback(
+    (fileName, boardroomId) => {
+      dispatch(fetchBoardroomImage({ fileName, boardroomId }));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
-    if (base64String) {
-      const url = base64ToUrl(base64String);
-      setDecodedUrl(url);
+    if (!imageUrl) {
+      fetchBoardroomImageFromServer(boardroom?.picture, boardroom?.id);
     }
-  }, [base64String]);
-
-  useEffect(() => {
-    if (decodedUrl) {
-      const img = new Image();
-      img.src = decodedUrl;
-      img.onload = () => {
-        setLoading(false);
-        // controls.start({ opacity: 1, scale: 1 });
-      };
-      img.onerror = () => setLoading(false); // Handle errors by stopping the loader
-    }
-  }, [decodedUrl, controls]);
-
-  // Start animation after component mounts
-  useEffect(() => {
-    if (!loading) {
-      controls.start({ opacity: 0.5, scale: 1 });
-    }
-  }, [loading, controls]);
+  }, [fetchBoardroomImageFromServer, boardroom?.picture, boardroom?.id]);
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <div className="h-[50vh] flex justify-center items-center bg-gray-200">
           <ColorRing
             visible={true}
@@ -48,13 +37,10 @@ const BoardroomDetailImage = ({ base64String }) => {
           />
         </div>
       ) : (
-        <motion.img
-          src={decodedUrl}
+        <img
+          src={imageUrl}
           alt="boardroom"
           className="w-[100%] h-[100%] opacity-80 rounded-sm shadow-lg brightness-90"
-          initial={{ opacity: 0, scale: 1 }}
-          animate={controls}
-          transition={{ duration: 1 }}
         />
       )}
     </>

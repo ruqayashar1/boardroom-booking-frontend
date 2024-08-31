@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { Bars } from "react-loader-spinner";
 import { motion } from "framer-motion";
 
 import { NavLink } from "react-router-dom";
 import BoardroomImage from "./BoardroomImage";
+import { fetchBoardroomImage } from "../../context/upload/uploadFileSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -11,6 +13,22 @@ const itemVariants = {
 };
 
 const BoardRoomCard = ({ boardroom }) => {
+  const dispatch = useDispatch();
+  const imageUrl = useSelector(
+    (state) => state.fileImage.boardroomImage[boardroom?.id]
+  );
+  const isLoading = useSelector((state) => state.fileImage.isLoading);
+
+  const fetchBoardroomImageFromServer = useCallback(
+    (fileName, boardroomId) => {
+      dispatch(fetchBoardroomImage({ fileName, boardroomId }));
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    fetchBoardroomImageFromServer(boardroom?.picture, boardroom?.id);
+  }, [fetchBoardroomImageFromServer, boardroom?.picture, boardroom?.id]);
   return (
     <NavLink
       to={`/boardrooms/${boardroom?.tag}`}
@@ -23,8 +41,7 @@ const BoardRoomCard = ({ boardroom }) => {
         animate="visible"
         transition={{ duration: 0.5, delay: boardroom?.id * 0.1 }}
       >
-        {" "}
-        <BoardroomImage base64String={boardroom.picture} />
+        <BoardroomImage imageUrl={imageUrl} isLoading={isLoading} />
         <div className="mx-2 my-6">
           <span className="block font-bold w-full text-sm">
             {boardroom?.name}

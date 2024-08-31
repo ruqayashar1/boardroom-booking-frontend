@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import { Bars } from "react-loader-spinner";
 import BoardroomSettings from "./BoardroomSettings";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import AdminCreateForm from "./AdminCreateForm";
 import AddEquipmentForm from "./AddEquipmentForm";
 import MakeReservationForm from "./MakeReservationForm";
@@ -23,6 +23,7 @@ import EmptyBoxMessager from "../../components/EmptyBoxMessager";
 
 const BoardRoomDetailPage = () => {
   useTrackPreviousUrl();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   let { boardroomId } = location.state || {};
@@ -72,12 +73,17 @@ const BoardRoomDetailPage = () => {
     manageControls(setShowUnLockRoomForm);
   };
 
+  const navigateToUpdateForm = () => {
+    navigate("/home/add-boardroom", { state: boardroom });
+  };
+
   const toggleFuncs = {
     toggleAdminForm: toggleAdminForm,
     toggleEquipmentForm: toggleEquipmentForm,
     toggleReservationForm: toggleReservationForm,
     toggleLockRoomForm: toggleLockRoomForm,
     toggleUnLockRoomForm: toggleUnLockRoomForm,
+    navigateToUpdateForm: navigateToUpdateForm,
   };
 
   const fetchBoardroomByIdFromServer = () => {
@@ -136,7 +142,7 @@ const BoardRoomDetailPage = () => {
             className="flex justify-between mb-6 mt-0"
           >
             <div id="boardroom-image" className="w-[49%] h-[100%]">
-              <BoardroomDetailImage base64String={boardroom?.picture} />
+              <BoardroomDetailImage boardroom={boardroom} />
             </div>
             <div
               id="description-section"

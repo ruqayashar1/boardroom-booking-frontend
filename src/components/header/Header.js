@@ -44,15 +44,30 @@ const Header = () => {
         id="right-area"
         className="flex flex-col md:flex-row justify-between items-center w-full md:w-[400px] gap-2 md:gap-4"
       >
-        {/* <Notification
+        <Notification
           numberOfNotifications={numberOfNotifications}
           openNotificationPopUp={openNotificationPopUp}
-        /> */}
+        />
         <NavLink
           to="/home"
           className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"
         >
           BOARDROOMS
+        </NavLink>
+        <NavLink
+          to="/home/add-boardroom"
+          state={null}
+          className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#5f6368"
+          >
+            <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+          </svg>
         </NavLink>
         <div
           onClick={toggleUserProfilePopup}
