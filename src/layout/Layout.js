@@ -29,7 +29,7 @@ const Layout = () => {
   }, [dispatch]);
   useEffect(() => {
     fetchBoardroomsFromServer();
-  }, [fetchBoardroomsFromServer]);
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />

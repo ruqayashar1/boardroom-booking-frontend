@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   authenticate,
   authenticateUser,
-  updateUserInfoFromLocalToken,
+  fetchCurrentLoggedUserDetail,
 } from "../context/auth/authSlice";
 import {
   getUserInfoFromDecodedToken,
@@ -48,10 +48,14 @@ const LoginPage = () => {
     });
   };
 
+  const fetchUserDetailFromServer = (userId) => {
+    dispatch(fetchCurrentLoggedUserDetail(userId));
+  };
+
   const makeUserAuthenticated = (token) => {
     const userInfo = getUserInfoFromDecodedToken(token);
     dispatch(authenticate(true));
-    dispatch(updateUserInfoFromLocalToken(userInfo));
+    fetchUserDetailFromServer(userInfo?.id);
     const previousUrl = sessionStorage.getItem("previousUrl");
     navigate(previousUrl);
   };

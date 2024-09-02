@@ -44,10 +44,10 @@ const Header = () => {
         id="right-area"
         className="flex flex-col md:flex-row justify-between items-center w-full md:w-[400px] gap-2 md:gap-4"
       >
-        <Notification
+        {/* <Notification
           numberOfNotifications={numberOfNotifications}
           openNotificationPopUp={openNotificationPopUp}
-        />
+        /> */}
         <NavLink
           to="/home"
           className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"

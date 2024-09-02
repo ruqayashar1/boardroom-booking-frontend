@@ -10,6 +10,7 @@ import {
 } from "../../context/boardroom/boardroomSlice";
 import { ColorRing } from "react-loader-spinner";
 import { createBoardroomImage } from "../../context/upload/uploadFileSlice";
+import { toast } from "react-toastify";
 
 function BoardroomForm({ boardroom }) {
   const dispatch = useDispatch();
@@ -76,15 +77,21 @@ function BoardroomForm({ boardroom }) {
       picture: data.boardroomImage,
     };
     delete newBoardroom.boardroomImage;
-    console.log(newBoardroom);
     const boardroomId = newBoardroom?.id;
-    console.log(boardroomId);
 
     setTimeout(() => {
       formik.setSubmitting(false);
-      console.log(boardroomId);
       if (newBoardroom?.id !== null) {
-        dispatch(updateBoardroom({ boardroomId, newBoardroom }));
+        delete boardroom?.tag;
+        delete boardroom?.boardroomContacts;
+        delete boardroom?.hasOngoingMeeting;
+        delete boardroom?.locked;
+        const isEqual = _.isEqual(boardroom, newBoardroom);
+        if (isEqual) {
+          toast.info("No changes detected!");
+        } else {
+          dispatch(updateBoardroom({ boardroomId, newBoardroom }));
+        }
       } else {
         dispatch(createBoardroom(newBoardroom));
       }

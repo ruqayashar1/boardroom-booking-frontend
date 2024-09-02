@@ -24,3 +24,5 @@ export const FETCH_BOARDROOM_ADMINISTRATOR_URL = (boardroomId) =>
 export const FETCH_RESERVATION_BY_ID_URL = (reservationId) =>
   `/reservations/${reservationId}`;
 export const FETCH_FILE_BY_NAME_URL = (fileName) => `/files/${fileName}`;
+export const UPDATE_USER_TIMEZONE_URL = (userId) => `/users/${userId}`;
+export const FETCH_USER_BY_ID_URL = (userId) => `/users/${userId}`;

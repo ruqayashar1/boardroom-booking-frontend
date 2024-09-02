@@ -6,18 +6,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTimezones } from "../context/timezone/timezoneSlice";
 import EmptyBoxMessager from "../components/EmptyBoxMessager";
 import LoaderIndicator from "../components/loaders/LoaderIndicator";
+import { updateUserTimezone } from "../context/auth/authSlice";
 
 const UserTimezonePage = () => {
   useTrackPreviousUrl();
+  const yourTimezone = useSelector((state) => state.auth.user.timeZone);
+  const userId = useSelector((state) => state.auth.user.id);
   const [searchQuery, setSearchQuery] = useState("");
-  const [yourTimezone, setYourTimezone] = useState("Africa/Nairobi");
   const [filteredTimezones, setFilteredTimezones] = useState([]);
   const timezones = useSelector((state) => state.timezone.timezones);
   const isLoading = useSelector((state) => state.timezone.isLoading);
   const dispatch = useDispatch();
 
   const changeUserTimezone = (timezone) => {
-    setYourTimezone(timezone);
+    dispatch(updateUserTimezone({ userId, timezone }));
     setSearchQuery("");
   };
 
@@ -40,7 +42,7 @@ const UserTimezonePage = () => {
   };
 
   const filteredTimezonesByUserTimezone = timezones.filter((timezone) => {
-    const filterTexts = yourTimezone.split("/");
+    const filterTexts = yourTimezone?.split("/");
     return (
       timezone.timezone.toLowerCase().includes(filterTexts[0].toLowerCase()) ||
       timezone.timezone.toLowerCase().includes(filterTexts[1].toLowerCase())

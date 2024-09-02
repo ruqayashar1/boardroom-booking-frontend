@@ -58,9 +58,11 @@ export const getUserInfoFromDecodedToken = (token) => {
   const decodedToken = decodeToken(token);
   return {
     username: decodedToken?.sub,
-    name: decodedToken?.fullName,
+    fullName: decodedToken?.fullName,
     role: decodedToken?.role,
     email: decodedToken?.email,
+    timezone: decodedToken?.timezone,
+    id: decodedToken?.id,
   };
 };
 
@@ -113,6 +115,9 @@ export const base64ToUrl = (base64String) => {
 };
 
 export const getTwoLettersFromName = (name) => {
+  if (!name) {
+    return "";
+  }
   const parts = name.trim().split(" ");
 
   if (parts.length === 1) {

@@ -15,6 +15,7 @@ import equipmentSlice from "./equipments/equipmentSlice";
 import boardroomAdminSlice from "./boardroom/boardroomAdminSlice";
 import reservationDetailSlice from "./reservation/reservationDetailSlice";
 import fileImageSlice from "./upload/uploadFileSlice";
+import errorMiddleware from "./middleware";
 
 const store = configureStore({
   reducer: {
@@ -35,6 +36,8 @@ const store = configureStore({
     selectedReservation: reservationDetailSlice,
     fileImage: fileImageSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(errorMiddleware),
 });
 
 export default store;

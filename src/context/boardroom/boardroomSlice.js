@@ -42,19 +42,18 @@ const createBoardroom = createAsyncThunk(
 
 const updateBoardroom = createAsyncThunk(
   "boardrom/updateBoardroom",
-  async ({ boardroomId, newBoardroom }) => {
+  async ({ boardroomId, newBoardroom }, { rejectWithValue }) => {
     try {
-      console.log(boardroomId);
       const resp = await apiClient.patch(
         BASE_URL.concat(BOARDROOM_BY_ID_URL(boardroomId)),
         newBoardroom
       );
-
-      console.log(resp.data);
       return resp.data;
     } catch (error) {
       console.error(error);
-      return null;
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
     }
   }
 );
