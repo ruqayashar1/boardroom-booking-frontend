@@ -29,7 +29,7 @@ const store = configureStore({
     lockedBoardroom: lockedBoardroomSLice,
     boardroomReservation: boardroomReservationSlice,
     selectedBoardroom: selectedBoardroomSlice,
-    currentAdmin: currentAdminSlice,
+    systemAdmin: currentAdminSlice,
     kemriEmployee: kemriEmployeeSlice,
     equipment: equipmentSlice,
     boardroomAdmin: boardroomAdminSlice,

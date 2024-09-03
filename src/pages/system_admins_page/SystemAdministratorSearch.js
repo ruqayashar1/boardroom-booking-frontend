@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { checkEmailValidity } from "../../functions";
 import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 import {
-  addSystemAdmin,
+  createSystemAdmin,
   fetchCurrentAdmins,
   removeSystemAdmin,
 } from "../../context/users/systemAdminsSLice";
@@ -12,18 +13,18 @@ const SystemAdministratorSearch = ({ kemriEmployees }) => {
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const [filteredAdmins, setFilteredAdmins] = useState([]);
-  // const [selectedAdmins, setSelectedAdmins] = useState([]);
   const selectedAdmins = useSelector(
-    (state) => state.currentAdmin.currentAdmins
+    (state) => state.systemAdmin.currentAdmins
   );
-  const isLoading = useSelector((state) => state.currentAdmin.isLoading);
+
+  const isLoading = useSelector((state) => state.systemAdmin.isLoading);
 
   const handleSearch = (e) => {
     const searchValue = e.target.value;
     setQuery(searchValue);
 
     if (searchValue.length > 0) {
-      const filtered = kemriEmployees.filter((admin) =>
+      const filtered = _.uniqBy(kemriEmployees, "email").filter((admin) =>
         admin.email.toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredAdmins(filtered);
@@ -33,13 +34,13 @@ const SystemAdministratorSearch = ({ kemriEmployees }) => {
   };
 
   const handleSelectAdmin = (val) => {
-    dispatch(addSystemAdmin(val));
+    dispatch(createSystemAdmin(val));
     setQuery("");
     setFilteredAdmins([]);
   };
 
   const handleRemoveAdmin = (val) => {
-    dispatch(removeSystemAdmin(val));
+    dispatch(removeSystemAdmin(val?.id));
   };
 
   const fetchSystemsAdminsFromServer = useCallback(() => {
@@ -104,28 +105,34 @@ const SystemAdministratorSearch = ({ kemriEmployees }) => {
       ) : (
         <div className="flex flex-wrap justify-center sm:justify-start my-5 space-x-2">
           {selectedAdmins.map((admin) => (
-            <button
-              type="button"
-              key={admin.email}
-              onClick={() => handleRemoveAdmin(admin)}
-              className="flex items-center space-x-2 bg-[#06ABDD] text-white px-3 py-1 rounded-full shadow hover:bg-blue-400 transition mt-2 sm:mt-0"
-            >
-              <span>{admin.email}</span>
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
+            <div class="relative group">
+              <button
+                type="button"
+                key={admin.email}
+                onDoubleClick={() => handleRemoveAdmin(admin)}
+                className="flex items-center space-x-2 bg-[#06ABDD] text-white px-3 py-1 rounded-full shadow hover:bg-blue-400 transition mt-2 sm:mt-0"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+                <span>{admin.email}</span>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+
+              <div class="absolute bottom-full mb-2 hidden group-hover:block w-max bg-red-800 text-white text-sm rounded py-1 px-3">
+                Double click removes the item!
+              </div>
+            </div>
           ))}
         </div>
       )}

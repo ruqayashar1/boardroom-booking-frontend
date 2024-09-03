@@ -8,6 +8,7 @@ export const UPCOMING_RESERVATIONS_URL = "/upcoming-reservations";
 export const LIVE_MEETINGS_URL = "/live-meetings";
 export const LOCKED_BOARDROOM_URL = "/locked-boardrooms";
 export const FETCH_CURRENT_ADMINS_URL = "/system-administrators";
+export const SYSTEM_ADMIN_URL = "/system-administrators";
 export const FETCH_KEMRI_EMPLOYEES_URL = "/kemri-employees";
 export const UPLOAD_IMAGE_URL = "/upload";
 
@@ -26,3 +27,5 @@ export const FETCH_RESERVATION_BY_ID_URL = (reservationId) =>
 export const FETCH_FILE_BY_NAME_URL = (fileName) => `/files/${fileName}`;
 export const UPDATE_USER_TIMEZONE_URL = (userId) => `/users/${userId}`;
 export const FETCH_USER_BY_ID_URL = (userId) => `/users/${userId}`;
+export const DELETE_SYSTEM_ADMIN_URL_BY_ID_URL = (adminId) =>
+  `/system-administrators/${adminId}`;
