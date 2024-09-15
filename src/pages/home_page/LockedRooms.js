@@ -4,8 +4,8 @@ import BoardroomImage from "../../assets/boardroom-img.jpg";
 import BoardroomLockedCard from "./BoardroomLockedCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLockedBoardrooms } from "../../context/boardroom/lockedBoardroomSLice";
-import EmptyBoxMessager from "../../ components/EmptyBoxMessager";
-import LoaderIndicator from "../../ components/loaders/LoaderIndicator";
+import EmptyBoxMessager from "../../components/EmptyBoxMessager";
+import LoaderIndicator from "../../components/loaders/LoaderIndicator";
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1 } };
 

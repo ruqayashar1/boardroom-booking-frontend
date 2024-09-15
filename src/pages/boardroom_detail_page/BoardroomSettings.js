@@ -61,6 +61,24 @@ const BoardroomSettings = ({ toggleFuncs, isRoomLocked = false }) => {
           </span>
           <h3 className="mr-4">Make Reservation</h3>
         </div>
+        <div
+          onClick={toggleFuncs.navigateToUpdateForm}
+          className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded"
+        >
+          <span className="material-symbols-outlined text-[#26ff26] mr-2 ml-4 py-2">
+            update
+          </span>
+          <h3 className="mr-4">Update Boardroom</h3>
+        </div>
+        <div
+          onClick={toggleFuncs.toggleBoardroomContact}
+          className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded"
+        >
+          <span className="material-symbols-outlined text-[#26ff26] mr-2 ml-4 py-2">
+            add
+          </span>
+          <h3 className="mr-4">Add Contact</h3>
+        </div>
         {isRoomLocked ? (
           <div
             onClick={toggleFuncs.toggleUnLockRoomForm}

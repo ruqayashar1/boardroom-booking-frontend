@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import ReservationTableRow from "./ReservationTableRow";
+import { storeCurrentSelectedReservationId } from "../../functions";
 
 const ReservationsTable = ({
   reservations,
@@ -8,7 +9,8 @@ const ReservationsTable = ({
   handleApprovalFilterFunc,
 }) => {
   const navigate = useNavigate();
-  const navigateToReservationDetailPage = (tag) => {
+  const navigateToReservationDetailPage = (tag, reservationId) => {
+    storeCurrentSelectedReservationId(reservationId);
     navigate(`/reservations/${tag}`);
   };
   return (
@@ -22,7 +24,7 @@ const ReservationsTable = ({
               <input
                 type="checkbox"
                 name="approved"
-                checked={filters.approved}
+                checked={filters?.approved}
                 onChange={handleApprovalFilterFunc}
               />
             </div>
@@ -31,7 +33,7 @@ const ReservationsTable = ({
               <input
                 type="checkbox"
                 name="pending"
-                checked={filters.pending}
+                checked={filters?.pending}
                 onChange={handleApprovalFilterFunc}
               />
             </div>
@@ -40,7 +42,7 @@ const ReservationsTable = ({
               <input
                 type="checkbox"
                 name="declined"
-                checked={filters.declined}
+                checked={filters?.declined}
                 onChange={handleApprovalFilterFunc}
               />
             </div>

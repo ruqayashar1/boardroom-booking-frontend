@@ -1,17 +1,14 @@
 import React from "react";
-import Header from "../../ components/header/Header";
-import PreviousPageButton from "../../ components/buttons/PreviousPageButton";
+import Header from "../../components/header/Header";
+import PreviousPageButton from "../../components/buttons/PreviousPageButton";
 import SystemAdministratorSearch from "./SystemAdministratorSearch";
 import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
+import useKemriEmployees from "../../hooks/context/useKemriEmployees";
 
 const SystemAdminsPage = () => {
   useTrackPreviousUrl();
-  const systemAdmins = [
-    { email: "john@kemri.go.ke" },
-    { email: "rukia@kemri.go.ke" },
-    { email: "benaya@kemri.go.ke" },
-    { email: "wendy@kemri.go.ke" },
-  ];
+  const kemriEmployees = useKemriEmployees();
+
   return (
     <>
       <Header />
@@ -22,7 +19,7 @@ const SystemAdminsPage = () => {
         </div>
       </div>
       <div className="shadow bg-gray-100 p-4 w-3/4 mx-auto">
-        <SystemAdministratorSearch systemAdmins={systemAdmins} />
+        <SystemAdministratorSearch kemriEmployees={kemriEmployees} />
       </div>
     </>
   );

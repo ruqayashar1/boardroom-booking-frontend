@@ -12,7 +12,7 @@ const LiveMeetingTableRow = ({
 }) => {
   return (
     <tr
-      onClick={() => navigateToReservationDetailPage(1)}
+      onClick={() => navigateToReservationDetailPage(record?.tag, record?.id)}
       className={
         (index + 1) % 2 !== 0
           ? "bg-white cursor-pointer hover:bg-red-50"

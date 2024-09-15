@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   authenticate,
   authenticateUser,
-  updateUserInfoFromLocalToken,
+  fetchCurrentLoggedUserDetail,
 } from "../context/auth/authSlice";
 import {
   getUserInfoFromDecodedToken,
@@ -40,20 +40,29 @@ const LoginPage = () => {
     },
   });
 
-  const autheticateUserFromServer = (userData) => {
-    dispatch(authenticateUser(userData)).then((action) => {
-      if (action.type === "auth/authenticate/fulfilled") {
-        navigate("/home"); // Navigate to the home page on successful login
+  const autheticateUserFromServer = async (userData) => {
+    dispatch(authenticateUser(userData)).then(() => {
+      const token = retrieveAccessToken();
+      if (token) {
+        makeUserAuthenticated(token);
       }
     });
+  };
+
+  const fetchUserDetailFromServer = (userId) => {
+    dispatch(fetchCurrentLoggedUserDetail(userId));
   };
 
   const makeUserAuthenticated = (token) => {
     const userInfo = getUserInfoFromDecodedToken(token);
     dispatch(authenticate(true));
-    dispatch(updateUserInfoFromLocalToken(userInfo));
+    fetchUserDetailFromServer(userInfo?.id);
     const previousUrl = sessionStorage.getItem("previousUrl");
-    navigate(previousUrl);
+    if (previousUrl) {
+      navigate(previousUrl);
+    } else {
+      navigate("/home");
+    }
   };
 
   const loginFromLocalStorage = () => {

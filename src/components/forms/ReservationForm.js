@@ -1,48 +1,145 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import AttendeeSearch from "../../pages/reservation_detail_page/AttendeeSearch";
+import {
+  changeFromCSVToList,
+  changeFromListToCSV,
+  convertDateAndTimeToUtcIsoString,
+} from "../../functions";
+import { useDispatch, useSelector } from "react-redux";
+import useKemriEmployees from "../../hooks/context/useKemriEmployees";
+import { createReservation } from "../../context/reservation/boardroomReservationSlice";
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required("Title is required"),
-  description: Yup.string().required("Description is required"),
-  boardroom: Yup.string().required("Boardroom is required"),
-  meetingType: Yup.string().required("Meeting Type is required"),
-  startDate: Yup.date().required("Start Date is required"),
-  startTime: Yup.string().required("Start Time is required"),
-  endDate: Yup.date().required("End Date is required"),
-  endTime: Yup.string().required("End Time is required"),
-});
+const createDefaultAttendees = (reservation, authUserEmail) => {
+  if (reservation) {
+    const attendees = changeFromCSVToList(reservation.attendees).map(
+      (attendee) => ({
+        email: attendee,
+      })
+    );
+    return attendees;
+  } else {
+    return [{ email: authUserEmail }];
+  }
+};
 
-const ReservationForm = ({ boardroom, updateFormType }) => {
+const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
+  const dispatch = useDispatch();
+  const authUserEmail = useSelector((state) => state.auth.user.email);
+  const [attendees, setAttendees] = useState(
+    createDefaultAttendees(reservation, authUserEmail)
+  );
+
+  // Get the start of today
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0); // Set to start of the day
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Title is required"),
+    description: Yup.string().required("Description is required"),
+    boardroom: Yup.string().required("Boardroom is required"),
+    meetingType: Yup.string().required("Meeting Type is required"),
+    startDate: Yup.date()
+      .min(startOfToday, "Start date must be in the future")
+      .required("Start Date is required"),
+    startTime: Yup.string().required("Start Time is required"),
+    endDate: Yup.date()
+      .min(startOfToday, "Start date must be in the future")
+      .required("End Date is required"),
+    endTime: Yup.string().required("End Time is required"),
+    attendees: Yup.number()
+      .min(1, "There must be at least one attendee.")
+      .required("Attendees is required"),
+  });
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
-      boardroom: boardroom,
-      meetingType: "Physical",
-      ictSupport: true,
-      startDate: "",
-      startTime: "",
-      endDate: "",
-      endTime: "",
-      urgent: false,
+      title: reservation?.meetingTitle || "",
+      description: reservation?.meetingDescription || "",
+      boardroom: reservation?.boardroomName || boardroom?.name,
+      meetingType: reservation?.meetingType || "PHYSICAL",
+      ictSupport: reservation?.ictSupportRequired || true,
+      startDate: reservation?.startDate || "",
+      startTime: reservation?.startTime?.substring(0, 5) || "",
+      endDate: reservation?.endDate || "",
+      endTime: reservation?.endTime?.substring(0, 5) || "",
+      attendees: attendees?.length,
+      urgent: reservation?.isUrgentMeeting || false,
+      recordMeeting: reservation?.recordMeeting || false,
     },
     validationSchema,
     onSubmit: (values, { setSubmitting }) => {
+      const numberOfAttendees = attendees.length;
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
+        if (values?.meetingType === "Hybrid") {
+          if (numberOfAttendees < 1) {
+            formik.setFieldError(
+              "attendees",
+              "There must be at least one attendee."
+            );
+          } else {
+            createReservationOnServer(values);
+          }
+        } else {
+          if (numberOfAttendees < 1) {
+            formik.setFieldError(
+              "attendees",
+              "There must be at least one attendee."
+            );
+          } else if (numberOfAttendees > boardroom?.capacity) {
+            formik.setFieldError(
+              "attendees",
+              `Attendees exceed the capacity (${boardroom?.capacity}) of the boardroom.`
+            );
+          } else {
+            createReservationOnServer(values);
+          }
+        }
         setSubmitting(false);
       }, 1000);
     },
   });
 
-  const attendeesList = [
-    { email: "john@kemri.go.ke" },
-    { email: "rukia@kemri.go.ke" },
-    { email: "benaya@kemri.go.ke" },
-    { email: "wendy@kemri.go.ke" },
-  ];
+  const chooseAttendees = (attendee) => {
+    setAttendees([attendee, ...attendees]);
+  };
+
+  const removeAttendee = (attendee) => {
+    setAttendees((prev) => prev.filter((a) => a.email !== attendee.email));
+  };
+
+  const kemriEmployees = useKemriEmployees();
+
+  const prepareReservationDetails = (val) => {
+    const startDateTime = convertDateAndTimeToUtcIsoString(
+      val?.startDate,
+      val?.startTime
+    );
+    const endDateTime = convertDateAndTimeToUtcIsoString(
+      val?.endDate,
+      val?.endTime
+    );
+    const emailList = attendees.map((attendee) => attendee?.email);
+    const attendeesCSVString = changeFromListToCSV(emailList);
+    const formData = {
+      meetingTitle: val?.title,
+      meetingDescription: val?.description,
+      meetingType: val?.meetingType,
+      attendees: attendeesCSVString,
+      boardroomId: reservation?.boardroomId || boardroom?.id,
+      ictSupportRequired: val?.ictSupport,
+      isUrgentMeeting: val?.urgent,
+      recordMeeting: val?.recordMeeting,
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+    };
+    console.log(formData);
+    return formData;
+  };
+
+  const createReservationOnServer = (val) => {
+    const newReservation = prepareReservationDetails(val);
+    dispatch(createReservation(newReservation));
+  };
 
   return (
     <form
@@ -171,8 +268,8 @@ const ReservationForm = ({ boardroom, updateFormType }) => {
                     : "border-gray-300"
                 }`}
               >
-                <option value="Physical">Physical</option>
-                <option value="Hybrid">Hybrid</option>
+                <option value="PHYSICAL">Physical</option>
+                <option value="HYBRID">Hybrid</option>
               </select>
               {formik.touched.meetingType && formik.errors.meetingType && (
                 <div className="text-red-500 text-sm">
@@ -310,7 +407,15 @@ const ReservationForm = ({ boardroom, updateFormType }) => {
       </div>
 
       <div className="shadow bg-gray-100 p-4">
-        <AttendeeSearch attendees={attendeesList} />
+        <AttendeeSearch
+          kemriEmployees={kemriEmployees}
+          attendees={attendees}
+          chooseAttendees={chooseAttendees}
+          removeAttendee={removeAttendee}
+        />
+        {formik.touched.attendees && formik.errors.attendees && (
+          <div className="text-red-500 text-sm">{formik.errors.attendees}</div>
+        )}
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-center shadow bg-gray-100 p-4">
@@ -334,15 +439,31 @@ const ReservationForm = ({ boardroom, updateFormType }) => {
         </div>
       </div>
 
+      <div className="flex flex-col md:flex-row justify-between items-center shadow bg-gray-100 p-4">
+        <label
+          htmlFor="recordMeeting"
+          className="w-full md:w-3/4 font-medium text-gray-700 mb-2 md:mb-0"
+        >
+          <b className="font-bold">Record?? </b> Do you want to allow this
+          meeting to be recorded?
+        </label>
+        <div className="w-full md:w-1/4 flex items-center">
+          <input
+            type="checkbox"
+            name="recordMeeting"
+            id="recordMeeting"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            checked={formik.values.recordMeeting}
+            className="bg-gray-100 shadow rounded-md w-4 h-4"
+          />
+        </div>
+      </div>
+
       <div className="flex justify-end mt-4">
         <button
           type="submit"
-          disabled={formik.isSubmitting || !formik.isValid}
-          className={`bg-[#06ABDD] text-white font-bold py-2 px-4 shadow transition ${
-            formik.isSubmitting || !formik.isValid
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-[#0491bb]"
-          }`}
+          className={`bg-[#06ABDD] text-white font-bold py-2 px-4 shadow transition`}
         >
           {formik.isSubmitting
             ? "Submitting..."

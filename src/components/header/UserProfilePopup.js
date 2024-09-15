@@ -25,10 +25,10 @@ const UserProfilePopup = ({ closeUserProfilePopup, setUserPopupOpen }) => {
       <div className="flex justify-between items-center border-b-2 bg-[#06ABDD] px-2 py-2">
         <div className="flex items-center gap-2 mr-5 font-[Nunito]">
           <span className="w-7 h-7 rounded-full bg-gray-100 flex justify-center items-center text-sm">
-            {getTwoLettersFromName(authUser?.name)}
+            {getTwoLettersFromName(authUser?.fullName)}
           </span>
           <span className="text-sm text-white uppercase tracking-wide">
-            {authUser.name}
+            {authUser?.fullName}
           </span>
         </div>
         <svg

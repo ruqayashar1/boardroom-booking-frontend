@@ -24,7 +24,24 @@ const fetchLockedBoardrooms = createAsyncThunk(
 const lockedBoardroomSlice = createSlice({
   name: "lockedBoardroom",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    lockOrUnLockFetchedBoardroom: (state, action) => {
+      const { boardroomId, lockOrUnlock } = action.payload;
+      state.lockedBoardrooms = [
+        ...state.lockedBoardrooms.map((boardroom) =>
+          boardroom.id !== boardroomId
+            ? boardroom
+            : { ...boardroom, locked: lockOrUnlock }
+        ),
+      ];
+    },
+    removeLockedBoardroom: (state, action) => {
+      const boardroomId = action.payload;
+      state.lockedBoardrooms = state.lockedBoardrooms.filter(
+        (boardroom) => boardroom.id !== boardroomId
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchLockedBoardrooms.pending, (state) => {
       state.isLoading = true;
@@ -43,4 +60,6 @@ const lockedBoardroomSlice = createSlice({
 });
 
 export default lockedBoardroomSlice.reducer;
+export const { lockOrUnLockFetchedBoardroom, removeLockedBoardroom } =
+  lockedBoardroomSlice.actions;
 export { fetchLockedBoardrooms };

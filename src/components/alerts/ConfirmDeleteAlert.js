@@ -1,6 +1,6 @@
 import React from "react";
 
-const ConfirmDeleteAlert = ({ onClose }) => {
+const ConfirmDeleteAlert = ({ onClose, handleReservationDeletion }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-80">
@@ -15,6 +15,7 @@ const ConfirmDeleteAlert = ({ onClose }) => {
           </button>
           <button
             onClick={() => {
+              handleReservationDeletion();
               onClose();
             }}
             className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"

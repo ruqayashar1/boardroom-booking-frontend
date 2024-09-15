@@ -7,6 +7,16 @@ import upcomingMeetingSlice from "./reservation/upcomingMeetingSlice";
 import liveMeetingSlice from "./reservation/liveMeetingSlice";
 import lockedBoardroomMessageSlice from "./boardroom/lockedBoardroomMessageSlice";
 import lockedBoardroomSLice from "./boardroom/lockedBoardroomSLice";
+import boardroomReservationSlice from "./reservation/boardroomReservationSlice";
+import selectedBoardroomSlice from "./boardroom/selectedBoardroomSlice";
+import currentAdminSlice from "./users/systemAdminsSLice";
+import kemriEmployeeSlice from "./users/kemriEmployeeSlice";
+import equipmentSlice from "./equipments/equipmentSlice";
+import boardroomAdminSlice from "./boardroom/boardroomAdminSlice";
+import reservationDetailSlice from "./reservation/reservationDetailSlice";
+import fileImageSlice from "./upload/uploadFileSlice";
+import errorMiddleware from "./middleware";
+import usersSlice from "./users/usersSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,7 +28,18 @@ const store = configureStore({
     liveMeeting: liveMeetingSlice,
     lockedBoardroomMessage: lockedBoardroomMessageSlice,
     lockedBoardroom: lockedBoardroomSLice,
+    boardroomReservation: boardroomReservationSlice,
+    selectedBoardroom: selectedBoardroomSlice,
+    systemAdmin: currentAdminSlice,
+    kemriEmployee: kemriEmployeeSlice,
+    equipment: equipmentSlice,
+    boardroomAdmin: boardroomAdminSlice,
+    selectedReservation: reservationDetailSlice,
+    fileImage: fileImageSlice,
+    user: usersSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(errorMiddleware),
 });
 
 export default store;

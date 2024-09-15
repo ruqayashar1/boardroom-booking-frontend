@@ -11,16 +11,19 @@ import UpcomingMeeting from "../pages/home_page/UpcomingMeeting";
 import BoardRoomDetailPage from "../pages/boardroom_detail_page/BoardRoomDetailPage";
 import BoardroomReservations from "../pages/boardroom_detail_page/BoardroomReservations";
 import BoardroomArchivedReservations from "../pages/boardroom_detail_page/BoardroomArchivedReservations";
-import BoardroomEquipment from "../pages/boardroom_detail_page/BoardroomEquipment";
+import BoardroomEquipments from "../pages/boardroom_detail_page/BoardroomEquipments";
 import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdminDetails";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useSelector } from "react-redux";
 import ReservationDetailPage from "../pages/reservation_detail_page/ReservationDetailPage";
 import SystemAdminsPage from "../pages/system_admins_page/SystemAdminsPage";
 import UserTimezonePage from "../pages/UserTimezonePage";
+import NotFoundPage from "../pages/NotFoundPage";
+import useFetchAllBoardrooms from "../hooks/context/useFetchAllBoardrooms";
 
 const Layout = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  useFetchAllBoardrooms();
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
@@ -40,7 +43,7 @@ const Layout = () => {
         <Route path="upcoming" element={<UpcomingMeeting />} />
       </Route>
       <Route
-        path="boardrooms/:id"
+        path="boardrooms/:boardroomTag"
         element={
           <ProtectedRoute isAuthenticated={isAuthenticated}>
             <BoardRoomDetailPage />
@@ -52,10 +55,17 @@ const Layout = () => {
           path="archived-reservations"
           element={<BoardroomArchivedReservations />}
         />
-        <Route path="equipments" element={<BoardroomEquipment />} />
+        <Route path="equipments" element={<BoardroomEquipments />} />
         <Route path="admin-info" element={<BoardroomAdminDetails />} />
       </Route>
-      <Route path="/reservations/:tag" element={<ReservationDetailPage />} />
+      <Route
+        path="/reservations/:reservationTag"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ReservationDetailPage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/system-adms"
         element={
@@ -72,6 +82,7 @@ const Layout = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

@@ -6,6 +6,7 @@ import {
   refreshTokenFromServer,
   retrieveAccessToken,
 } from "../functions";
+import { toast } from "react-toastify";
 
 // Create an Axios instance
 const apiClient = axios.create({
@@ -34,9 +35,13 @@ axiosRetry(apiClient, {
         // If refreshing token fails, navigate to login page
         console.error("Refresh token error:", refreshError);
         deleteToken();
-        window.location.href = "/";
+        // window.location.href = "/";
         return false; // Don't retry the request
       }
+    }
+
+    if (response?.status === 400) {
+      toast.error(error.response.data.message);
     }
 
     // Retry on network errors or 5xx server errors

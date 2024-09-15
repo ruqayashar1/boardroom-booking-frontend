@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../utils/axiosClient";
 import { BASE_URL, RESERVATION_URL } from "../../constants";
+import { toast } from "react-toastify";
 
 const initialState = {
   isLoading: false,
@@ -10,13 +11,15 @@ const initialState = {
 
 const fetchReservations = createAsyncThunk(
   "reservation/fetchReservations",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const resp = await apiClient.get(BASE_URL.concat(RESERVATION_URL));
       return resp.data;
     } catch (error) {
       console.error(error);
-      return [];
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
     }
   }
 );

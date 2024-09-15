@@ -58,9 +58,11 @@ export const getUserInfoFromDecodedToken = (token) => {
   const decodedToken = decodeToken(token);
   return {
     username: decodedToken?.sub,
-    name: decodedToken?.fullName,
+    fullName: decodedToken?.fullName,
     role: decodedToken?.role,
     email: decodedToken?.email,
+    timezone: decodedToken?.timezone,
+    id: decodedToken?.id,
   };
 };
 
@@ -104,7 +106,8 @@ export const base64ToUrl = (base64String) => {
     // Decode the Base64 string
     const decodedString = atob(base64String);
     // Return the decoded URL
-    return decodedString;
+    const encodedBase64Url = btoa(decodedString);
+    return encodedBase64Url;
   } catch (error) {
     console.error("Failed to decode Base64 string:", error);
     return null;
@@ -112,6 +115,9 @@ export const base64ToUrl = (base64String) => {
 };
 
 export const getTwoLettersFromName = (name) => {
+  if (!name) {
+    return "";
+  }
   const parts = name.trim().split(" ");
 
   if (parts.length === 1) {
@@ -136,4 +142,86 @@ export const formatTimeToHumanReadableForm = (date, time) => {
   const parsedDate = parse(dateTimeString, "yyyy-MM-dd HH:mm:ss", new Date());
   const time12Hour = format(parsedDate, "hh:mm a");
   return time12Hour;
+};
+
+export const storeCurrentSelectedBoardroomId = (boardroomId) => {
+  if (boardroomId) {
+    sessionStorage.setItem("currentSelectedBoardroom", boardroomId);
+  }
+};
+
+export const getCurrentSelectedBoardroomId = () => {
+  return sessionStorage.getItem("currentSelectedBoardroom");
+};
+
+export const storeCurrentSelectedReservationId = (reservationId) => {
+  if (reservationId) {
+    sessionStorage.setItem("currentSelectedReservation", reservationId);
+  }
+};
+
+export const getCurrentSelectedReservationId = () => {
+  return sessionStorage.getItem("currentSelectedReservation");
+};
+
+export const changeFromCSVToList = (csvString) => {
+  return csvString?.split(",");
+};
+
+export const changeFromListToCSV = (list) => {
+  return list?.join(",");
+};
+
+export const checkEmailValidity = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const convertImageToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    // Event listener to handle when the file has been read
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+
+    // Event listener to handle any errors
+    reader.onerror = reject;
+    // Read the file as a data URL (Base64)
+    reader.readAsDataURL(file);
+  });
+};
+
+export const removeBase64Prefix = (base64String) => {
+  // Check if the string contains a comma, which indicates the presence of a prefix
+  if (base64String.includes(",")) {
+    // Split the string and return the part after the comma (the actual Base64 data)
+    return base64String.split(",")[1];
+  }
+  // If there's no prefix, return the original string
+  return base64String;
+};
+
+export const blobToBase64 = (blob) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64String = reader.result.split(",")[1]; // Remove the data URL prefix
+      resolve(base64String);
+    };
+
+    reader.onerror = reject; // Handle errors
+
+    reader.readAsDataURL(blob); // Read the Blob as a data URL
+  });
+};
+
+export const convertDateAndTimeToUtcIsoString = (date, time) => {
+  const combinedDateTime = `${date}T${time}`;
+  const localDateTime = new Date(combinedDateTime);
+  console.log(localDateTime);
+  const utcDateTimeISO = localDateTime.toISOString();
+  console.log(utcDateTimeISO);
+  return utcDateTimeISO;
 };

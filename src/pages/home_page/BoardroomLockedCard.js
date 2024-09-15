@@ -5,6 +5,7 @@ import BoardroomImage from "./BoardroomImage";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorRing } from "react-loader-spinner";
 import { fetchLockedBoardroomMessageById } from "../../context/boardroom/lockedBoardroomMessageSlice";
+import useBoardroomImage from "../../hooks/context/useBoardroomImage";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -12,6 +13,7 @@ const itemVariants = {
 };
 
 const BoardroomLockedCard = ({ boardroom }) => {
+  const { imageUrl, imageIsLoading } = useBoardroomImage(boardroom);
   const dispatch = useDispatch();
   const lockedMessage = useSelector(
     (state) =>
@@ -36,6 +38,7 @@ const BoardroomLockedCard = ({ boardroom }) => {
     <NavLink
       to={`/boardrooms/${boardroom?.tag}`}
       className="boardroom-card cursor-pointer"
+      state={{ boardroomId: boardroom?.id }}
     >
       <motion.div
         variants={itemVariants}
@@ -43,7 +46,7 @@ const BoardroomLockedCard = ({ boardroom }) => {
         animate="visible"
         transition={{ duration: 0.5, delay: boardroom?.id * 0.1 }}
       >
-        <BoardroomImage base64String={boardroom?.picture} />
+        <BoardroomImage imageUrl={imageUrl} isLoading={imageIsLoading} />
         <div className="mx-2 my-6">
           <span className="block font-bold w-full text-sm">
             {boardroom?.name}

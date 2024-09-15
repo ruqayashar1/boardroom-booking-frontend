@@ -1,25 +1,42 @@
 import React from "react";
-import ReservationForm from "../../ components/forms/ReservationForm";
+import ReservationForm from "../../components/forms/ReservationForm";
 
-const EditReservationForm = ({ toggleForm, boardroom }) => {
+const EditReservationForm = ({ toggleForm, boardroom, reservation }) => {
   return (
-    <div className="w-full bg-gray-50 absolute top-0 my-4 bg-opacity-95">
-      <div className="w-[75%] bg-white shadow mb-4 mx-auto font-[Nunito]">
-        <div className="text-white shadow p-4 flex justify-between bg-gradient-to-tr from-[#06ABDE] to-[#8fdef8] bg-opacity-50">
-          <span>{`UPDATE RESERVATION - ${boardroom}`}</span>
+    <div className="w-full mb-4 bg-white absolute top-0 right-0 z-10">
+      <div className="flex justify-start p-4">
+        <button
+          onClick={toggleForm}
+          className="flex items-center bg-red-500 text-white px-4 py-2 rounded-sm hover:bg-red-600 transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400"
+        >
           <svg
-            onClick={toggleForm}
-            className="cursor-pointer hover:bg-slate-700 opacity-80 transition-all duration-500"
             xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="#fff"
+            className="h-5 w-5 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
+          Cancel
+        </button>
+      </div>
+      <div className="w-[75%] bg-white shadow mb-4 mx-auto font-[Nunito]">
+        <div className="shadow p-4 flex justify-center font-bold">
+          <span>{`UPDATE RESERVATION - ${
+            boardroom?.name || reservation?.boardroomName
+          }`}</span>
         </div>
-        <ReservationForm boardroom={boardroom} updateFormType={true} />
+        <ReservationForm
+          boardroom={boardroom}
+          updateFormType={true}
+          reservation={reservation}
+        />
       </div>
     </div>
   );

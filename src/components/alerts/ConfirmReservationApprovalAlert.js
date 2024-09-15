@@ -1,6 +1,10 @@
 import React from "react";
 
-const ConfirmReservationApprovalAlert = ({ onClose, isAcceptButton }) => {
+const ConfirmReservationApprovalAlert = ({
+  onClose,
+  isAcceptButton,
+  handleApproval,
+}) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-80">
@@ -18,6 +22,7 @@ const ConfirmReservationApprovalAlert = ({ onClose, isAcceptButton }) => {
           {isAcceptButton ? (
             <button
               onClick={() => {
+                handleApproval("APPROVED");
                 onClose();
               }}
               className="bg-[#52AC43] text-white px-4 py-2 rounded-md hover:bg-green-700"
@@ -27,6 +32,7 @@ const ConfirmReservationApprovalAlert = ({ onClose, isAcceptButton }) => {
           ) : (
             <button
               onClick={() => {
+                handleApproval("DECLINED");
                 onClose();
               }}
               className="bg-[#D4342C] text-white px-4 py-2 rounded-md hover:bg-red-800"

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 import { NavLink } from "react-router-dom";
 import BoardroomImage from "./BoardroomImage";
+import useBoardroomImage from "../../hooks/context/useBoardroomImage";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -11,10 +12,12 @@ const itemVariants = {
 };
 
 const BoardRoomCard = ({ boardroom }) => {
+  const { imageUrl, isLoading } = useBoardroomImage(boardroom);
   return (
     <NavLink
       to={`/boardrooms/${boardroom?.tag}`}
       className="boardroom-card cursor-pointer"
+      state={{ boardroomId: boardroom?.id }}
     >
       <motion.div
         variants={itemVariants}
@@ -22,8 +25,7 @@ const BoardRoomCard = ({ boardroom }) => {
         animate="visible"
         transition={{ duration: 0.5, delay: boardroom?.id * 0.1 }}
       >
-        {" "}
-        <BoardroomImage base64String={boardroom.picture} />
+        <BoardroomImage imageUrl={imageUrl} isLoading={isLoading} />
         <div className="mx-2 my-6">
           <span className="block font-bold w-full text-sm">
             {boardroom?.name}
