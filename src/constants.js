@@ -48,3 +48,5 @@ export const LOCK_BOARDROOM_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/lock-message`;
 export const UNLOCK_BOARDROOM_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/unlock`;
+export const RESCHEDULE_RESERVATION_URL = (reservationId) =>
+  `/reservations/${reservationId}/reschedule`;

@@ -35,7 +35,7 @@ const ReservationDetailPage = () => {
       <main className="relative mb-6 px-4 md:px-8">
         <div className="flex flex-col md:flex-row items-center">
           <PreviousPageButton />
-          <div className="w-full md:w-auto h-8 bg-[#06ABDD] text-white font-bold px-2 font-[Roboto] shadow my-4 md:ml-10">
+          <div className="w-full md:w-auto h-max bg-[#06ABDD] text-white font-bold px-2 font-[Roboto] shadow my-4 md:ml-10">
             <h4 className="font-bold m-1 text-sm md:text-base">
               {reservation?.meetingTitle}
             </h4>

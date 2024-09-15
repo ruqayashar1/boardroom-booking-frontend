@@ -1,7 +1,14 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { convertDateAndTimeToUtcIsoString } from "../../functions";
+import { useDispatch, useSelector } from "react-redux";
+import { rescheduleReservation } from "../../context/reservation/reservationDetailSlice";
 
 const RescheduleMeeting = ({ reservation, onClose }) => {
+  const dispatch = useDispatch();
+  const isRescheduling = useSelector(
+    (state) => state.selectedReservation.isRescheduling
+  );
   // Get the start of today
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0); // Set to start of the day
@@ -23,10 +30,41 @@ const RescheduleMeeting = ({ reservation, onClose }) => {
       endTime: reservation?.endTime?.substring(0, 5) || "",
     },
     validationSchema,
-    onSubmit: (values, { setSubmitting }) => {},
+    onSubmit: (values, { setSubmitting }) => {
+      setTimeout(() => {
+        setSubmitting(false);
+        rescheduleMeetingFromServer(values);
+      }, 2000);
+    },
   });
+
+  const prepareDateDetails = (val) => {
+    const startDateTime = convertDateAndTimeToUtcIsoString(
+      val?.startDate,
+      val?.startTime
+    );
+    const endDateTime = convertDateAndTimeToUtcIsoString(
+      val?.endDate,
+      val?.endTime
+    );
+    const preparedDate = {
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+    };
+    return preparedDate;
+  };
+
+  const rescheduleMeetingFromServer = (values) => {
+    const rescheduleData = prepareDateDetails(values);
+    dispatch(
+      rescheduleReservation({
+        reservationId: reservation?.id,
+        rescheduleData: rescheduleData,
+      })
+    );
+  };
   return (
-    <div className="w-full h-[100vh] bg-white absolute top-0 shadow">
+    <div className="w-full h-[100vh] bg-white absolute top-0 right-0 shadow z-10">
       <div className="flex justify-start p-4">
         <button
           onClick={onClose}
@@ -172,9 +210,9 @@ const RescheduleMeeting = ({ reservation, onClose }) => {
             className={`bg-[#06ABDD] text-white font-bold py-2 px-4 shadow transition flex items-center justify-center ${
               formik.isSubmitting ? "cursor-not-allowed opacity-75" : ""
             }`}
-            disabled={formik.isSubmitting}
+            disabled={formik.isSubmitting || isRescheduling}
           >
-            {formik.isSubmitting ? (
+            {formik.isSubmitting || isRescheduling ? (
               <div className="flex items-center">
                 <svg
                   className="animate-spin h-5 w-5 mr-2 text-white"
