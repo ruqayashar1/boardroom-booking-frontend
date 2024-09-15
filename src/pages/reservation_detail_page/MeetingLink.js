@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import CopyToClipboard from "../../components/CopyToClipboard";
+import { useDispatch } from "react-redux";
+import { createReservationMeetingLink } from "../../context/reservation/reservationDetailSlice";
+import { getCurrentSelectedReservationId } from "../../functions";
 
 const MeetingLink = ({ meetingLinkUrl }) => {
+  const dispatch = useDispatch();
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isEditButtonClicked, setIsEditButtonClicked] = useState(false);
 
@@ -22,12 +26,19 @@ const MeetingLink = ({ meetingLinkUrl }) => {
         .required("Meeting link is required"),
     }),
     onSubmit: (values, { setSubmitting }) => {
-      console.log("Meeting link submitted:", values.meetingLink);
-      setSubmitting(false);
-      setIsEditButtonClicked(false);
-      setIsFormVisible(false); // Optionally close form after submit
+      setTimeout(() => {
+        createMeetingLinkOnServer(values);
+        setSubmitting(false);
+        setIsEditButtonClicked(false);
+        setIsFormVisible(false); // Optionally close form after submit
+      }, 3000);
     },
   });
+
+  const createMeetingLinkOnServer = (meetingLink) => {
+    const reservationId = getCurrentSelectedReservationId();
+    dispatch(createReservationMeetingLink({ reservationId, meetingLink }));
+  };
 
   return (
     <div className="w-full relative">
@@ -117,10 +128,38 @@ const MeetingLink = ({ meetingLinkUrl }) => {
 
                 <button
                   type="submit"
-                  className="mt-4 bg-[#06ABDD] shadow-lg rounded-sm text-white px-4 py-2 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`mt-4 bg-[#06ABDD] shadow-lg rounded-sm text-white px-4 py-2 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    formik.isSubmitting ? "cursor-not-allowed opacity-75" : ""
+                  }`}
                   disabled={formik.isSubmitting}
                 >
-                  Submit Changes
+                  {formik.isSubmitting ? (
+                    <div className="flex items-center">
+                      <svg
+                        className="animate-spin h-5 w-5 mr-2 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        ></path>
+                      </svg>
+                      Submitting Changes
+                    </div>
+                  ) : (
+                    "Submit Changes"
+                  )}
                 </button>
               </form>
             </div>

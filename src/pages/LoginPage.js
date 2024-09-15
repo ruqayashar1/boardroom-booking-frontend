@@ -40,10 +40,11 @@ const LoginPage = () => {
     },
   });
 
-  const autheticateUserFromServer = (userData) => {
-    dispatch(authenticateUser(userData)).then((action) => {
-      if (action.type === "auth/authenticate/fulfilled") {
-        navigate("/home"); // Navigate to the home page on successful login
+  const autheticateUserFromServer = async (userData) => {
+    dispatch(authenticateUser(userData)).then(() => {
+      const token = retrieveAccessToken();
+      if (token) {
+        makeUserAuthenticated(token);
       }
     });
   };
@@ -57,7 +58,11 @@ const LoginPage = () => {
     dispatch(authenticate(true));
     fetchUserDetailFromServer(userInfo?.id);
     const previousUrl = sessionStorage.getItem("previousUrl");
-    navigate(previousUrl);
+    if (previousUrl) {
+      navigate(previousUrl);
+    } else {
+      navigate("/home");
+    }
   };
 
   const loginFromLocalStorage = () => {

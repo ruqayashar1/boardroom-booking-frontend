@@ -9,6 +9,7 @@ import { blobToBase64 } from "../../functions";
 
 const initialState = {
   isLoading: false,
+  isLoadingEquipment: false,
   isUploading: false,
   boardroomImage: {},
   equipmentImage: {},
@@ -53,9 +54,31 @@ const createBoardroomImage = createAsyncThunk(
           },
         }
       );
-      console.log(resp.data);
-
       return resp.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+);
+
+const fetchEquipmentImage = createAsyncThunk(
+  "fileImage/fetchEquipmentImage",
+  async ({ fileName, equipmentId }) => {
+    try {
+      const resp = await apiClient.get(
+        BASE_URL.concat(FETCH_FILE_BY_NAME_URL(fileName)),
+        {
+          responseType: "blob",
+          headers: {
+            "Content-Type": "application/json", // Adjust based on your request type
+          },
+        }
+      );
+      const mimeType = resp.headers["content-type"];
+      const base64 = await blobToBase64(resp.data);
+      const imageUrl = `data:${mimeType};base64,${base64}`;
+      return { equipmentId: equipmentId, imageUrl: imageUrl };
     } catch (error) {
       console.error(error);
       return null;
@@ -84,6 +107,22 @@ const fileImageSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+    // Fetch equipment image
+    builder.addCase(fetchEquipmentImage.pending, (state) => {
+      state.isLoadingEquipment = true;
+    });
+    builder.addCase(fetchEquipmentImage.fulfilled, (state, action) => {
+      state.isLoadingEquipment = false;
+      state.equipmentImage = {
+        ...state.equipmentImage,
+        [action.payload?.equipmentId]: action.payload?.imageUrl,
+      };
+      state.error = null;
+    });
+    builder.addCase(fetchEquipmentImage.rejected, (state, action) => {
+      state.isLoadingEquipment = false;
+      state.error = action.payload;
+    });
     // Upload file
     builder.addCase(createBoardroomImage.pending, (state) => {
       state.isUploading = true;
@@ -101,4 +140,4 @@ const fileImageSlice = createSlice({
 });
 
 export default fileImageSlice.reducer;
-export { fetchBoardroomImage, createBoardroomImage };
+export { fetchBoardroomImage, createBoardroomImage, fetchEquipmentImage };

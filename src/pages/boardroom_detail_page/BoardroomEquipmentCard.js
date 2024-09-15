@@ -1,9 +1,10 @@
 import React from "react";
-import samsung_img from "../../assets/sumsung.jpeg";
 import { Link } from "react-router-dom";
 import EquipmentImage from "./EquipmentImage";
+import useEquipmentImage from "../../hooks/context/useEquipmentImage";
 
 const BoardroomEquipmentCard = ({ equipment }) => {
+  const { imageUrl, isLoading } = useEquipmentImage(equipment);
   return (
     <div
       id="equipment-card"
@@ -13,10 +14,7 @@ const BoardroomEquipmentCard = ({ equipment }) => {
         id="card-image"
         className="w-full h-56 bg-gray-200 flex justify-center items-center overflow-hidden"
       >
-        <EquipmentImage
-          base64String={equipment?.picture}
-          equipmentTitle={equipment?.title}
-        />
+        <EquipmentImage imageUrl={imageUrl} isLoading={isLoading} />
       </div>
       <div id="card-title" className="flex justify-center mt-2 uppercase">
         <h5 className="font-bold text-sm p-1 text-[#024458]">

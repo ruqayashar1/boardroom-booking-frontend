@@ -35,7 +35,7 @@ axiosRetry(apiClient, {
         // If refreshing token fails, navigate to login page
         console.error("Refresh token error:", refreshError);
         deleteToken();
-        window.location.href = "/";
+        // window.location.href = "/";
         return false; // Don't retry the request
       }
     }

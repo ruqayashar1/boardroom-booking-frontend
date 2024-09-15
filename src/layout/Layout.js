@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import HomePage from "../pages/home_page/HomePage";
 import LoginPage from "../pages/LoginPage";
 import { Route, Routes } from "react-router-dom";
@@ -14,22 +14,16 @@ import BoardroomArchivedReservations from "../pages/boardroom_detail_page/Boardr
 import BoardroomEquipments from "../pages/boardroom_detail_page/BoardroomEquipments";
 import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdminDetails";
 import ProtectedRoute from "../routes/ProtectedRoute";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ReservationDetailPage from "../pages/reservation_detail_page/ReservationDetailPage";
 import SystemAdminsPage from "../pages/system_admins_page/SystemAdminsPage";
 import UserTimezonePage from "../pages/UserTimezonePage";
-import { fetchBoardrooms } from "../context/boardroom/boardroomSlice";
+import NotFoundPage from "../pages/NotFoundPage";
+import useFetchAllBoardrooms from "../hooks/context/useFetchAllBoardrooms";
 
 const Layout = () => {
-  const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
-  const fetchBoardroomsFromServer = useCallback(() => {
-    dispatch(fetchBoardrooms());
-  }, [dispatch]);
-  useEffect(() => {
-    fetchBoardroomsFromServer();
-  }, []);
+  useFetchAllBoardrooms();
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
@@ -88,6 +82,7 @@ const Layout = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

@@ -28,7 +28,7 @@ const UserProfilePopup = ({ closeUserProfilePopup, setUserPopupOpen }) => {
             {getTwoLettersFromName(authUser?.fullName)}
           </span>
           <span className="text-sm text-white uppercase tracking-wide">
-            {authUser.fullName}
+            {authUser?.fullName}
           </span>
         </div>
         <svg

@@ -1,12 +1,12 @@
 import React from "react";
-import ReservationForm from "../../components/forms/ReservationForm";
+import BoardroomContactForm from "./BoardroomContactForm";
 
-const EditReservationForm = ({ toggleForm, boardroom, reservation }) => {
+const CreateBoardroomContact = ({ toggleBoardroomContact, boardroom }) => {
   return (
-    <div className="w-full mb-4 bg-white absolute top-0 right-0 z-10">
+    <div className="bg-white w-full absolute top-[0px] right-0 z-10 h-[100%] shadow">
       <div className="flex justify-start p-4">
         <button
-          onClick={toggleForm}
+          onClick={toggleBoardroomContact}
           className="flex items-center bg-red-500 text-white px-4 py-2 rounded-sm hover:bg-red-600 transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400"
         >
           <svg
@@ -26,20 +26,9 @@ const EditReservationForm = ({ toggleForm, boardroom, reservation }) => {
           Cancel
         </button>
       </div>
-      <div className="w-[75%] bg-white shadow mb-4 mx-auto font-[Nunito]">
-        <div className="shadow p-4 flex justify-center font-bold">
-          <span>{`UPDATE RESERVATION - ${
-            boardroom?.name || reservation?.boardroomName
-          }`}</span>
-        </div>
-        <ReservationForm
-          boardroom={boardroom}
-          updateFormType={true}
-          reservation={reservation}
-        />
-      </div>
+      <BoardroomContactForm boardroom={boardroom} />
     </div>
   );
 };
 
-export default EditReservationForm;
+export default CreateBoardroomContact;

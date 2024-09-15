@@ -1,24 +1,13 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import Header from "../../components/header/Header";
 import PreviousPageButton from "../../components/buttons/PreviousPageButton";
 import SystemAdministratorSearch from "./SystemAdministratorSearch";
 import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchKemriEmployees } from "../../context/users/kemriEmployeeSlice";
+import useKemriEmployees from "../../hooks/context/useKemriEmployees";
 
 const SystemAdminsPage = () => {
   useTrackPreviousUrl();
-  const dispatch = useDispatch();
-  const kemriEmployees = useSelector(
-    (state) => state.kemriEmployee.kemriEmployees
-  );
-  const fetchKemriEmployeesFromSever = useCallback(() => {
-    dispatch(fetchKemriEmployees());
-  }, [dispatch]);
-
-  useEffect(() => {
-    fetchKemriEmployeesFromSever();
-  }, [fetchKemriEmployeesFromSever]);
+  const kemriEmployees = useKemriEmployees();
 
   return (
     <>

@@ -1,19 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../utils/axiosClient";
-import { BASE_URL, RESERVATION_URL } from "../../constants";
-import { toast } from "react-toastify";
+import { BASE_URL, USERS_URL } from "../../constants";
 
 const initialState = {
   isLoading: false,
-  reservations: [],
+  users: [],
   error: null,
 };
 
-const fetchReservations = createAsyncThunk(
-  "reservation/fetchReservations",
+const fetchUsers = createAsyncThunk(
+  "user/fetchUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const resp = await apiClient.get(BASE_URL.concat(RESERVATION_URL));
+      const resp = await apiClient.get(BASE_URL.concat(USERS_URL));
       return resp.data;
     } catch (error) {
       console.error(error);
@@ -24,26 +23,26 @@ const fetchReservations = createAsyncThunk(
   }
 );
 
-const reservationSlice = createSlice({
-  name: "reservation",
+const userSlice = createSlice({
+  name: "user",
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchReservations.pending, (state) => {
+    builder.addCase(fetchUsers.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(fetchReservations.fulfilled, (state, action) => {
+    builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.reservations = action.payload;
+      state.users = action.payload;
       state.error = null;
     });
-    builder.addCase(fetchReservations.rejected, (state, action) => {
+    builder.addCase(fetchUsers.rejected, (state, action) => {
       state.isLoading = false;
-      state.reservations = [];
+      state.users = [];
       state.error = action.payload;
     });
   },
 });
 
-export default reservationSlice.reducer;
-export { fetchReservations };
+export default userSlice.reducer;
+export { fetchUsers };

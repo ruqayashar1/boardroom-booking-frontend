@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../utils/axiosClient";
-import { BASE_URL, BOARDROOM_RESESERVATIONS_URL } from "../../constants";
+import {
+  BASE_URL,
+  BOARDROOM_RESESERVATIONS_URL,
+  RESERVATION_URL,
+} from "../../constants";
+import { toast } from "react-toastify";
 
 const initialState = {
   isLoading: false,
@@ -10,7 +15,7 @@ const initialState = {
 
 const fetchBoardroomReservations = createAsyncThunk(
   "boardroomReservation/fetchBoardroomReservations",
-  async (boardroomId) => {
+  async (boardroomId, { rejectWithValue }) => {
     try {
       const resp = await apiClient.get(
         BASE_URL.concat(BOARDROOM_RESESERVATIONS_URL(boardroomId))
@@ -18,15 +23,61 @@ const fetchBoardroomReservations = createAsyncThunk(
       return resp.data;
     } catch (error) {
       console.error(error);
-      return [];
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
+
+const createReservation = createAsyncThunk(
+  "boardroomReservation/createReservation",
+  async (newReservation, { rejectWithValue }) => {
+    try {
+      const resp = await apiClient.post(
+        BASE_URL.concat(RESERVATION_URL),
+        newReservation
+      );
+      return resp.data;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
+
+const updateReservation = createAsyncThunk(
+  "boardroomReservation/updateReservation",
+  async (newReservation, { rejectWithValue }) => {
+    try {
+      const resp = await apiClient.patch(
+        BASE_URL.concat(RESERVATION_URL),
+        newReservation
+      );
+      return resp.data;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
     }
   }
 );
 
 const boardroomReservationSlice = createSlice({
-  name: "reservation",
+  name: "boardroomReservation",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    removeboardroomReservation: (state, action) => {
+      state.boardroomReservations = [
+        state.boardroomReservations.filter(
+          (reservation) => reservation.id !== action.payload
+        ),
+      ];
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchBoardroomReservations.pending, (state) => {
       state.isLoading = true;
@@ -41,8 +92,37 @@ const boardroomReservationSlice = createSlice({
       state.boardroomReservations = [];
       state.error = action.payload;
     });
+    // Create reservation
+    builder.addCase(createReservation.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.boardroomReservations = [
+          action.payload,
+          ...state.boardroomReservations,
+        ];
+      }
+      toast.success("Reservation made successfully");
+      state.error = null;
+    });
+    builder.addCase(createReservation.rejected, (state, action) => {
+      state.error = action.payload;
+    });
+    // Update reservation
+    builder.addCase(updateReservation.fulfilled, (state, action) => {
+      const newReservation = action.payload;
+      state.boardroomReservations = [
+        ...state.boardroomReservations.map((reservation) =>
+          reservation.id !== newReservation?.id ? reservation : newReservation
+        ),
+      ];
+      toast.success("Reservation updated successfully");
+      state.error = null;
+    });
+    builder.addCase(updateReservation.rejected, (state, action) => {
+      state.error = action.payload;
+    });
   },
 });
 
 export default boardroomReservationSlice.reducer;
-export { fetchBoardroomReservations };
+export const { removeboardroomReservation } = boardroomReservationSlice.actions;
+export { fetchBoardroomReservations, createReservation, updateReservation };

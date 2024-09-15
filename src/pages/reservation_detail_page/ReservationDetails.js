@@ -10,15 +10,26 @@ import {
   changeFromCSVToList,
   formatDateToHumanReadableForm,
   formatTimeToHumanReadableForm,
+  storeCurrentSelectedBoardroomId,
 } from "../../functions";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { boardroomSelectionList } from "../../context/customSelectors";
+import {
+  approveReservation,
+  changeReservationVenue,
+  removeReservation,
+} from "../../context/reservation/reservationDetailSlice";
+import { useNavigate } from "react-router-dom";
+import RescheduleMeeting from "./RescheduleMeeting";
 
 const ReservationDetails = ({ reservation }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const boardroomSelection = useSelector(boardroomSelectionList);
   const [reservationVenue, setReservationVenue] = useState(
     reservation?.boardroomId
   );
+  const [reschedulePaneOpen, setReschedulePaneOpen] = useState(false);
   const [reservationFormOpen, setReservationFormOpen] = useState(false);
   const meetingDescriptionRef = useRef();
   const attendeesRef = useRef();
@@ -37,25 +48,53 @@ const ReservationDetails = ({ reservation }) => {
     setReservationFormOpen((prev) => !prev);
   };
 
-  const updateResevationVenueFromServer = (venue) => {
-    setReservationVenue(venue);
-    console.log("updating with " + venue);
+  const updateResevationVenueFromServer = (boardroomId) => {
+    setReservationVenue(boardroomId);
+    const reservationId = reservation?.id;
+    const newVenue = {
+      boardroomId: boardroomId,
+    };
+    dispatch(changeReservationVenue({ reservationId, newVenue }));
+    storeCurrentSelectedBoardroomId(boardroomId);
+    navigate(`/boardrooms/${reservation?.tag}`, {
+      state: { boardroomId: boardroomId },
+    });
+  };
+
+  const handleApproval = (approve) => {
+    const reservationId = reservation?.id;
+    const approval = {
+      approvalStatus: approve,
+    };
+    dispatch(approveReservation({ reservationId, approval }));
+  };
+
+  const handleReservationDeletion = () => {
+    const reservationId = reservation?.id;
+    dispatch(removeReservation(reservationId));
+    navigate(-1);
   };
 
   const confirmDeletion = (e) => {
     e.preventDefault();
     confirmAlert({
-      customUI: ({ onClose }) => <ConfirmDeleteAlert onClose={onClose} />,
+      customUI: ({ onClose }) => (
+        <ConfirmDeleteAlert
+          onClose={onClose}
+          handleReservationDeletion={handleReservationDeletion}
+        />
+      ),
     });
   };
 
   const confirmApproval = (e, isAcceptButton) => {
     e.preventDefault();
     return confirmAlert({
-      customUI: ({ onClose }) => (
+      customUI: ({ onClose, on }) => (
         <ConfirmReservationApprovalAlert
           onClose={onClose}
           isAcceptButton={isAcceptButton}
+          handleApproval={handleApproval}
         />
       ),
     });
@@ -82,6 +121,16 @@ const ReservationDetails = ({ reservation }) => {
   const handleInputChange = (e) => {
     e.preventDefault();
     confirmVenueChange(e.target.value);
+  };
+
+  const openReschedulePane = (e) => {
+    e.preventDefault();
+    setReschedulePaneOpen(true);
+  };
+
+  const closeReschedulePane = (e) => {
+    e.preventDefault();
+    setReschedulePaneOpen(false);
   };
 
   const approvalStatus = {
@@ -263,7 +312,7 @@ const ReservationDetails = ({ reservation }) => {
                     </option>
                   ))}
                 </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 ml-4">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 ml-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="24px"
@@ -277,7 +326,10 @@ const ReservationDetails = ({ reservation }) => {
                 </div>
               </div>
             </div>
-            <button className="flex justify-center items-center w-max h-max p-2 bg-[#D9D9D9]">
+            <button
+              onClick={openReschedulePane}
+              className="flex justify-center items-center w-max h-max p-2 bg-[#D9D9D9]"
+            >
               <span className="material-symbols-outlined opacity-70 mr-2">
                 refresh
               </span>
@@ -299,12 +351,14 @@ const ReservationDetails = ({ reservation }) => {
             </button>
           </div>
           <div className="flex justify-end items-center w-[50%] font-bold text-white">
-            <button
-              onClick={(e) => confirmApproval(e, true)}
-              className="bg-[#52AC43] w-24 h-max p-2 mr-2"
-            >
-              ACCEPT
-            </button>
+            {reservation?.approvalStatus !== "APPROVED" && (
+              <button
+                onClick={(e) => confirmApproval(e, true)}
+                className="bg-[#52AC43] w-24 h-max p-2 mr-2"
+              >
+                ACCEPT
+              </button>
+            )}
             <button
               onClick={(e) => confirmApproval(e, false)}
               className="bg-[#D4342C] w-24 h-max p-2"
@@ -317,7 +371,14 @@ const ReservationDetails = ({ reservation }) => {
       {reservationFormOpen ? (
         <EditReservationForm
           toggleForm={toggleResevationEditForm}
-          boardroom={"CBRD Boardroom"}
+          boardroom={null}
+          reservation={reservation}
+        />
+      ) : null}
+      {reschedulePaneOpen ? (
+        <RescheduleMeeting
+          reservation={reservation}
+          onClose={closeReschedulePane}
         />
       ) : null}
     </section>

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../utils/axiosClient";
 import {
   BASE_URL,
-  DELETE_SYSTEM_ADMIN_URL_BY_ID_URL,
+  DELETE_SYSTEM_ADMIN_URL,
   FETCH_CURRENT_ADMINS_URL,
   SYSTEM_ADMIN_URL,
 } from "../../constants";
@@ -22,6 +22,7 @@ const fetchCurrentAdmins = createAsyncThunk(
       const resp = await apiClient.get(
         BASE_URL.concat(FETCH_CURRENT_ADMINS_URL)
       );
+
       return resp.data;
     } catch (error) {
       console.error(error);
@@ -52,9 +53,7 @@ const removeSystemAdmin = createAsyncThunk(
   "systemAdmin/removeSystemAdmin",
   async (adminId, { rejectWithValue }) => {
     try {
-      await apiClient.delete(
-        BASE_URL.concat(DELETE_SYSTEM_ADMIN_URL_BY_ID_URL(adminId))
-      );
+      await apiClient.delete(BASE_URL.concat(DELETE_SYSTEM_ADMIN_URL(adminId)));
 
       return adminId;
     } catch (error) {

@@ -5,12 +5,12 @@ import BoardRoomCard from "./BoardRoomCard";
 import { useSelector } from "react-redux";
 import LoaderIndicator from "../../components/loaders/LoaderIndicator";
 import EmptyBoxMessager from "../../components/EmptyBoxMessager";
+import useFetchAllBoardrooms from "../../hooks/context/useFetchAllBoardrooms";
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1 } };
 
 const BoardRooms = () => {
-  const boardrooms = useSelector((state) => state.boardroom.boardrooms);
-  const isLoading = useSelector((state) => state.boardroom.isLoading);
+  const { boardrooms, isLoading } = useFetchAllBoardrooms();
   const capacityFilter = useSelector(
     (state) => state.boardroom.filter.capacityFilter
   );

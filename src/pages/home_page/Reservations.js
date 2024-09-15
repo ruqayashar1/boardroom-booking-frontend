@@ -14,7 +14,6 @@ const Reservations = () => {
     pending: false,
     declined: false,
   });
-
   const fetchReservationsFromServer = useCallback(() => {
     dispatch(fetchReservations());
   }, [dispatch]);

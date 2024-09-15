@@ -105,10 +105,9 @@ const SystemAdministratorSearch = ({ kemriEmployees }) => {
       ) : (
         <div className="flex flex-wrap justify-center sm:justify-start my-5 space-x-2">
           {selectedAdmins.map((admin) => (
-            <div class="relative group">
+            <div className="relative group" key={admin.email}>
               <button
                 type="button"
-                key={admin.email}
                 onDoubleClick={() => handleRemoveAdmin(admin)}
                 className="flex items-center space-x-2 bg-[#06ABDD] text-white px-3 py-1 rounded-full shadow hover:bg-blue-400 transition mt-2 sm:mt-0"
               >
@@ -129,7 +128,7 @@ const SystemAdministratorSearch = ({ kemriEmployees }) => {
                 </svg>
               </button>
 
-              <div class="absolute bottom-full mb-2 hidden group-hover:block w-max bg-red-800 text-white text-sm rounded py-1 px-3">
+              <div className="absolute bottom-full mb-2 hidden group-hover:block w-max bg-red-800 text-white text-sm rounded py-1 px-3">
                 Double click removes the item!
               </div>
             </div>

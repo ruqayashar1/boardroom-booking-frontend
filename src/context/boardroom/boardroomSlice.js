@@ -68,6 +68,16 @@ const boardroomSlice = createSlice({
     filterBySearchedString: (state, action) => {
       state.filter.searchedString = action.payload;
     },
+    lockOrUnLockFetchedHomeBoardroom: (state, action) => {
+      const { boardroomId, lockOrUnlock } = action.payload;
+      state.boardrooms = [
+        ...state.boardrooms.map((boardroom) =>
+          boardroom.id !== boardroomId
+            ? boardroom
+            : { ...boardroom, locked: lockOrUnlock }
+        ),
+      ];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchBoardrooms.pending, (state) => {
@@ -121,6 +131,9 @@ const boardroomSlice = createSlice({
 });
 
 export default boardroomSlice.reducer;
-export const { filterByCapacity, filterBySearchedString } =
-  boardroomSlice.actions;
+export const {
+  filterByCapacity,
+  filterBySearchedString,
+  lockOrUnLockFetchedHomeBoardroom,
+} = boardroomSlice.actions;
 export { fetchBoardrooms, createBoardroom, updateBoardroom };

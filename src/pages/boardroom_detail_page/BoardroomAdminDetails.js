@@ -1,27 +1,13 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import BoardroomAdminInfo from "./BoardroomAdminInfo";
-import { useDispatch, useSelector } from "react-redux";
 import { getCurrentSelectedBoardroomId } from "../../functions";
-import { fetchBoardroomAdmin } from "../../context/boardroom/boardroomAdminSlice";
 import EmptyBoxMessager from "../../components/EmptyBoxMessager";
 import LoaderIndicator from "../../components/loaders/LoaderIndicator";
+import useBoardroomAdmin from "../../hooks/context/useBoardroomAdmin";
 
 const BoardroomAdminDetails = () => {
   const boardroomId = getCurrentSelectedBoardroomId();
-  const dispatch = useDispatch();
-  const boardroomAdmin = useSelector(
-    (state) => state.boardroomAdmin.boardroomAdmin
-  );
-  const isLoading = useSelector((state) => state.boardroomAdmin.isLoading);
-  const fetchBoardroomAdminFromServer = useCallback(
-    (boardroomId) => {
-      dispatch(fetchBoardroomAdmin(boardroomId));
-    },
-    [dispatch]
-  );
-  useEffect(() => {
-    fetchBoardroomAdminFromServer(boardroomId);
-  }, [fetchBoardroomAdminFromServer]);
+  const { boardroomAdmin, isLoading } = useBoardroomAdmin(boardroomId);
   return (
     <>
       {boardroomAdmin === null && !isLoading ? (

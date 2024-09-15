@@ -1,27 +1,9 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { ColorRing } from "react-loader-spinner";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchBoardroomImage } from "../../context/upload/uploadFileSlice";
+import useBoardroomImage from "../../hooks/context/useBoardroomImage";
 
 const BoardroomDetailImage = ({ boardroom }) => {
-  const dispatch = useDispatch();
-  const imageUrl = useSelector(
-    (state) => state.fileImage.boardroomImage[boardroom?.id]
-  );
-  const isLoading = useSelector((state) => state.fileImage.isLoading);
-
-  const fetchBoardroomImageFromServer = useCallback(
-    (fileName, boardroomId) => {
-      dispatch(fetchBoardroomImage({ fileName, boardroomId }));
-    },
-    [dispatch]
-  );
-
-  useEffect(() => {
-    if (!imageUrl) {
-      fetchBoardroomImageFromServer(boardroom?.picture, boardroom?.id);
-    }
-  }, [fetchBoardroomImageFromServer, boardroom?.picture, boardroom?.id]);
+  const { imageUrl, isLoading } = useBoardroomImage(boardroom);
   return (
     <>
       {isLoading ? (

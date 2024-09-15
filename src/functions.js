@@ -168,6 +168,10 @@ export const changeFromCSVToList = (csvString) => {
   return csvString?.split(",");
 };
 
+export const changeFromListToCSV = (list) => {
+  return list?.join(",");
+};
+
 export const checkEmailValidity = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -198,7 +202,7 @@ export const removeBase64Prefix = (base64String) => {
   return base64String;
 };
 
-export function blobToBase64(blob) {
+export const blobToBase64 = (blob) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -211,4 +215,13 @@ export function blobToBase64(blob) {
 
     reader.readAsDataURL(blob); // Read the Blob as a data URL
   });
-}
+};
+
+export const convertDateAndTimeToUtcIsoString = (date, time) => {
+  const combinedDateTime = `${date}T${time}`;
+  const localDateTime = new Date(combinedDateTime);
+  console.log(localDateTime);
+  const utcDateTimeISO = localDateTime.toISOString();
+  console.log(utcDateTimeISO);
+  return utcDateTimeISO;
+};
