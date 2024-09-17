@@ -49,13 +49,13 @@ const Header = () => {
           openNotificationPopUp={openNotificationPopUp}
         /> */}
         <NavLink
-          to="/home"
+          to="/"
           className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"
         >
           BOARDROOMS
         </NavLink>
         <NavLink
-          to="/home/add-boardroom"
+          to="/add-boardroom"
           state={null}
           className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"
         >

@@ -288,18 +288,18 @@ const ReservationDetails = ({ reservation }) => {
         </div>
         <div
           id="reschedue-approval-area"
-          className="col-start-1 col-end-13 flex flex-col gap-2 p-2 py-10 justify-start items-center relative sm:flex-row"
+          className="col-start-1 col-end-13 flex flex-col gap-2 p-2 py-10 justify-start items-center relative sm:flex-row sm:justify-between"
         >
-          <div className="w-[50%] flex flex-col gap-4 mb-4 sm:flex-row">
-            <div>
+          <div className="w-full sm:w-[50%] flex flex-col gap-4 mb-4 sm:flex-row sm:mb-0">
+            <div className="relative w-full sm:w-auto">
               <h3 className="font-bold opacity-70 m-1 absolute top-0">
                 Change venue
               </h3>
-              <div className="shadow w-max h-max bg-[#D9D9D9] relative inline-block px-2">
+              <div className="shadow w-full sm:w-auto bg-[#D9D9D9] relative inline-block px-2 mt-6 sm:mt-0">
                 <select
                   onChange={handleInputChange}
                   value={reservationVenue}
-                  className="bg-[#D9D9D9] cursor-pointer p-2 outline-none block appearance-none w-full px-4 mr-2"
+                  className="bg-[#D9D9D9] cursor-pointer p-2 outline-none block appearance-none w-full sm:w-auto px-4 mr-2"
                 >
                   {boardroomSelection.map((boardroom) => (
                     <option
@@ -328,7 +328,7 @@ const ReservationDetails = ({ reservation }) => {
             </div>
             <button
               onClick={openReschedulePane}
-              className="flex justify-center items-center w-max h-max p-2 bg-[#D9D9D9]"
+              className="flex justify-center items-center w-full sm:w-auto h-max p-2 bg-[#D9D9D9]"
             >
               <span className="material-symbols-outlined opacity-70 mr-2">
                 refresh
@@ -336,13 +336,13 @@ const ReservationDetails = ({ reservation }) => {
               <h3 className="opacity-70 inline-block">Reschedule</h3>
             </button>
           </div>
-          <div className="flex justify-end items-center w-[50%] font-bold text-white mb-4">
-            <button
+          <div className="flex justify-end items-center w-full sm:w-[50%] font-bold text-white mb-4 sm:mb-0">
+            {/* <button
               onClick={toggleResevationEditForm}
               className="bg-blue-300 w-24 h-max p-2 mr-2"
             >
               EDIT
-            </button>
+            </button> */}
             <button
               onClick={confirmDeletion}
               className="bg-[#D4342C] w-24 h-max p-2"
@@ -350,7 +350,7 @@ const ReservationDetails = ({ reservation }) => {
               DELETE
             </button>
           </div>
-          <div className="flex justify-end items-center w-[50%] font-bold text-white">
+          <div className="flex justify-end items-center w-full sm:w-[50%] font-bold text-white">
             {reservation?.approvalStatus !== "APPROVED" && (
               <button
                 onClick={(e) => confirmApproval(e, true)}

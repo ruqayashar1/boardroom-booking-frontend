@@ -6,6 +6,7 @@ import {
   CREATE_RESERVATION_MEETING_LINK_URL,
   DELETE_RESERVATION_BY_ID_URL,
   FETCH_RESERVATION_BY_ID_URL,
+  RESCHEDULE_RESERVATION_URL,
   RESERVATION_VENUE_CHANGE_BY_ID_URL,
 } from "../../constants";
 import { toast } from "react-toastify";
@@ -14,6 +15,7 @@ import { removeboardroomReservation } from "./boardroomReservationSlice";
 const initialState = {
   isLoading: false,
   isApproving: false,
+  isRescheduling: false,
   isSavingMeetingLink: false,
   reservation: null,
   error: null,
@@ -108,6 +110,24 @@ const createReservationMeetingLink = createAsyncThunk(
   }
 );
 
+const rescheduleReservation = createAsyncThunk(
+  "selectedReservation/rescheduleReservation",
+  async ({ reservationId, rescheduleData }, { rejectWithValue }) => {
+    try {
+      const resp = await apiClient.patch(
+        BASE_URL.concat(RESCHEDULE_RESERVATION_URL(reservationId)),
+        rescheduleData
+      );
+      return resp.data;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
+
 const reservationDetailSlice = createSlice({
   name: "selectedReservation",
   initialState: initialState,
@@ -168,6 +188,20 @@ const reservationDetailSlice = createSlice({
       state.isSavingMeetingLink = false;
       state.error = action.payload;
     });
+    //Reschedule reservation
+    builder.addCase(rescheduleReservation.pending, (state) => {
+      state.isRescheduling = true;
+    });
+    builder.addCase(rescheduleReservation.fulfilled, (state, action) => {
+      state.isRescheduling = false;
+      state.reservation = action.payload;
+      state.error = null;
+      toast.success("Reservation rescheduled successfully");
+    });
+    builder.addCase(rescheduleReservation.rejected, (state, action) => {
+      state.isRescheduling = false;
+      state.error = action.payload;
+    });
   },
 });
 
@@ -178,4 +212,5 @@ export {
   removeReservation,
   changeReservationVenue,
   createReservationMeetingLink,
+  rescheduleReservation,
 };

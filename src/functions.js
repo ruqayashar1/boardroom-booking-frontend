@@ -220,8 +220,6 @@ export const blobToBase64 = (blob) => {
 export const convertDateAndTimeToUtcIsoString = (date, time) => {
   const combinedDateTime = `${date}T${time}`;
   const localDateTime = new Date(combinedDateTime);
-  console.log(localDateTime);
   const utcDateTimeISO = localDateTime.toISOString();
-  console.log(utcDateTimeISO);
   return utcDateTimeISO;
 };

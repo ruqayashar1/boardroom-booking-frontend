@@ -26,9 +26,9 @@ const Layout = () => {
   useFetchAllBoardrooms();
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route
-        path="/home"
+        path="/"
         element={
           <ProtectedRoute isAuthenticated={isAuthenticated}>
             <HomePage />

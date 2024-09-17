@@ -12,6 +12,7 @@ export const SYSTEM_ADMIN_URL = "/system-administrators";
 export const FETCH_KEMRI_EMPLOYEES_URL = "/kemri-employees";
 export const UPLOAD_IMAGE_URL = "/upload";
 export const USERS_URL = "/users";
+export const EQUIPMENT_URL = "/equipments";
 
 export const LOCKED_BOARDROOM_MESSAGE_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/lock-message`;
@@ -48,3 +49,5 @@ export const LOCK_BOARDROOM_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/lock-message`;
 export const UNLOCK_BOARDROOM_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/unlock`;
+export const RESCHEDULE_RESERVATION_URL = (reservationId) =>
+  `/reservations/${reservationId}/reschedule`;
