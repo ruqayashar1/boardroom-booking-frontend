@@ -1,7 +1,7 @@
 import React from "react";
 import BoardroomEquipmentForm from "./BoardroomEquipmentForm";
 
-const CreateBoardroomEquipment = ({ toggleEquipmentForm }) => {
+const CreateBoardroomEquipment = ({ toggleEquipmentForm, boardroom }) => {
   return (
     <aside
       id="add-equipment-popup"
@@ -29,7 +29,7 @@ const CreateBoardroomEquipment = ({ toggleEquipmentForm }) => {
           Cancel
         </button>
       </div>
-      <BoardroomEquipmentForm />
+      <BoardroomEquipmentForm boardroom={boardroom} />
     </aside>
   );
 };

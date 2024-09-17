@@ -80,7 +80,7 @@ const BoardRoomDetailPage = () => {
   };
 
   const navigateToUpdateForm = () => {
-    navigate("/home/add-boardroom", { state: boardroom });
+    navigate("/add-boardroom", { state: boardroom });
   };
 
   const toggleFuncs = {
@@ -249,6 +249,7 @@ const BoardRoomDetailPage = () => {
           {showEquipmentForm ? (
             <CreateBoardroomEquipment
               toggleEquipmentForm={toggleEquipmentForm}
+              boardroom={boardroom}
             />
           ) : null}
           {showReservationForm ? (
@@ -281,19 +282,38 @@ const BoardRoomDetailPage = () => {
           >
             <NavLink
               to=""
-              className="w-full sm:w-auto h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer"
+              end
+              className={({ isActive }) =>
+                `w-full sm:w-auto h-8 ${
+                  isActive
+                    ? "bg-gradient-to-tr from-[#06ABDE] to-[#a4e9e0]"
+                    : "bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9]"
+                } flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer`
+              }
             >
               <h3 className="font-bold text-sm">Reservations</h3>
             </NavLink>
             <NavLink
               to="equipments"
-              className="w-full sm:w-auto h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer"
+              className={({ isActive }) =>
+                `w-full sm:w-auto h-8 ${
+                  isActive
+                    ? "bg-gradient-to-tr from-[#06ABDE] to-[#a4e9e0]"
+                    : "bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9]"
+                } flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer`
+              }
             >
               <h3 className="font-bold text-sm">Equipment</h3>
             </NavLink>
             <NavLink
               to="admin-info"
-              className="w-full sm:w-auto h-8 bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9] flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer"
+              className={({ isActive }) =>
+                `w-full sm:w-auto h-8 ${
+                  isActive
+                    ? "bg-gradient-to-tr from-[#06ABDE] to-[#a4e9e0]"
+                    : "bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9]"
+                } flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer`
+              }
             >
               <h3 className="font-bold text-sm">Superviser</h3>
             </NavLink>

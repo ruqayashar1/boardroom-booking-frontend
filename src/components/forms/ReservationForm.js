@@ -132,7 +132,6 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
       startDateTime: startDateTime,
       endDateTime: endDateTime,
     };
-    console.log(formData);
     return formData;
   };
 

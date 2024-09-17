@@ -61,7 +61,7 @@ const LoginPage = () => {
     if (previousUrl) {
       navigate(previousUrl);
     } else {
-      navigate("/home");
+      navigate("/");
     }
   };
 

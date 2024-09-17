@@ -62,6 +62,27 @@ const createBoardroomImage = createAsyncThunk(
   }
 );
 
+const createEquipmentImage = createAsyncThunk(
+  "fileImage/createEquipmentImage",
+  async (fileData) => {
+    try {
+      const resp = await apiClient.post(
+        BASE_URL.concat(UPLOAD_IMAGE_URL),
+        fileData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return resp.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+);
+
 const fetchEquipmentImage = createAsyncThunk(
   "fileImage/fetchEquipmentImage",
   async ({ fileName, equipmentId }) => {
@@ -89,7 +110,11 @@ const fetchEquipmentImage = createAsyncThunk(
 const fileImageSlice = createSlice({
   name: "fileImage",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setIsUploading: (state, action) => {
+      state.isUploading = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // Fetch boardroom image
     builder.addCase(fetchBoardroomImage.pending, (state) => {
@@ -123,7 +148,7 @@ const fileImageSlice = createSlice({
       state.isLoadingEquipment = false;
       state.error = action.payload;
     });
-    // Upload file
+    // Upload boardroom file
     builder.addCase(createBoardroomImage.pending, (state) => {
       state.isUploading = true;
     });
@@ -136,8 +161,28 @@ const fileImageSlice = createSlice({
       state.isUploading = false;
       state.error = action.payload;
     });
+
+    // Upload boardroom file
+    builder.addCase(createEquipmentImage.pending, (state) => {
+      state.isUploading = true;
+    });
+    builder.addCase(createEquipmentImage.fulfilled, (state, action) => {
+      state.isUploading = false;
+      state.currentCreatedFileName = action.payload;
+      state.error = null;
+    });
+    builder.addCase(createEquipmentImage.rejected, (state, action) => {
+      state.isUploading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 export default fileImageSlice.reducer;
-export { fetchBoardroomImage, createBoardroomImage, fetchEquipmentImage };
+export const { setIsUploading } = fileImageSlice.actions;
+export {
+  fetchBoardroomImage,
+  createBoardroomImage,
+  fetchEquipmentImage,
+  createEquipmentImage,
+};

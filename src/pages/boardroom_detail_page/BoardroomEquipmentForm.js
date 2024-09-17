@@ -1,9 +1,24 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { convertImageToBase64 } from "../../functions";
+import {
+  createEquipmentImage,
+  setIsUploading,
+} from "../../context/upload/uploadFileSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { ClipLoader } from "react-spinners";
+import {
+  createBoardroomEquipment,
+  setCreatingEquipment,
+} from "../../context/equipments/equipmentSlice";
 
-const BoardroomEquipmentForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const BoardroomEquipmentForm = ({ boardroom }) => {
+  const dispatch = useDispatch();
+  const isUploading = useSelector((state) => state.fileImage.isUploading);
+  const isCreatingEquipment = useSelector(
+    (state) => state.equipment.isCreatingEquipment
+  );
   const [imagePreview, setImagePreview] = useState(null);
 
   const formik = useFormik({
@@ -26,20 +41,53 @@ const BoardroomEquipmentForm = () => {
       picture: Yup.mixed().required("Picture is required"),
     }),
     onSubmit: (values) => {
-      setIsSubmitting(true);
       setTimeout(() => {
-        console.log("Form data:", values);
-        setIsSubmitting(false);
+        formik.setSubmitting(false);
+        createBoardroomOnServer(values);
       }, 2000);
     },
   });
 
-  const handleImageChange = (event) => {
-    const file = event.currentTarget.files[0];
-    formik.setFieldValue("picture", file);
-    const reader = new FileReader();
-    reader.onload = () => setImagePreview(reader.result);
-    reader.readAsDataURL(file);
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      try {
+        const base64String = await convertImageToBase64(file);
+        setImagePreview(base64String);
+        dispatch(setIsUploading(true));
+        setTimeout(async () => {
+          const imageFileName = await createBoardroomImageOnServer(formData);
+          formik.setFieldValue("picture", imageFileName);
+        }, 2000);
+      } catch (error) {
+        console.error("Error converting file to Base64:", error);
+      }
+    } else {
+      setImagePreview(null);
+    }
+  };
+
+  const createBoardroomImageOnServer = async (formData) => {
+    try {
+      const result = await dispatch(createEquipmentImage(formData)).unwrap();
+      return result;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const createBoardroomOnServer = (values) => {
+    const equipment = {
+      ...values,
+      isDisposed: false,
+      boardroomId: boardroom?.id,
+    };
+    dispatch(setCreatingEquipment(true));
+    setTimeout(() => {
+      dispatch(createBoardroomEquipment(equipment));
+    }, 1000);
   };
 
   return (
@@ -55,12 +103,14 @@ const BoardroomEquipmentForm = () => {
       <button
         type="submit"
         className={`w-full py-3 px-6 mb-6 rounded-lg shadow text-white font-semibold transition duration-200 ${
-          isSubmitting ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+          formik.isSubmitting || isCreatingEquipment
+            ? "bg-gray-400"
+            : "bg-blue-500 hover:bg-blue-600"
         }`}
-        disabled={isSubmitting}
+        disabled={formik.isSubmitting || isUploading}
         onClick={formik.handleSubmit}
       >
-        {isSubmitting ? (
+        {formik.isSubmitting || isCreatingEquipment ? (
           <div className="flex items-center justify-center">
             <svg
               className="animate-spin mr-2 h-5 w-5 text-white"
@@ -314,11 +364,24 @@ const BoardroomEquipmentForm = () => {
             )}
             {imagePreview && (
               <div className="mt-4">
-                <img
-                  src={imagePreview}
-                  alt="Selected Preview"
-                  className="h-40 w-full object-contain border border-gray-300 rounded-lg"
-                />
+                {isUploading ? (
+                  <div className="flex justify-center items-center p-4">
+                    <div className="flex items-center gap-4">
+                      {/* Loader */}
+                      <ClipLoader color="#36D7B7" size={50} />
+                      {/* Text */}
+                      <p className="text-lg text-gray-700">
+                        Wait as we process the image...
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    src={imagePreview}
+                    alt="Selected Preview"
+                    className="h-40 w-full object-contain border border-gray-300 rounded-lg"
+                  />
+                )}
               </div>
             )}
           </div>
