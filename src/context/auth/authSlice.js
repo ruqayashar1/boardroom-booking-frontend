@@ -125,6 +125,7 @@ const authSlice = createSlice({
     builder.addCase(fetchCurrentLoggedUserDetail.fulfilled, (state, action) => {
       state.isLoading = false;
       state.user = action.payload;
+      state.role = action.payload.role;
       state.error = null;
     });
     builder.addCase(fetchCurrentLoggedUserDetail.rejected, (state, action) => {

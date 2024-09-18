@@ -61,7 +61,7 @@ const removeReservation = createAsyncThunk(
       const resp = await apiClient.delete(
         BASE_URL.concat(DELETE_RESERVATION_BY_ID_URL(reservationId))
       );
-      if (resp.status === 200) {
+      if (resp.status === 204) {
         dispatch(removeboardroomReservation(reservationId));
       }
       return reservationId;

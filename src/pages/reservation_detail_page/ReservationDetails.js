@@ -21,8 +21,12 @@ import {
 } from "../../context/reservation/reservationDetailSlice";
 import { useNavigate } from "react-router-dom";
 import RescheduleMeeting from "./RescheduleMeeting";
+import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
+import useFetchBoardroomAdmin from "../../hooks/context/useFetchBoardroomAdmin";
 
 const ReservationDetails = ({ reservation }) => {
+  const { authUserId, isAuthenticatedUserAdmin } = useAuthenticatedUser();
+  const { boardroomAdmin } = useFetchBoardroomAdmin(reservation?.boardroomId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const boardroomSelection = useSelector(boardroomSelectionList);
@@ -152,7 +156,7 @@ const ReservationDetails = ({ reservation }) => {
           className="col-start-1 col-end-7 row-start-1 row-end-2 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
         >
           <h3 className="font-bold opacity-70 m-1">
-            Booked by:{" "}
+            Booked by:
             <b className="text-[#024458] ml-2">{reservation?.reservedBy}</b>
           </h3>
         </div>
@@ -161,7 +165,7 @@ const ReservationDetails = ({ reservation }) => {
           className="col-start-1 col-end-7 row-start-2 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
         >
           <h3 className="font-bold opacity-70 m-1">
-            Email:{" "}
+            Email:
             <b className="text-[#024458] ml-2">{reservation?.ownerEmail}</b>
           </h3>
         </div>
@@ -195,7 +199,10 @@ const ReservationDetails = ({ reservation }) => {
             id="meeting-link"
             className="col-start-7 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
           >
-            <MeetingLink meetingLinkUrl={reservation?.meetingLink} />
+            <MeetingLink
+              meetingLinkUrl={reservation?.meetingLink}
+              isAuthenticatedUserAdmin={isAuthenticatedUserAdmin}
+            />
           </div>
         )}
         <div
@@ -254,7 +261,7 @@ const ReservationDetails = ({ reservation }) => {
           </div>
           <h3 className="w-full inline-block font-bold opacity-70 mr-1 mb-2 text-center">
             Event Details
-          </h3>{" "}
+          </h3>
           <p
             ref={meetingDescriptionRef}
             className="text-md  p-2 indent-10 bg-white hidden"
@@ -290,82 +297,88 @@ const ReservationDetails = ({ reservation }) => {
           id="reschedue-approval-area"
           className="col-start-1 col-end-13 flex flex-col gap-2 p-2 py-10 justify-start items-center relative sm:flex-row sm:justify-between"
         >
-          <div className="w-full sm:w-[50%] flex flex-col gap-4 mb-4 sm:flex-row sm:mb-0">
-            <div className="relative w-full sm:w-auto">
-              <h3 className="font-bold opacity-70 m-1 absolute top-0">
-                Change venue
-              </h3>
-              <div className="shadow w-full sm:w-auto bg-[#D9D9D9] relative inline-block px-2 mt-6 sm:mt-0">
-                <select
-                  onChange={handleInputChange}
-                  value={reservationVenue}
-                  className="bg-[#D9D9D9] cursor-pointer p-2 outline-none block appearance-none w-full sm:w-auto px-4 mr-2"
-                >
-                  {boardroomSelection.map((boardroom) => (
-                    <option
-                      className={`${boardroom.locked && "bg-red-200"}`}
-                      key={boardroom.id}
-                      value={boardroom.id}
-                      disabled={boardroom.locked}
-                    >
-                      {boardroom.name}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 ml-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#5f6368"
-                    className="fill-current h-6 w-6"
+          {authUserId === reservation?.userId && (
+            <div className="w-full sm:w-[50%] flex flex-col gap-4 mb-4 sm:flex-row sm:mb-0">
+              <div className="relative w-full sm:w-auto">
+                <h3 className="font-bold opacity-70 m-1 absolute top-0">
+                  Change venue
+                </h3>
+                <div className="shadow w-full sm:w-auto bg-[#D9D9D9] relative inline-block px-2 mt-6 sm:mt-0">
+                  <select
+                    onChange={handleInputChange}
+                    value={reservationVenue}
+                    className="bg-[#D9D9D9] cursor-pointer p-2 outline-none block appearance-none w-full sm:w-auto px-4 mr-2"
                   >
-                    <path d="M480-360 280-560h400L480-360Z" />
-                  </svg>
+                    {boardroomSelection.map((boardroom) => (
+                      <option
+                        className={`${boardroom.locked && "bg-red-200"}`}
+                        key={boardroom.id}
+                        value={boardroom.id}
+                        disabled={boardroom.locked}
+                      >
+                        {boardroom.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 ml-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#5f6368"
+                      className="fill-current h-6 w-6"
+                    >
+                      <path d="M480-360 280-560h400L480-360Z" />
+                    </svg>
+                  </div>
                 </div>
               </div>
-            </div>
-            <button
-              onClick={openReschedulePane}
-              className="flex justify-center items-center w-full sm:w-auto h-max p-2 bg-[#D9D9D9]"
-            >
-              <span className="material-symbols-outlined opacity-70 mr-2">
-                refresh
-              </span>
-              <h3 className="opacity-70 inline-block">Reschedule</h3>
-            </button>
-          </div>
-          <div className="flex justify-end items-center w-full sm:w-[50%] font-bold text-white mb-4 sm:mb-0">
-            {/* <button
-              onClick={toggleResevationEditForm}
-              className="bg-blue-300 w-24 h-max p-2 mr-2"
-            >
-              EDIT
-            </button> */}
-            <button
-              onClick={confirmDeletion}
-              className="bg-[#D4342C] w-24 h-max p-2"
-            >
-              DELETE
-            </button>
-          </div>
-          <div className="flex justify-end items-center w-full sm:w-[50%] font-bold text-white">
-            {reservation?.approvalStatus !== "APPROVED" && (
               <button
-                onClick={(e) => confirmApproval(e, true)}
-                className="bg-[#52AC43] w-24 h-max p-2 mr-2"
+                onClick={openReschedulePane}
+                className="flex justify-center items-center w-full sm:w-auto h-max p-2 bg-[#D9D9D9]"
               >
-                ACCEPT
+                <span className="material-symbols-outlined opacity-70 mr-2">
+                  refresh
+                </span>
+                <h3 className="opacity-70 inline-block">Reschedule</h3>
               </button>
-            )}
-            <button
-              onClick={(e) => confirmApproval(e, false)}
-              className="bg-[#D4342C] w-24 h-max p-2"
-            >
-              DECLINE
-            </button>
-          </div>
+            </div>
+          )}
+          {authUserId === reservation?.userId && (
+            <div className="flex justify-end items-center w-full sm:w-[50%] font-bold text-white mb-4 sm:mb-0">
+              {/* <button
+            onClick={toggleResevationEditForm}
+            className="bg-blue-300 w-24 h-max p-2 mr-2"
+          >
+            EDIT
+          </button> */}
+              <button
+                onClick={confirmDeletion}
+                className="bg-[#D4342C] w-24 h-max p-2"
+              >
+                DELETE
+              </button>
+            </div>
+          )}
+          {authUserId === boardroomAdmin?.id && (
+            <div className="flex justify-end items-center w-full sm:w-[50%] font-bold text-white">
+              {reservation?.approvalStatus !== "APPROVED" && (
+                <button
+                  onClick={(e) => confirmApproval(e, true)}
+                  className="bg-[#52AC43] w-24 h-max p-2 mr-2"
+                >
+                  ACCEPT
+                </button>
+              )}
+              <button
+                onClick={(e) => confirmApproval(e, false)}
+                className="bg-[#D4342C] w-24 h-max p-2"
+              >
+                DECLINE
+              </button>
+            </div>
+          )}
         </div>
       </div>
       {reservationFormOpen ? (

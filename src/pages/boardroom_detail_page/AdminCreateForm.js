@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import useBoardroomAdmin from "../../hooks/context/useBoardroomAdmin";
+import useBoardroomAdmin from "../../hooks/context/useFetchBoardroomAdmin";
 import { changeBoardroomAdmin } from "../../context/boardroom/boardroomAdminSlice";
 
 const AdminCreateForm = ({ boardroom, users = [] }) => {

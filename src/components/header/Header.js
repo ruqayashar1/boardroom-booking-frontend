@@ -6,8 +6,10 @@ import { NavLink } from "react-router-dom";
 import { useClickAway } from "react-use";
 import UserProfilePopup from "./UserProfilePopup";
 import { useSelector } from "react-redux";
+import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
 
 const Header = () => {
+  const { isAuthenticatedUserAdmin } = useAuthenticatedUser();
   const authUser = useSelector((state) => state.auth.user);
   const [userPopupOpen, setUserPopupOpen] = useState(false);
   const [numberOfNotifications, setNumberOfNotifications] = useState(4);
@@ -54,21 +56,23 @@ const Header = () => {
         >
           BOARDROOMS
         </NavLink>
-        <NavLink
-          to="/add-boardroom"
-          state={null}
-          className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="#5f6368"
+        {isAuthenticatedUserAdmin && (
+          <NavLink
+            to="/add-boardroom"
+            state={null}
+            className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"
           >
-            <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-          </svg>
-        </NavLink>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#5f6368"
+            >
+              <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+            </svg>
+          </NavLink>
+        )}
         <div
           onClick={toggleUserProfilePopup}
           id="user-profile"
@@ -85,6 +89,7 @@ const Header = () => {
         <UserProfilePopup
           closeUserProfilePopup={closeUserProfilePopup}
           setUserPopupOpen={setUserPopupOpen}
+          isAuthenticatedUserAdmin={isAuthenticatedUserAdmin}
         />
       ) : null}
       {/* <Notifications
