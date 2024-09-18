@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoardroomAdmin } from "../../context/boardroom/boardroomAdminSlice";
 
-const useBoardroomAdmin = (boardroomId) => {
+const useFetchBoardroomAdmin = (boardroomId) => {
   const dispatch = useDispatch();
   const boardroomAdmin = useSelector(
     (state) => state.boardroomAdmin.boardroomAdmin
@@ -16,9 +16,9 @@ const useBoardroomAdmin = (boardroomId) => {
   );
   useEffect(() => {
     fetchBoardroomAdminFromServer(boardroomId);
-  }, []);
+  }, [boardroomId]);
 
   return { boardroomAdmin, isLoading };
 };
 
-export default useBoardroomAdmin;
+export default useFetchBoardroomAdmin;

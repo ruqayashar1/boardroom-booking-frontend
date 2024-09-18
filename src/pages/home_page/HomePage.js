@@ -15,7 +15,6 @@ const HomePage = () => {
         >
           <NavLink
             to="/"
-            exact
             className={({ isActive }) =>
               `flex items-center gap-2 h-10 ${
                 isActive ? "bg-[#daf3f5]" : "bg-[#D9D9D9]"
@@ -60,7 +59,6 @@ const HomePage = () => {
           </NavLink>
           <NavLink
             to="upcoming"
-            exact
             className={({ isActive }) =>
               `flex items-center gap-2 h-10 ${
                 isActive ? "bg-[#daf3f5]" : "bg-[#D9D9D9]"

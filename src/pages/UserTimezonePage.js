@@ -10,8 +10,8 @@ import { updateUserTimezone } from "../context/auth/authSlice";
 
 const UserTimezonePage = () => {
   useTrackPreviousUrl();
-  const yourTimezone = useSelector((state) => state.auth.user.timeZone);
-  const userId = useSelector((state) => state.auth.user.id);
+  const yourTimezone = useSelector((state) => state.auth.user?.timeZone);
+  const userId = useSelector((state) => state.auth.user?.id);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTimezones, setFilteredTimezones] = useState([]);
   const timezones = useSelector((state) => state.timezone.timezones);

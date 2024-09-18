@@ -14,15 +14,15 @@ import BoardroomArchivedReservations from "../pages/boardroom_detail_page/Boardr
 import BoardroomEquipments from "../pages/boardroom_detail_page/BoardroomEquipments";
 import BoardroomAdminDetails from "../pages/boardroom_detail_page/BoardroomAdminDetails";
 import ProtectedRoute from "../routes/ProtectedRoute";
-import { useSelector } from "react-redux";
 import ReservationDetailPage from "../pages/reservation_detail_page/ReservationDetailPage";
 import SystemAdminsPage from "../pages/system_admins_page/SystemAdminsPage";
 import UserTimezonePage from "../pages/UserTimezonePage";
 import NotFoundPage from "../pages/NotFoundPage";
 import useFetchAllBoardrooms from "../hooks/context/useFetchAllBoardrooms";
+import useAuthenticatedUser from "../hooks/useAuthenticatedUser";
 
 const Layout = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { isAuthenticated } = useAuthenticatedUser();
   useFetchAllBoardrooms();
   return (
     <Routes>

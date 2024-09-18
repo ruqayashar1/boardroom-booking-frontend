@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../utils/axiosClient";
 import { BASE_URL, RESERVATION_URL } from "../../constants";
-import { toast } from "react-toastify";
 
 const initialState = {
   isLoading: false,

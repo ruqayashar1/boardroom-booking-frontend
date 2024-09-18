@@ -3,11 +3,11 @@ import BoardroomAdminInfo from "./BoardroomAdminInfo";
 import { getCurrentSelectedBoardroomId } from "../../functions";
 import EmptyBoxMessager from "../../components/EmptyBoxMessager";
 import LoaderIndicator from "../../components/loaders/LoaderIndicator";
-import useBoardroomAdmin from "../../hooks/context/useBoardroomAdmin";
+import useFetchBoardroomAdmin from "../../hooks/context/useFetchBoardroomAdmin";
 
 const BoardroomAdminDetails = () => {
   const boardroomId = getCurrentSelectedBoardroomId();
-  const { boardroomAdmin, isLoading } = useBoardroomAdmin(boardroomId);
+  const { boardroomAdmin, isLoading } = useFetchBoardroomAdmin(boardroomId);
   return (
     <>
       {boardroomAdmin === null && !isLoading ? (

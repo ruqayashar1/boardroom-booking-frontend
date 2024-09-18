@@ -6,7 +6,6 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import MakeReservationForm from "./MakeReservationForm";
 import LockRoom from "./LockRoom";
 import UnLockRoom from "./UnLockRoom";
-import PreviousPageButton from "../../components/buttons/PreviousPageButton";
 import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
 import {
   changeFromCSVToList,
@@ -21,15 +20,19 @@ import EmptyBoxMessager from "../../components/EmptyBoxMessager";
 import CreateBoardroomAdmin from "./CreateBoardroomAdmin";
 import CreateBoardroomEquipment from "./CreateBoardroomEquipment";
 import CreateBoardroomContact from "./CreateBoardroomContact";
+import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
+import useFetchBoardroomAdmin from "../../hooks/context/useFetchBoardroomAdmin";
 
 const BoardRoomDetailPage = () => {
   useTrackPreviousUrl();
+  const { isAuthenticatedUserAdmin, authUserId } = useAuthenticatedUser();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   let { boardroomId } = location.state || {};
   storeCurrentSelectedBoardroomId(boardroomId);
   boardroomId = getCurrentSelectedBoardroomId();
+  const { boardroomAdmin } = useFetchBoardroomAdmin(boardroomId);
   const boardroom = useSelector((state) => state.selectedBoardroom.boardroom);
   const isLoading = useSelector((state) => state.selectedBoardroom.isLoading);
 
@@ -111,7 +114,6 @@ const BoardRoomDetailPage = () => {
       ) : (
         <main id="main" className="relative mb-6 px-4 md:px-8">
           <div className="flex items-center gap-5 flex-wrap">
-            <PreviousPageButton />
             <div className="flex-1 h-max flex justify-between my-2 bg-[#f7f7f7] pr-4 items-center shadow-sm rounded-[0.4rem]">
               <div
                 className={`w-full sm:w-[80%] h-full bg-gradient-to-tr ${
@@ -170,10 +172,12 @@ const BoardRoomDetailPage = () => {
                     <span className="material-symbols-outlined mr-2">wifi</span>
                     <h3>Enabled</h3>
                   </div>
-                  <BoardroomSettings
-                    toggleFuncs={toggleFuncs}
-                    isRoomLocked={boardroom?.locked}
-                  />
+                  {authUserId === boardroomAdmin?.id ? (
+                    <BoardroomSettings
+                      toggleFuncs={toggleFuncs}
+                      isRoomLocked={boardroom?.locked}
+                    />
+                  ) : null}
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center sm:justify-start mb-5">
                   <div className="mr-0 sm:mr-24 mb-2 sm:mb-0">
@@ -192,7 +196,9 @@ const BoardRoomDetailPage = () => {
                     <h3 className="font-bold text-sm mb-2 opacity-50">
                       Phone Extension
                     </h3>
-                    {boardroom?.boardroomContacts?.length === 0 ? (
+                    {boardroom?.boardroomContacts?.length === 0 &&
+                    (isAuthenticatedUserAdmin ||
+                      authUserId === boardroomAdmin?.id) ? (
                       <button
                         onClick={() => setShowBoardroomContact(true)}
                         className="w-max h-max bg-gradient-to-tl from-[#06ABDE] to-[#a4e9e0] text-white font-semibold py-1 px-4 rounded-sm shadow-lg hover:bg-blue-600 transition duration-200 flex items-center"
@@ -293,18 +299,20 @@ const BoardRoomDetailPage = () => {
             >
               <h3 className="font-bold text-sm">Reservations</h3>
             </NavLink>
-            <NavLink
-              to="equipments"
-              className={({ isActive }) =>
-                `w-full sm:w-auto h-8 ${
-                  isActive
-                    ? "bg-gradient-to-tr from-[#06ABDE] to-[#a4e9e0]"
-                    : "bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9]"
-                } flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer`
-              }
-            >
-              <h3 className="font-bold text-sm">Equipment</h3>
-            </NavLink>
+            {isAuthenticatedUserAdmin && (
+              <NavLink
+                to="equipments"
+                className={({ isActive }) =>
+                  `w-full sm:w-auto h-8 ${
+                    isActive
+                      ? "bg-gradient-to-tr from-[#06ABDE] to-[#a4e9e0]"
+                      : "bg-gradient-to-tr from-[#eef5f7] to-[#d9d9d9]"
+                  } flex justify-center items-center p-2 shadow-md px-4 opacity-70 hover:opacity-100 cursor-pointer`
+                }
+              >
+                <h3 className="font-bold text-sm">Equipment</h3>
+              </NavLink>
+            )}
             <NavLink
               to="admin-info"
               className={({ isActive }) =>

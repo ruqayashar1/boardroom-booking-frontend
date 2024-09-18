@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { createReservationMeetingLink } from "../../context/reservation/reservationDetailSlice";
 import { getCurrentSelectedReservationId } from "../../functions";
 
-const MeetingLink = ({ meetingLinkUrl }) => {
+const MeetingLink = ({ meetingLinkUrl, isAuthenticatedUserAdmin }) => {
   const dispatch = useDispatch();
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isEditButtonClicked, setIsEditButtonClicked] = useState(false);
@@ -45,7 +45,7 @@ const MeetingLink = ({ meetingLinkUrl }) => {
       {!isEditButtonClicked && meetingLinkUrl !== null ? (
         <div className="flex gap-3 my-2">
           <h3 className="font-bold opacity-70 m-1">
-            Meeting Link:{" "}
+            Meeting Link:
             <a
               href={meetingLinkUrl}
               target="_blank"
@@ -56,23 +56,31 @@ const MeetingLink = ({ meetingLinkUrl }) => {
             </a>
           </h3>
           <CopyToClipboard textToBeCopied={"johnmaluki.dev"} />
-          <button
-            onClick={handleEditButtonClick}
-            className="mx-auto bg-[#06ABDD] text-white px-4 py-2 shadow hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Edit Link
-          </button>
+          {isAuthenticatedUserAdmin && (
+            <button
+              onClick={handleEditButtonClick}
+              className="mx-auto bg-[#06ABDD] text-white px-4 py-2 shadow hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Edit Link
+            </button>
+          )}
         </div>
       ) : (
         <>
           <div className="max-w-md mx-auto p-2 flex justify-center">
-            {!isFormVisible && (
-              <button
-                onClick={() => setIsFormVisible(true)}
-                className="mx-auto bg-[#06ABDD] text-white px-4 py-2 shadow hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Add Meeting Link
-              </button>
+            {isAuthenticatedUserAdmin ? (
+              !isFormVisible && (
+                <button
+                  onClick={() => setIsFormVisible(true)}
+                  className="mx-auto bg-[#06ABDD] text-white px-4 py-2 shadow hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Add Meeting Link
+                </button>
+              )
+            ) : (
+              <span className="bg-red-50 p-2 shadow italic text-sm">
+                When meeting link is created will appear here
+              </span>
             )}
           </div>
 
