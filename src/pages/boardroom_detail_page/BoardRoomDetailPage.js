@@ -22,6 +22,7 @@ import CreateBoardroomEquipment from "./CreateBoardroomEquipment";
 import CreateBoardroomContact from "./CreateBoardroomContact";
 import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
 import useFetchBoardroomAdmin from "../../hooks/context/useFetchBoardroomAdmin";
+import BoardroomDescription from "./BoardroomDescription";
 
 const BoardRoomDetailPage = () => {
   useTrackPreviousUrl();
@@ -148,14 +149,14 @@ const BoardRoomDetailPage = () => {
           </div>
           <section
             id="boardroom-basic-info"
-            className="flex flex-col lg:flex-row justify-between mb-6 mt-0 gap-6"
+            className="h-96 flex flex-col lg:flex-row justify-between mb-6 mt-0 gap-6"
           >
-            <div id="boardroom-image" className="w-full lg:w-[49%] h-[100%]">
+            <div id="boardroom-image" className="w-full lg:w-[49%] h-full">
               <BoardroomDetailImage boardroom={boardroom} />
             </div>
             <div
               id="description-section"
-              className="w-full lg:w-[49%] font-[Inter] flex flex-col justify-between relative"
+              className="w-full h-full lg:w-[49%] font-[Inter] flex flex-col justify-between relative"
             >
               <div id="top-info" className="p-3 shadow-md mb-2">
                 <div className="flex justify-between items-center mb-5 flex-wrap gap-2">
@@ -172,7 +173,8 @@ const BoardRoomDetailPage = () => {
                     <span className="material-symbols-outlined mr-2">wifi</span>
                     <h3>Enabled</h3>
                   </div>
-                  {authUserId === boardroomAdmin?.id ? (
+                  {authUserId === boardroomAdmin?.id ||
+                  isAuthenticatedUserAdmin ? (
                     <BoardroomSettings
                       toggleFuncs={toggleFuncs}
                       isRoomLocked={boardroom?.locked}
@@ -228,9 +230,7 @@ const BoardRoomDetailPage = () => {
                     )}
                   </div>
                 </div>
-                <div className="bg-gray-50 p-2 font-[Roboto]">
-                  <p>{boardroom?.description}</p>
-                </div>
+                <BoardroomDescription description={boardroom?.description} />
               </div>
               <div
                 id="bottom-info"
