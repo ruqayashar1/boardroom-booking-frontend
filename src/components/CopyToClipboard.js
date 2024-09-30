@@ -13,7 +13,7 @@ const CopyToClipboard = ({ textToBeCopied }) => {
     <div className="flex items-center justify-center">
       <span
         onClick={handleCopy}
-        className="font-[Roboto] shadow-lg cursor-pointer inline-block bg-gray-200 px-4 py-2 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="font-[Roboto] shadow-lg hover:text-blue-600 cursor-copy inline-block bg-gray-200 px-4 py-2 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
         {copied ? "Copied!" : "Click to Copy"}
       </span>

@@ -12,7 +12,6 @@ const fetchTimezones = createAsyncThunk(
   "timezone/fetchTimezones",
   async (_, { rejectWithValue }) => {
     try {
-      console.log(TIMEZONES_FETCH_URL);
       const response = await apiClient.get(TIMEZONES_FETCH_URL);
       const timezones = response.data;
       return timezones;

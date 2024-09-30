@@ -3,11 +3,13 @@ import apiClient from "../../utils/axiosClient";
 import {
   BASE_URL,
   BOARDROOM_RESESERVATIONS_URL,
+  CHECK_RESERVATION_EVENT_OVERLAP_URL,
   RESERVATION_URL,
 } from "../../constants";
 import { toast } from "react-toastify";
 
 const initialState = {
+  isCreatingReservation: false,
   isLoading: false,
   boardroomReservations: [],
   error: null,
@@ -66,6 +68,17 @@ const updateReservation = createAsyncThunk(
   }
 );
 
+const checkReservationEventOverlap = createAsyncThunk(
+  "boardroomReservation/checkReservationEventOverlap",
+  async ({ boardroomId, reservationEventDate }) => {
+    const resp = await apiClient.post(
+      BASE_URL.concat(CHECK_RESERVATION_EVENT_OVERLAP_URL(boardroomId)),
+      reservationEventDate
+    );
+    return resp.data;
+  }
+);
+
 const boardroomReservationSlice = createSlice({
   name: "boardroomReservation",
   initialState: initialState,
@@ -76,6 +89,9 @@ const boardroomReservationSlice = createSlice({
           (reservation) => reservation.id !== action.payload
         ),
       ];
+    },
+    setIsCreatingReservation: (state, action) => {
+      state.isCreatingReservation = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -93,7 +109,11 @@ const boardroomReservationSlice = createSlice({
       state.error = action.payload;
     });
     // Create reservation
+    builder.addCase(createReservation.pending, (state) => {
+      state.isCreatingReservation = true;
+    });
     builder.addCase(createReservation.fulfilled, (state, action) => {
+      state.isCreatingReservation = false;
       if (action.payload) {
         state.boardroomReservations = [
           action.payload,
@@ -104,6 +124,7 @@ const boardroomReservationSlice = createSlice({
       state.error = null;
     });
     builder.addCase(createReservation.rejected, (state, action) => {
+      state.isCreatingReservation = false;
       state.error = action.payload;
     });
     // Update reservation
@@ -124,5 +145,11 @@ const boardroomReservationSlice = createSlice({
 });
 
 export default boardroomReservationSlice.reducer;
-export const { removeboardroomReservation } = boardroomReservationSlice.actions;
-export { fetchBoardroomReservations, createReservation, updateReservation };
+export const { removeboardroomReservation, setIsCreatingReservation } =
+  boardroomReservationSlice.actions;
+export {
+  fetchBoardroomReservations,
+  createReservation,
+  updateReservation,
+  checkReservationEventOverlap,
+};

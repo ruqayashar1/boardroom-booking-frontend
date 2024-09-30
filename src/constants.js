@@ -51,3 +51,5 @@ export const UNLOCK_BOARDROOM_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/unlock`;
 export const RESCHEDULE_RESERVATION_URL = (reservationId) =>
   `/reservations/${reservationId}/reschedule`;
+export const CHECK_RESERVATION_EVENT_OVERLAP_URL = (boardroomId) =>
+  `/boardrooms/${boardroomId}/event-overlap`;

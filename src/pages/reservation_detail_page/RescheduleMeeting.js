@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import { convertDateAndTimeToUtcIsoString } from "../../functions";
 import { useDispatch, useSelector } from "react-redux";
 import { rescheduleReservation } from "../../context/reservation/reservationDetailSlice";
+import { format, parseISO } from "date-fns";
 
 const RescheduleMeeting = ({ reservation, onClose }) => {
   const dispatch = useDispatch();
@@ -18,9 +19,47 @@ const RescheduleMeeting = ({ reservation, onClose }) => {
       .required("Start Date is required"),
     startTime: Yup.string().required("Start Time is required"),
     endDate: Yup.date()
-      .min(startOfToday, "Start date must be in the future")
-      .required("End Date is required"),
-    endTime: Yup.string().required("End Time is required"),
+      .min(startOfToday, "End date must be in the future")
+      .required("End Date is required")
+      .test(
+        "is-greater-or-equal",
+        "End date must be greater than or equal to start date",
+        function (endDate) {
+          const { startDate } = this.parent; // Access sibling field
+          return startDate && endDate
+            ? new Date(endDate) >= new Date(startDate)
+            : true;
+        }
+      ),
+    endTime: Yup.string()
+      .required("End Time is required")
+      .test(
+        "is-after-start",
+        "End time must be after start time if dates are the same",
+        function (endTime) {
+          const { startDate, startTime, endDate } = this.parent; // Access sibling fields
+          if (startDate && endDate) {
+            // If both dates are provided and are the same
+            if (startDate.getTime() === endDate.getTime()) {
+              // Check if startTime and endTime are provided
+              if (startTime && endTime) {
+                const startDateTimeIso = `${format(
+                  startDate,
+                  "yyyy-MM-dd"
+                )}T${startTime}`;
+                const endDateTimeIso = `${format(
+                  endDate,
+                  "yyyy-MM-dd"
+                )}T${endTime}`;
+                const startDateTime = parseISO(startDateTimeIso);
+                const endDateTime = parseISO(endDateTimeIso);
+                return endDateTime > startDateTime; // Check if end time is after start time
+              }
+            }
+          }
+          return true; // Pass if dates are not the same or if either time is not provided
+        }
+      ),
   });
   const formik = useFormik({
     initialValues: {
