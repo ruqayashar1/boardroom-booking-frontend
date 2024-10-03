@@ -17,7 +17,7 @@ const BoardroomDescription = ({ description }) => {
 
   // Function to truncate text and add "..." if it overflows
   const truncateText = () => {
-    const maxChars = 247; // Adjust the number of characters
+    const maxChars = 170; // Adjust the number of characters
     if (description.length > maxChars) {
       setTruncatedText(description.slice(0, maxChars) + "...");
     }

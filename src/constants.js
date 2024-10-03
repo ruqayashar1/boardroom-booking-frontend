@@ -13,6 +13,8 @@ export const FETCH_KEMRI_EMPLOYEES_URL = "/kemri-employees";
 export const UPLOAD_IMAGE_URL = "/upload";
 export const USERS_URL = "/users";
 export const EQUIPMENT_URL = "/equipments";
+export const FETCH_OVERLAPED_BOARDROOMS_URL =
+  "/boardrooms/filter_by_event_date";
 
 export const LOCKED_BOARDROOM_MESSAGE_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/lock-message`;

@@ -1,18 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
-const ErrorAlert = ({ removeError }) => {
+const ErrorAlert = ({ removeError, message }) => {
   return (
     <div
-      className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative m-4"
+      className=" flex justify-between items-center bg-red-100 border border-red-400 text-red-700 px-2 py-2 rounded relative m-2"
       role="alert"
     >
-      <span className="block sm:inline">
-        Please choose another event date. The current one overlaps with another
-        scheduled event.
-      </span>
+      <span className="block sm:inline">{message}</span>
       <button
         onClick={() => removeError()}
-        className="absolute top-0 bottom-0 right-0 px-4 py-3 text-red-700 hover:text-red-900"
+        className="px-2 text-red-700 hover:text-red-900"
         aria-label="Close"
       >
         <svg
