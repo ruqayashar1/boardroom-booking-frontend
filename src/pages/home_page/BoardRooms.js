@@ -14,20 +14,29 @@ const BoardRooms = () => {
   const capacityFilter = useSelector(
     (state) => state.boardroom.filter.capacityFilter
   );
+  const overlapedBoardrooms = useSelector(
+    (state) => state.boardroom.overlapedBoardrooms
+  );
   const searchedString = useSelector(
     (state) => state.boardroom.filter.searchedString
   );
 
-  const filteredBoardrooms = boardrooms?.filter((boardroom) => {
-    const matchesCapacity = capacityFilter
-      ? boardroom?.capacity >= capacityFilter
-      : true;
-    const matchesSearch = searchedString
-      ? boardroom?.name.toLowerCase().includes(searchedString.toLowerCase())
-      : true;
+  const filteredBoardrooms = boardrooms
+    ?.filter((boardroom) => {
+      const matchesCapacity = capacityFilter
+        ? boardroom?.capacity >= capacityFilter
+        : true;
+      const matchesSearch = searchedString
+        ? boardroom?.name.toLowerCase().includes(searchedString.toLowerCase())
+        : true;
 
-    return matchesCapacity && matchesSearch;
-  });
+      return matchesCapacity && matchesSearch;
+    })
+    .filter((boardroom) =>
+      overlapedBoardrooms.length !== 0
+        ? !overlapedBoardrooms.find((room) => room.id === boardroom.id)
+        : true
+    );
 
   return (
     <section id="boardrooms" className="w-full relative">

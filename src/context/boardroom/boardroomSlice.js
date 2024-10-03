@@ -1,12 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import apiClient from "../../utils/axiosClient";
-import { BASE_URL, BOARDROOM_BY_ID_URL, BOARDROOM_URL } from "../../constants";
+import {
+  BASE_URL,
+  BOARDROOM_BY_ID_URL,
+  BOARDROOM_URL,
+  FETCH_OVERLAPED_BOARDROOMS_URL,
+} from "../../constants";
 
 const initialState = {
   isLoading: false,
   isSaving: false,
+  isFetchingOverlapedRooms: false,
   boardrooms: [],
+  overlapedBoardrooms: [],
   filter: { capacityFilter: null, searchedString: "" },
   error: null,
 };
@@ -58,15 +65,39 @@ const updateBoardroom = createAsyncThunk(
   }
 );
 
+const fetchOverlapedBoardroomsByEventDate = createAsyncThunk(
+  "boardrom/fetchOverlapedBoardroomsByEventDate",
+  async (eventData, { rejectWithValue }) => {
+    try {
+      const resp = await apiClient.post(
+        BASE_URL.concat(FETCH_OVERLAPED_BOARDROOMS_URL),
+        eventData
+      );
+      return resp.data;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+);
+
 const boardroomSlice = createSlice({
   name: "boardroom",
   initialState: initialState,
   reducers: {
+    setIsFetchingOverlapedRooms: (state, action) => {
+      state.isFetchingOverlapedRooms = action.payload;
+    },
     filterByCapacity: (state, action) => {
       state.filter.capacityFilter = action.payload;
     },
     filterBySearchedString: (state, action) => {
       state.filter.searchedString = action.payload;
+    },
+    clearOverlapedBoardrooms: (state) => {
+      state.overlapedBoardrooms = [];
     },
     lockOrUnLockFetchedHomeBoardroom: (state, action) => {
       const { boardroomId, lockOrUnlock } = action.payload;
@@ -127,6 +158,26 @@ const boardroomSlice = createSlice({
       state.isSaving = false;
       state.error = action.payload;
     });
+    // Fetch overlaped boardrooms
+    builder.addCase(fetchOverlapedBoardroomsByEventDate.pending, (state) => {
+      state.isFetchingOverlapedRooms = true;
+    });
+    builder.addCase(
+      fetchOverlapedBoardroomsByEventDate.fulfilled,
+      (state, action) => {
+        state.isFetchingOverlapedRooms = false;
+        state.overlapedBoardrooms = action.payload;
+        state.error = null;
+      }
+    );
+    builder.addCase(
+      fetchOverlapedBoardroomsByEventDate.rejected,
+      (state, action) => {
+        state.isFetchingOverlapedRooms = false;
+        state.overlapedBoardrooms = [];
+        state.error = action.payload;
+      }
+    );
   },
 });
 
@@ -135,5 +186,12 @@ export const {
   filterByCapacity,
   filterBySearchedString,
   lockOrUnLockFetchedHomeBoardroom,
+  setIsFetchingOverlapedRooms,
+  clearOverlapedBoardrooms,
 } = boardroomSlice.actions;
-export { fetchBoardrooms, createBoardroom, updateBoardroom };
+export {
+  fetchBoardrooms,
+  createBoardroom,
+  updateBoardroom,
+  fetchOverlapedBoardroomsByEventDate,
+};

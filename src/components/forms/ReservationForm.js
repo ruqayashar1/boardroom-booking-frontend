@@ -219,6 +219,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
         return result.payload.overlap;
       } else {
         dispatch(setIsCreatingReservation(false));
+        return false;
       }
     } catch {
       console.error("error checking overlap");
@@ -229,7 +230,13 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
 
   return (
     <>
-      {overlaped && <ErrorAlert removeError={removeError} />}
+      {overlaped && (
+        <ErrorAlert
+          removeError={removeError}
+          message="Please choose another event date. The current one overlaps with another
+        scheduled event."
+        />
+      )}
       <form
         onSubmit={formik.handleSubmit}
         className="w-full p-4 bg-white space-y-4"

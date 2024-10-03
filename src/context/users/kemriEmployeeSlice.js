@@ -10,7 +10,7 @@ const initialState = {
 
 const fetchKemriEmployees = createAsyncThunk(
   "kemriEmployee/fetchKemriEmployees",
-  async ({ rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const resp = await apiClient.get(
         BASE_URL.concat(FETCH_KEMRI_EMPLOYEES_URL)
