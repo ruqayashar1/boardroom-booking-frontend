@@ -5,7 +5,7 @@ const MakeReservationForm = ({ toggleReservationForm, boardroom }) => {
   return (
     <aside
       id="make-reservation-popup"
-      className="w-full h-full shadow absolute bg-white top-0 right-0 z-10"
+      className="w-full shadow absolute bg-white top-0 right-0 z-10"
     >
       <div className="flex justify-start p-4 mb-6">
         <button

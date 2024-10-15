@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { BASE_URL, REFRESH_TOKEN_URL } from "./constants";
-import { format, parse } from "date-fns";
+import { format, parse, parseISO } from "date-fns";
 
 const tokenKeyName = "authToken";
 
@@ -222,4 +222,18 @@ export const convertDateAndTimeToUtcIsoString = (date, time) => {
   const localDateTime = new Date(combinedDateTime);
   const utcDateTimeISO = localDateTime.toISOString();
   return utcDateTimeISO;
+};
+
+export const getHumanFriendlyDateTime = (isoString) => {
+  // Parse the ISO string to a JavaScript Date object
+  const parsedDate = parseISO(isoString);
+
+  // Format the date as human-friendly (e.g., 'October 12, 2024')
+  const humanFriendlyDate = format(parsedDate, "MMMM dd, yyyy");
+
+  // Format the time as human-friendly (e.g., '2:30 PM')
+  const humanFriendlyTime = format(parsedDate, "hh:mm a");
+
+  // Return the date and time in an array
+  return [humanFriendlyDate, humanFriendlyTime];
 };

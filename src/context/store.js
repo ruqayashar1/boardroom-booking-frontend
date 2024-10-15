@@ -17,6 +17,7 @@ import reservationDetailSlice from "./reservation/reservationDetailSlice";
 import fileImageSlice from "./upload/uploadFileSlice";
 import errorMiddleware from "./middleware";
 import usersSlice from "./users/usersSlice";
+import notificationSlice from "./notification/notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -37,6 +38,7 @@ const store = configureStore({
     selectedReservation: reservationDetailSlice,
     fileImage: fileImageSlice,
     user: usersSlice,
+    notification: notificationSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(errorMiddleware),

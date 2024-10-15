@@ -39,17 +39,17 @@ const Header = () => {
   return (
     <header
       id="header"
-      className="flex flex-col md:flex-row justify-between items-center h-auto md:h-[70px] p-4 md:p-2 shadow-sm sticky top-0 z-30 bg-white"
+      className="flex flex-col md:flex-row justify-between items-center h-auto md:h-[70px] p-4 md:p-2 shadow-sm sticky z-50 bg-white"
     >
       <Logo />
       <div
         id="right-area"
         className="flex flex-col md:flex-row justify-between items-center w-full md:w-[400px] gap-2 md:gap-4"
       >
-        {/* <Notification
+        <Notification
           numberOfNotifications={numberOfNotifications}
           openNotificationPopUp={openNotificationPopUp}
-        /> */}
+        />
         <NavLink
           to="/"
           className="font-bold cursor-pointer text-[#06ABDD] p-2 rounded-sm transition duration-300 ease-out hover:bg-[#f3f3f3]"
@@ -92,10 +92,10 @@ const Header = () => {
           isAuthenticatedUserAdmin={isAuthenticatedUserAdmin}
         />
       ) : null}
-      {/* <Notifications
+      <Notifications
         notificationPaneRef={notificationPaneRef}
         openNotificationPopUp={openNotificationPopUp}
-      /> */}
+      />
     </header>
   );
 };
