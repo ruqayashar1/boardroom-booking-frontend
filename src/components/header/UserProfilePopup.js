@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useClickAway } from "react-use";
 import { deleteToken, getTwoLettersFromName } from "../../functions";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ const UserProfilePopup = ({
   setUserPopupOpen,
   isAuthenticatedUserAdmin,
 }) => {
+  const navigate = useNavigate();
   const authUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const userProfilePopupRef = useRef();
@@ -20,6 +21,8 @@ const UserProfilePopup = ({
   const logoutUser = () => {
     deleteToken();
     dispatch(authenticate(false));
+    navigate("/login");
+    window.location.reload();
   };
   return (
     <div

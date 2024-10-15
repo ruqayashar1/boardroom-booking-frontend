@@ -75,6 +75,7 @@ const checkReservationEventOverlap = createAsyncThunk(
       BASE_URL.concat(CHECK_RESERVATION_EVENT_OVERLAP_URL(boardroomId)),
       reservationEventDate
     );
+    console.log(resp.data);
     return resp.data;
   }
 );

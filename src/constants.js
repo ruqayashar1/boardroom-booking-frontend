@@ -1,4 +1,5 @@
 export const BASE_URL = "http://localhost:8080";
+export const WS_BASE_URL = "http://localhost:8080/ws";
 export const AUTH_URL = "/auth/login";
 export const REFRESH_TOKEN_URL = "/auth/refresh-token";
 export const TIMEZONES_FETCH_URL = "/user-timezones";
@@ -15,6 +16,7 @@ export const USERS_URL = "/users";
 export const EQUIPMENT_URL = "/equipments";
 export const FETCH_OVERLAPED_BOARDROOMS_URL =
   "/boardrooms/filter_by_event_date";
+export const FETCH_NOTIFICATIONS_URL = "/notifications";
 
 export const LOCKED_BOARDROOM_MESSAGE_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/lock-message`;
@@ -55,3 +57,5 @@ export const RESCHEDULE_RESERVATION_URL = (reservationId) =>
   `/reservations/${reservationId}/reschedule`;
 export const CHECK_RESERVATION_EVENT_OVERLAP_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/event-overlap`;
+export const UPDATE_NOTIFICATION_AS_READ_URL = (notificationId) =>
+  `/notifications/${notificationId}`;

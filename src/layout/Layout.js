@@ -20,9 +20,28 @@ import UserTimezonePage from "../pages/UserTimezonePage";
 import NotFoundPage from "../pages/NotFoundPage";
 import useFetchAllBoardrooms from "../hooks/context/useFetchAllBoardrooms";
 import useAuthenticatedUser from "../hooks/useAuthenticatedUser";
+import useSockjsConnection from "../hooks/useSockjsConnection";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../context/notification/notificationSlice";
 
 const Layout = () => {
-  const { isAuthenticated } = useAuthenticatedUser();
+  const dispatch = useDispatch();
+  const { isAuthenticated, tag, isAuthenticatedUserAdmin } =
+    useAuthenticatedUser();
+
+  const onAdminRoomNotification = (notification) => {
+    dispatch(addNotification(notification));
+  };
+  const onUserPrivateNotification = (notification) => {
+    dispatch(addNotification(notification));
+  };
+  useSockjsConnection(
+    tag,
+    isAuthenticated,
+    isAuthenticatedUserAdmin,
+    onAdminRoomNotification,
+    onUserPrivateNotification
+  );
   useFetchAllBoardrooms();
   return (
     <Routes>
