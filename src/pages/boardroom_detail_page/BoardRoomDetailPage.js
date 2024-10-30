@@ -8,13 +8,11 @@ import LockRoom from "./LockRoom";
 import UnLockRoom from "./UnLockRoom";
 import useTrackPreviousUrl from "../../hooks/useTrackPreviousUrl";
 import {
-  changeFromCSVToList,
   getCurrentSelectedBoardroomId,
   storeCurrentSelectedBoardroomId,
 } from "../../functions";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoardroomById } from "../../context/boardroom/selectedBoardroomSlice";
-import BoardroomDetailImage from "./BoardroomDetailImage";
 import LoaderIndicator from "../../components/loaders/LoaderIndicator";
 import EmptyBoxMessager from "../../components/EmptyBoxMessager";
 import CreateBoardroomAdmin from "./CreateBoardroomAdmin";
@@ -199,6 +197,7 @@ const BoardRoomDetailPage = () => {
                 toggleFuncs={toggleFuncs}
                 boardroomAdmin={boardroomAdmin}
                 isRoomLocked={boardroom?.locked}
+                boardroom={boardroom}
               />
             </div>
 
@@ -265,7 +264,7 @@ const BoardRoomDetailPage = () => {
             </div>
           </section>
 
-          <Outlet context={{ toggleReservationForm }} />
+          <Outlet context={{ toggleReservationForm, boardroom }} />
         </main>
       )}
     </>

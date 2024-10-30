@@ -6,6 +6,7 @@ import BoardroomSettingItem from "./BoardroomSettingItem";
 const BoardroomSettings = ({
   toggleFuncs,
   boardroomAdmin,
+  boardroom,
   isRoomLocked = false,
 }) => {
   const { isAuthenticatedUserAdmin, authUserId } = useAuthenticatedUser();
@@ -77,13 +78,15 @@ const BoardroomSettings = ({
               <BoardroomSettingItem key={index} item={item} />
             ))
           : null}
-        <BoardroomSettingItem
-          item={{
-            label: "Make Reservation",
-            icon: "add",
-            action: toggleFuncs.toggleReservationForm,
-          }}
-        />
+        {!boardroom?.locked && (
+          <BoardroomSettingItem
+            item={{
+              label: "Make Reservation",
+              icon: "add",
+              action: toggleFuncs.toggleReservationForm,
+            }}
+          />
+        )}
 
         {authUserId === boardroomAdmin?.id || isAuthenticatedUserAdmin ? (
           isRoomLocked ? (

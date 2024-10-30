@@ -1,5 +1,5 @@
 import moment from "moment/moment";
-import React, { useState } from "react";
+import React from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import useFetchBoardroomReservations from "../../hooks/context/useFetchBoardroomReservations";
 import {
@@ -15,11 +15,9 @@ const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 const ReservationBigCalendar = () => {
-  const { toggleReservationForm } = useOutletContext();
-  const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const { toggleReservationForm, boardroom } = useOutletContext();
   const boardroomId = getCurrentSelectedBoardroomId();
-  const { reservations, isLoading } =
-    useFetchBoardroomReservations(boardroomId);
+  const { reservations } = useFetchBoardroomReservations(boardroomId);
   const events =
     reservations.length === 0
       ? []
@@ -37,14 +35,6 @@ const ReservationBigCalendar = () => {
           recordMeeting: reservation.recordMeeting,
           cancellationMessage: reservation.cancellationMessage,
         }));
-
-  // Custom event styling
-  const eventPropGetter = (event) => {
-    const backgroundColor = event.isUrgentMeeting
-      ? "bg-red-500"
-      : "bg-blue-500";
-    return { className: `${backgroundColor} text-white p-2 rounded-md` };
-  };
 
   // Custom event component
   const EventComponent = ({ event }) => {
@@ -65,11 +55,10 @@ const ReservationBigCalendar = () => {
     // );
   };
   const handleSelectSlot = ({ start, end }) => {
-    setSelectedDateTime({ start, end });
     const [startDate, startTime] = getDateAndTimeFromDateIsoString(start);
     const [endDate, endTime] = getDateAndTimeFromDateIsoString(end);
 
-    if (isFutureSlot(start)) {
+    if (isFutureSlot(start) && !boardroom?.locked) {
       const dateEvent = {
         startDate: startDate,
         startTime: startTime,
@@ -91,12 +80,12 @@ const ReservationBigCalendar = () => {
         min={new Date(1970, 1, 1, 6, 0, 0)}
         max={new Date(1970, 1, 1, 19, 0, 0)}
         onEventDrop={handleEventDrop}
-        // eventPropGetter={eventPropGetter}
-
         components={{
           timeSlotWrapper: ({ value, children }) => (
             <div className="relative">
-              {isFutureSlot(value) && !isSlotBooked(value) ? (
+              {isFutureSlot(value) &&
+              !isSlotBooked(value) &&
+              !boardroom?.locked ? (
                 <div className="group">
                   {children}
                   <div className="h-min z-10 absolute bottom-0 inset-0 shadow flex items-center justify-center cursor-pointer bg-green-500 bg-opacity-70 text-white text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-200">
