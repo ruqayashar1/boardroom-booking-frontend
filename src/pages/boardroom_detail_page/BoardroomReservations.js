@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import ReservationsTable from "../../components/tables/ReservationsTable";
 import { getCurrentSelectedBoardroomId } from "../../functions";
 import useFetchBoardroomReservations from "../../hooks/context/useFetchBoardroomReservations";
+import useFetchBoardroomAdmin from "../../hooks/context/useFetchBoardroomAdmin";
+import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
 
 const BoardroomReservations = () => {
   const boardroomId = getCurrentSelectedBoardroomId();
+  const { boardroomAdmin } = useFetchBoardroomAdmin(boardroomId);
+  const { authUserId, isAuthenticatedUserAdmin } = useAuthenticatedUser();
   const [filters, setFilters] = useState({
     approved: false,
     pending: false,
@@ -14,7 +18,18 @@ const BoardroomReservations = () => {
   const { reservations, isLoading } =
     useFetchBoardroomReservations(boardroomId);
 
-  const filteredReservations = reservations.filter((reservation) => {
+  const userReservations =
+    reservations.length !== 0 && boardroomAdmin !== null
+      ? reservations.filter((reservation) => {
+          if (isAuthenticatedUserAdmin || authUserId === boardroomAdmin?.id) {
+            return true;
+          } else {
+            return reservation?.userId === authUserId;
+          }
+        })
+      : [];
+
+  const filteredReservations = userReservations.filter((reservation) => {
     const { approvalStatus } = reservation;
 
     // Check if any filter is applied
