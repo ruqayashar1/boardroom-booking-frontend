@@ -2,8 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import ReservationTableRow from "./ReservationTableRow";
 import { storeCurrentSelectedReservationId } from "../../functions";
+import EmptyBoxMessager from "../EmptyBoxMessager";
+import LoaderIndicator from "../loaders/LoaderIndicator";
 
 const ReservationsTable = ({
+  isLoading,
   reservations,
   filters,
   handleApprovalFilterFunc,
@@ -49,47 +52,55 @@ const ReservationsTable = ({
           </div>
         </div>
       </div>
-      <div className="w-[100%] shadow p-2 font-[Roboto] overflow-auto md:overflow-hidden scroll-smooth">
-        <table className="w-full bg-white">
-          <thead className="font-bold text-left border-b-2">
-            <tr className="text-nowrap mb-24 bg-gray-100">
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Booked By
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Start Date
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Start Time
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                End Date
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                End Time
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Boardroom
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
-                Approval Status
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {reservations.map((reservation, index) => (
-              <ReservationTableRow
-                key={reservation?.id}
-                index={index}
-                record={reservation}
-                navigateToReservationDetailPage={
-                  navigateToReservationDetailPage
-                }
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {reservations.length === 0 && !isLoading ? (
+        <EmptyBoxMessager
+          displayText={"No boardroom reservations to display!"}
+        />
+      ) : isLoading ? (
+        <LoaderIndicator />
+      ) : (
+        <div className="w-[100%] shadow p-2 font-[Roboto] overflow-auto md:overflow-hidden scroll-smooth">
+          <table className="w-full bg-white">
+            <thead className="font-bold text-left border-b-2">
+              <tr className="text-nowrap mb-24 bg-gray-100">
+                <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  Booked By
+                </th>
+                <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  Start Date
+                </th>
+                <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  Start Time
+                </th>
+                <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  End Date
+                </th>
+                <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  End Time
+                </th>
+                <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  Boardroom
+                </th>
+                <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  Approval Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {reservations.map((reservation, index) => (
+                <ReservationTableRow
+                  key={reservation?.id}
+                  index={index}
+                  record={reservation}
+                  navigateToReservationDetailPage={
+                    navigateToReservationDetailPage
+                  }
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 };

@@ -23,6 +23,7 @@ import useAuthenticatedUser from "../hooks/useAuthenticatedUser";
 import useSockjsConnection from "../hooks/useSockjsConnection";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../context/notification/notificationSlice";
+import ReservationBigCalendar from "../pages/boardroom_detail_page/ReservationBigCalendar";
 
 const Layout = () => {
   const dispatch = useDispatch();
@@ -69,7 +70,8 @@ const Layout = () => {
           </ProtectedRoute>
         }
       >
-        <Route index element={<BoardroomReservations />} />
+        <Route index element={<ReservationBigCalendar />} />
+        <Route path="reservations" element={<BoardroomReservations />} />
         <Route
           path="archived-reservations"
           element={<BoardroomArchivedReservations />}

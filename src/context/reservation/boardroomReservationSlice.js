@@ -94,6 +94,9 @@ const boardroomReservationSlice = createSlice({
     setIsCreatingReservation: (state, action) => {
       state.isCreatingReservation = action.payload;
     },
+    clearReservationError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchBoardroomReservations.pending, (state) => {
@@ -146,8 +149,11 @@ const boardroomReservationSlice = createSlice({
 });
 
 export default boardroomReservationSlice.reducer;
-export const { removeboardroomReservation, setIsCreatingReservation } =
-  boardroomReservationSlice.actions;
+export const {
+  removeboardroomReservation,
+  setIsCreatingReservation,
+  clearReservationError,
+} = boardroomReservationSlice.actions;
 export {
   fetchBoardroomReservations,
   createReservation,

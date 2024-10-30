@@ -6,13 +6,13 @@ import {
   changeFromCSVToList,
   changeFromListToCSV,
   convertDateAndTimeToUtcIsoString,
+  getSelectedCalendarDate,
 } from "../../functions";
 import { useDispatch, useSelector } from "react-redux";
 import useKemriEmployees from "../../hooks/context/useKemriEmployees";
 import {
-  checkReservationEventOverlap,
+  clearReservationError,
   createReservation,
-  setIsCreatingReservation,
 } from "../../context/reservation/boardroomReservationSlice";
 import ErrorAlert from "../alerts/ErrorAlert";
 import { parseISO, format } from "date-fns";
@@ -36,10 +36,11 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
   const [attendees, setAttendees] = useState(
     createDefaultAttendees(reservation, authUserEmail)
   );
-  const [overlaped, setOverlaped] = useState(false);
+
+  const overlaped = useSelector((state) => state.boardroomReservation.error);
 
   const removeError = () => {
-    setOverlaped(false);
+    dispatch(clearReservationError());
   };
 
   // Get the start of today
@@ -100,6 +101,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
       .min(1, "There must be at least one attendee.")
       .required("Attendees is required"),
   });
+  const selectedCalendarDate = getSelectedCalendarDate();
   const formik = useFormik({
     initialValues: {
       title: reservation?.meetingTitle || "",
@@ -107,10 +109,17 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
       boardroom: reservation?.boardroomName || boardroom?.name,
       meetingType: reservation?.meetingType || "PHYSICAL",
       ictSupport: reservation?.ictSupportRequired || true,
-      startDate: reservation?.startDate || "",
-      startTime: reservation?.startTime?.substring(0, 5) || "",
-      endDate: reservation?.endDate || "",
-      endTime: reservation?.endTime?.substring(0, 5) || "",
+      startDate:
+        reservation?.startDate || selectedCalendarDate?.startDate || "",
+      startTime:
+        reservation?.startTime?.substring(0, 5) ||
+        selectedCalendarDate?.startTime ||
+        "",
+      endDate: reservation?.endDate || selectedCalendarDate?.endDate || "",
+      endTime:
+        reservation?.endTime?.substring(0, 5) ||
+        selectedCalendarDate?.endTime ||
+        "",
       attendees: attendees?.length,
       urgent: reservation?.isUrgentMeeting || false,
       recordMeeting: reservation?.recordMeeting || false,
@@ -186,46 +195,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
 
   const createReservationOnServer = async (val) => {
     const newReservation = prepareReservationDetails(val);
-    const anyOverlap = await checkDateOverlapOnServer(
-      newReservation.boardroomId,
-      newReservation.startDateTime,
-      newReservation.endDateTime
-    );
-    if (!anyOverlap) {
-      if (overlaped) {
-        setOverlaped(false);
-      }
-      dispatch(createReservation(newReservation));
-    } else {
-      setOverlaped(true);
-    }
-  };
-
-  const checkDateOverlapOnServer = async (
-    boardroomId,
-    startDateTime,
-    endDateTime
-  ) => {
-    const reservationEventDate = {
-      startDateTime: startDateTime,
-      endDateTime: endDateTime,
-    };
-    try {
-      dispatch(setIsCreatingReservation(true));
-      const result = await dispatch(
-        checkReservationEventOverlap({ boardroomId, reservationEventDate })
-      ).then((resp) => resp);
-      if (checkReservationEventOverlap.fulfilled.match(result)) {
-        return result.payload.overlap;
-      } else {
-        dispatch(setIsCreatingReservation(false));
-        return false;
-      }
-    } catch {
-      console.error("error checking overlap");
-    } finally {
-      dispatch(setIsCreatingReservation(false));
-    }
+    dispatch(createReservation(newReservation));
   };
 
   return (

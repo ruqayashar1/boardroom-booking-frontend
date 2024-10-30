@@ -5,7 +5,7 @@ const CreateBoardroomEquipment = ({ toggleEquipmentForm, boardroom }) => {
   return (
     <aside
       id="add-equipment-popup"
-      className="w-full h-[100%] shadow absolute top-[0px] bg-white left-0 z-10"
+      className="w-full h-[100%] shadow absolute top-[0px] bg-white left-0 z-20"
     >
       <div className="flex justify-start p-4">
         <button

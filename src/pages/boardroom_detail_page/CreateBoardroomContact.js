@@ -3,7 +3,7 @@ import BoardroomContactForm from "./BoardroomContactForm";
 
 const CreateBoardroomContact = ({ toggleBoardroomContact, boardroom }) => {
   return (
-    <div className="bg-white w-full absolute top-[0px] right-0 z-10 h-[100%] shadow">
+    <div className="bg-white w-full absolute top-[0px] right-0 z-20 h-[100%] shadow">
       <div className="flex justify-start p-4">
         <button
           onClick={toggleBoardroomContact}

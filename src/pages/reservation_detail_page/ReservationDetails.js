@@ -65,10 +65,11 @@ const ReservationDetails = ({ reservation }) => {
     });
   };
 
-  const handleApproval = (approve) => {
+  const handleApproval = (approve, cancellationMessage = null) => {
     const reservationId = reservation?.id;
     const approval = {
       approvalStatus: approve,
+      cancellationMessage: cancellationMessage,
     };
     dispatch(approveReservation({ reservationId, approval }));
   };
@@ -94,7 +95,7 @@ const ReservationDetails = ({ reservation }) => {
   const confirmApproval = (e, isAcceptButton) => {
     e.preventDefault();
     return confirmAlert({
-      customUI: ({ onClose, on }) => (
+      customUI: ({ onClose }) => (
         <ConfirmReservationApprovalAlert
           onClose={onClose}
           isAcceptButton={isAcceptButton}
@@ -170,6 +171,11 @@ const ReservationDetails = ({ reservation }) => {
           </h3>
         </div>
         <div
+          title={
+            reservation?.approvalStatus === "DECLINED"
+              ? reservation?.cancellationMessage
+              : null
+          }
           id="approval-status"
           className="col-start-7 col-end-13 row-start-1 row-end-3 bg-[#D9D9D9] bg-opacity-[21%] shadow flex justify-center items-center"
         >
@@ -347,12 +353,12 @@ const ReservationDetails = ({ reservation }) => {
           )}
           {authUserId === reservation?.userId && (
             <div className="flex justify-end items-center w-full sm:w-[50%] font-bold text-white mb-4 sm:mb-0">
-              {/* <button
-            onClick={toggleResevationEditForm}
-            className="bg-blue-300 w-24 h-max p-2 mr-2"
-          >
-            EDIT
-          </button> */}
+              <button
+                onClick={toggleResevationEditForm}
+                className="bg-blue-300 w-24 h-max p-2 mr-2"
+              >
+                EDIT
+              </button>
               <button
                 onClick={confirmDeletion}
                 className="bg-[#D4342C] w-24 h-max p-2"

@@ -4,6 +4,7 @@ import { BASE_URL, REFRESH_TOKEN_URL } from "./constants";
 import { format, parse, parseISO } from "date-fns";
 
 const tokenKeyName = "authToken";
+const selectedCalendarDateKey = "selectedCalendarDate";
 
 const retrieveToken = () => {
   try {
@@ -224,6 +225,12 @@ export const convertDateAndTimeToUtcIsoString = (date, time) => {
   return utcDateTimeISO;
 };
 
+export const joinDateAndTime = (date, time) => {
+  const combinedDateTime = `${date}T${time}`;
+  const localDateTime = new Date(combinedDateTime);
+  return localDateTime;
+};
+
 export const getHumanFriendlyDateTime = (isoString) => {
   // Parse the ISO string to a JavaScript Date object
   const parsedDate = parseISO(isoString);
@@ -236,4 +243,40 @@ export const getHumanFriendlyDateTime = (isoString) => {
 
   // Return the date and time in an array
   return [humanFriendlyDate, humanFriendlyTime];
+};
+
+export const storeSelectedCalendarDate = (date) => {
+  sessionStorage.setItem(selectedCalendarDateKey, JSON.stringify(date));
+};
+
+export const getSelectedCalendarDate = () => {
+  const selectedDateString = sessionStorage.getItem(selectedCalendarDateKey);
+  if (selectedDateString) {
+    const selectedDate = JSON.parse(selectedDateString);
+    return selectedDate;
+  } else {
+    return null;
+  }
+};
+
+export const removeSelectedCalendarDate = () => {
+  sessionStorage.removeItem(selectedCalendarDateKey);
+};
+
+export const getDateAndTimeFromDateIsoString = (localeDateString) => {
+  // Parse the date using the locale string
+  const date = new Date(localeDateString);
+  // Extract the components and format to ISO without changing time
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  // Create ISO format compatible with <input type="datetime-local">
+  const isoDateForInput = `${year}-${month}-${day}T${hours}:${minutes}`;
+  const dLs = isoDateForInput.split("T");
+  const dateString = dLs[0];
+  const timeString = dLs[1];
+  return [dateString, timeString];
 };

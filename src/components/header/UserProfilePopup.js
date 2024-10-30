@@ -21,6 +21,7 @@ const UserProfilePopup = ({
   const logoutUser = () => {
     deleteToken();
     dispatch(authenticate(false));
+    sessionStorage.removeItem("previousUrl");
     navigate("/login");
     window.location.reload();
   };
