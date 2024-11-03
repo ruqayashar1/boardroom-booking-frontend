@@ -64,3 +64,7 @@ html {
 /* .rbc-time-slot {
   color: #74a4b3;
 } */
+
+.rbc-events-container {
+  width: 100% !important;
+}

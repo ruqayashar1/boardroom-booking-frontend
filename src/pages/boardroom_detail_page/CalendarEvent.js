@@ -32,8 +32,8 @@ const CalendarEvent = ({ event }) => {
       </div>
 
       {isModalOpen && (
-        <div className="text-[#000] fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded shadow w-80">
+        <div className="text-[#000] fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 !z-50">
+          <div className="bg-white p-4 rounded shadow w-80 z-50">
             <div
               className={`h-6 ${
                 approvalStatus[event.approvalStatus][1]
@@ -41,7 +41,9 @@ const CalendarEvent = ({ event }) => {
             >
               <p className="text-white font-semibold">{event.approvalStatus}</p>
             </div>
-            <h3 className="text-sm font-bold mb-4 mt-2">{event.title}</h3>
+            <h3 className="text-sm font-bold mb-4 mt-2 w-full text-wrap">
+              {event.title}
+            </h3>
             <p className="text-sm">
               <strong>Type:</strong> {event.meetingType}
             </p>

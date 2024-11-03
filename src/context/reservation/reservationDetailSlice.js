@@ -10,7 +10,10 @@ import {
   RESERVATION_VENUE_CHANGE_BY_ID_URL,
 } from "../../constants";
 import { toast } from "react-toastify";
-import { removeboardroomReservation } from "./boardroomReservationSlice";
+import {
+  removeboardroomReservation,
+  updateBoardroomReservation,
+} from "./boardroomReservationSlice";
 
 const initialState = {
   isLoading: false,
@@ -112,12 +115,13 @@ const createReservationMeetingLink = createAsyncThunk(
 
 const rescheduleReservation = createAsyncThunk(
   "selectedReservation/rescheduleReservation",
-  async ({ reservationId, rescheduleData }, { rejectWithValue }) => {
+  async ({ reservationId, rescheduleData }, { rejectWithValue, dispatch }) => {
     try {
       const resp = await apiClient.patch(
         BASE_URL.concat(RESCHEDULE_RESERVATION_URL(reservationId)),
         rescheduleData
       );
+      dispatch(updateBoardroomReservation(resp.data));
       return resp.data;
     } catch (error) {
       console.error(error);

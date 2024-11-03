@@ -75,7 +75,6 @@ const checkReservationEventOverlap = createAsyncThunk(
       BASE_URL.concat(CHECK_RESERVATION_EVENT_OVERLAP_URL(boardroomId)),
       reservationEventDate
     );
-    console.log(resp.data);
     return resp.data;
   }
 );
@@ -96,6 +95,12 @@ const boardroomReservationSlice = createSlice({
     },
     clearReservationError: (state) => {
       state.error = null;
+    },
+    updateBoardroomReservation: (state, action) => {
+      state.boardroomReservations = state.boardroomReservations.map(
+        (reservation) =>
+          reservation.id === action.payload.id ? action.payload : reservation
+      );
     },
   },
   extraReducers: (builder) => {
@@ -153,6 +158,7 @@ export const {
   removeboardroomReservation,
   setIsCreatingReservation,
   clearReservationError,
+  updateBoardroomReservation,
 } = boardroomReservationSlice.actions;
 export {
   fetchBoardroomReservations,
