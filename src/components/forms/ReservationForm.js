@@ -380,6 +380,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               Start Date
             </label>
             <input
+              disabled={updateFormType}
               type="date"
               name="startDate"
               id="startDate"
@@ -409,6 +410,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               Start Time
             </label>
             <input
+              disabled={updateFormType}
               type="time"
               name="startTime"
               id="startTime"
@@ -435,6 +437,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               End Date
             </label>
             <input
+              disabled={updateFormType}
               type="date"
               name="endDate"
               id="endDate"
@@ -461,6 +464,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               End Time
             </label>
             <input
+              disabled={updateFormType}
               type="time"
               name="endTime"
               id="endTime"

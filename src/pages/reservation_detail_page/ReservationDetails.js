@@ -190,7 +190,8 @@ const ReservationDetails = ({ reservation }) => {
         <div
           id="meeting-type"
           className={`col-start-1 ${
-            reservation?.approvalStatus === "APPROVED"
+            reservation?.approvalStatus === "APPROVED" &&
+            !reservation?.meetingType === "PHYSICAL"
               ? "col-end-7"
               : "col-end-13"
           } row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2`}
@@ -200,17 +201,18 @@ const ReservationDetails = ({ reservation }) => {
             <b className="text-[#024458] ml-2">{reservation?.meetingType}</b>
           </h3>
         </div>
-        {reservation?.approvalStatus === "APPROVED" && (
-          <div
-            id="meeting-link"
-            className="col-start-7 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
-          >
-            <MeetingLink
-              meetingLinkUrl={reservation?.meetingLink}
-              isAuthenticatedUserAdmin={isAuthenticatedUserAdmin}
-            />
-          </div>
-        )}
+        {reservation?.approvalStatus === "APPROVED" &&
+          !reservation?.meetingType === "PHYSICAL" && (
+            <div
+              id="meeting-link"
+              className="col-start-7 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
+            >
+              <MeetingLink
+                meetingLinkUrl={reservation?.meetingLink}
+                isAuthenticatedUserAdmin={isAuthenticatedUserAdmin}
+              />
+            </div>
+          )}
         <div
           id="meeting-dates"
           className="col-start-1 col-end-13 bg-[#D9D9D9] bg-opacity-[21%] shadow flex p-2"
