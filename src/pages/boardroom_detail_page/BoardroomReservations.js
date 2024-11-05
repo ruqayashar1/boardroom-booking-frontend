@@ -1,35 +1,35 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReservationsTable from "../../components/tables/ReservationsTable";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchBoardroomReservations } from "../../context/reservation/boardroomReservationSlice";
 import { getCurrentSelectedBoardroomId } from "../../functions";
-import EmptyBoxMessager from "../../components/EmptyBoxMessager";
-import LoaderIndicator from "../../components/loaders/LoaderIndicator";
+import useFetchBoardroomReservations from "../../hooks/context/useFetchBoardroomReservations";
+import useFetchBoardroomAdmin from "../../hooks/context/useFetchBoardroomAdmin";
+import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
 
 const BoardroomReservations = () => {
   const boardroomId = getCurrentSelectedBoardroomId();
-  const dispatch = useDispatch();
-  const reservations = useSelector(
-    (state) => state.boardroomReservation.boardroomReservations
-  );
-  const isLoading = useSelector(
-    (state) => state.boardroomReservation.isLoading
-  );
+  const { boardroomAdmin } = useFetchBoardroomAdmin(boardroomId);
+  const { authUserId, isAuthenticatedUserAdmin } = useAuthenticatedUser();
   const [filters, setFilters] = useState({
     approved: false,
     pending: false,
     declined: false,
   });
 
-  const fetchBoardroomReservationsFromServer = useCallback(() => {
-    dispatch(fetchBoardroomReservations(boardroomId));
-  }, [dispatch]);
+  const { reservations, isLoading } =
+    useFetchBoardroomReservations(boardroomId);
 
-  useEffect(() => {
-    fetchBoardroomReservationsFromServer();
-  }, [fetchBoardroomReservationsFromServer]);
+  const userReservations =
+    reservations.length !== 0 && boardroomAdmin !== null
+      ? reservations.filter((reservation) => {
+          if (isAuthenticatedUserAdmin || authUserId === boardroomAdmin?.id) {
+            return true;
+          } else {
+            return reservation?.userId === authUserId;
+          }
+        })
+      : [];
 
-  const filteredReservations = reservations.filter((reservation) => {
+  const filteredReservations = userReservations.filter((reservation) => {
     const { approvalStatus } = reservation;
 
     // Check if any filter is applied
@@ -57,21 +57,12 @@ const BoardroomReservations = () => {
     }));
   };
   return (
-    <>
-      {filteredReservations.length === 0 && !isLoading ? (
-        <EmptyBoxMessager
-          displayText={"No boardroom reservations to display!"}
-        />
-      ) : isLoading ? (
-        <LoaderIndicator />
-      ) : (
-        <ReservationsTable
-          reservations={filteredReservations}
-          filters={filters}
-          handleApprovalFilterFunc={handleApprovalFilter}
-        />
-      )}
-    </>
+    <ReservationsTable
+      isLoading={isLoading}
+      reservations={filteredReservations}
+      filters={filters}
+      handleApprovalFilterFunc={handleApprovalFilter}
+    />
   );
 };
 

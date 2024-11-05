@@ -57,17 +57,12 @@ const UpcomingMeeting = () => {
       <span className="block w-max uppercase mb-4 tracking-wide font-[Roboto] bg-gray-100 shadow-sm p-2">
         Upcoming Meetings
       </span>
-      {filteredReservations.length === 0 && !isLoading ? (
-        <EmptyBoxMessager displayText={"No upcoming meetings to display!"} />
-      ) : isLoading ? (
-        <LoaderIndicator />
-      ) : (
-        <ReservationsTable
-          reservations={filteredReservations}
-          filters={filters}
-          handleApprovalFilterFunc={handleApprovalFilter}
-        />
-      )}
+      <ReservationsTable
+        isLoading={isLoading}
+        reservations={filteredReservations}
+        filters={filters}
+        handleApprovalFilterFunc={handleApprovalFilter}
+      />
     </div>
   );
 };

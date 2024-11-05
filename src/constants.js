@@ -1,5 +1,5 @@
-export const BASE_URL = "http://localhost:8080";
-export const WS_BASE_URL = "http://localhost:8080/ws";
+export const BASE_URL = "http://10.0.2.72:8080";
+export const WS_BASE_URL = "http://10.0.2.72:8080/ws";
 export const AUTH_URL = "/auth/login";
 export const REFRESH_TOKEN_URL = "/auth/refresh-token";
 export const TIMEZONES_FETCH_URL = "/user-timezones";
@@ -28,7 +28,7 @@ export const FETCH_BOARDROOM_EQUIPMENTS_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/equipments`;
 export const FETCH_BOARDROOM_ADMINISTRATOR_URL = (boardroomId) =>
   `/boardrooms/${boardroomId}/administrator`;
-export const FETCH_RESERVATION_BY_ID_URL = (reservationId) =>
+export const RESERVATION_BY_ID_URL = (reservationId) =>
   `/reservations/${reservationId}`;
 export const DELETE_RESERVATION_BY_ID_URL = (reservationId) =>
   `/reservations/${reservationId}`;

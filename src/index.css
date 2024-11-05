@@ -47,3 +47,24 @@ html {
 .estimated-capacity {
   appearance: textfield;
 }
+
+/* react big calendar */
+.rbc-header {
+  background-color: lightblue !important;
+  font-size: 1.7rem;
+  font-weight: bold;
+  height: 1.7rem;
+  opacity: 0.6;
+}
+
+.rbc-time-header-cell .rbc-today {
+  background-color: rgb(192, 150, 200) !important;
+}
+
+/* .rbc-time-slot {
+  color: #74a4b3;
+} */
+
+.rbc-events-container {
+  width: 100% !important;
+}

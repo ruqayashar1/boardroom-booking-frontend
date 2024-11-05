@@ -3,8 +3,13 @@ import { useClickAway } from "react-use";
 import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
 import BoardroomSettingItem from "./BoardroomSettingItem";
 
-const BoardroomSettings = ({ toggleFuncs, isRoomLocked = false }) => {
-  const { isAuthenticatedUserAdmin } = useAuthenticatedUser();
+const BoardroomSettings = ({
+  toggleFuncs,
+  boardroomAdmin,
+  boardroom,
+  isRoomLocked = false,
+}) => {
+  const { isAuthenticatedUserAdmin, authUserId } = useAuthenticatedUser();
 
   const boardroomSettingRef = useRef();
   const toggleBoardromSettingsPopup = (e) => {
@@ -37,12 +42,6 @@ const BoardroomSettings = ({ toggleFuncs, isRoomLocked = false }) => {
   ];
   const settingsItems = [
     {
-      label: "Make Reservation",
-      icon: "add",
-      action: toggleFuncs.toggleReservationForm,
-    },
-
-    {
       label: "Add Contact",
       icon: "add",
       action: toggleFuncs.toggleBoardroomContact,
@@ -50,7 +49,7 @@ const BoardroomSettings = ({ toggleFuncs, isRoomLocked = false }) => {
   ];
 
   return (
-    <div>
+    <div className="absolute right-0">
       <div className="cursor-pointer" onClick={toggleBoardromSettingsPopup}>
         <span className="material-symbols-outlined">manufacturing</span>
         <span className="material-symbols-outlined">arrow_drop_down</span>
@@ -58,7 +57,7 @@ const BoardroomSettings = ({ toggleFuncs, isRoomLocked = false }) => {
       <div
         ref={boardroomSettingRef}
         id="boardroom-settings"
-        className="hidden w-max bg-white h-max mt-2 absolute top-10 right-0 z-10 shadow-lg transition-all duration-300"
+        className="hidden w-max bg-white h-max mt-2 absolute top-10 right-0 z-50 shadow-lg transition-all duration-300"
       >
         <div className="p-2 flex justify-between items-center bg-[#06ABDD] text-white">
           <h3 className="mr-10">Settings</h3>
@@ -74,31 +73,44 @@ const BoardroomSettings = ({ toggleFuncs, isRoomLocked = false }) => {
           ? [...adminSettings, ...settingsItems].map((item, index) => (
               <BoardroomSettingItem key={index} item={item} />
             ))
-          : settingsItems.map((item, index) => (
+          : authUserId === boardroomAdmin?.id
+          ? settingsItems.map((item, index) => (
               <BoardroomSettingItem key={index} item={item} />
-            ))}
-
-        {isRoomLocked ? (
-          <div
-            onClick={toggleFuncs.toggleUnLockRoomForm}
-            className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded hover:bg-[#06ABDE] hover:text-white transition-all duration-300"
-          >
-            <span className="material-symbols-outlined text-[#DD0606] mr-2 ml-4 py-2">
-              lock_open
-            </span>
-            <h3 className="mr-4">Unlock</h3>
-          </div>
-        ) : (
-          <div
-            onClick={toggleFuncs.toggleLockRoomForm}
-            className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded hover:bg-[#06ABDE] hover:text-white transition-all duration-300"
-          >
-            <span className="material-symbols-outlined text-[#DD0606] mr-2 ml-4 py-2">
-              lock
-            </span>
-            <h3 className="mr-4">Lock</h3>
-          </div>
+            ))
+          : null}
+        {!boardroom?.locked && (
+          <BoardroomSettingItem
+            item={{
+              label: "Make Reservation",
+              icon: "add",
+              action: toggleFuncs.toggleReservationForm,
+            }}
+          />
         )}
+
+        {authUserId === boardroomAdmin?.id || isAuthenticatedUserAdmin ? (
+          isRoomLocked ? (
+            <div
+              onClick={toggleFuncs.toggleUnLockRoomForm}
+              className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded hover:bg-[#06ABDE] hover:text-white transition-all duration-300"
+            >
+              <span className="material-symbols-outlined text-[#DD0606] mr-2 ml-4 py-2">
+                lock_open
+              </span>
+              <h3 className="mr-4">Unlock</h3>
+            </div>
+          ) : (
+            <div
+              onClick={toggleFuncs.toggleLockRoomForm}
+              className="bg-[#d9d9d9] bg-opacity-[21%] m-1 my-2 flex items-center font-thin font-[Roboto] cursor-pointer rounded hover:bg-[#06ABDE] hover:text-white transition-all duration-300"
+            >
+              <span className="material-symbols-outlined text-[#DD0606] mr-2 ml-4 py-2">
+                lock
+              </span>
+              <h3 className="mr-4">Lock</h3>
+            </div>
+          )
+        ) : null}
       </div>
     </div>
   );

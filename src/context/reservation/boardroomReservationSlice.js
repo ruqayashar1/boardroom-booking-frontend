@@ -4,9 +4,11 @@ import {
   BASE_URL,
   BOARDROOM_RESESERVATIONS_URL,
   CHECK_RESERVATION_EVENT_OVERLAP_URL,
+  RESERVATION_BY_ID_URL,
   RESERVATION_URL,
 } from "../../constants";
 import { toast } from "react-toastify";
+import { updateSelectedReservation } from "./reservationDetailSlice";
 
 const initialState = {
   isCreatingReservation: false,
@@ -52,12 +54,13 @@ const createReservation = createAsyncThunk(
 
 const updateReservation = createAsyncThunk(
   "boardroomReservation/updateReservation",
-  async (newReservation, { rejectWithValue }) => {
+  async ({ reservationId, newReservation }, { rejectWithValue, dispatch }) => {
     try {
       const resp = await apiClient.patch(
-        BASE_URL.concat(RESERVATION_URL),
+        BASE_URL.concat(RESERVATION_BY_ID_URL(reservationId)),
         newReservation
       );
+      dispatch(updateSelectedReservation(resp.data));
       return resp.data;
     } catch (error) {
       console.error(error);
@@ -75,7 +78,6 @@ const checkReservationEventOverlap = createAsyncThunk(
       BASE_URL.concat(CHECK_RESERVATION_EVENT_OVERLAP_URL(boardroomId)),
       reservationEventDate
     );
-    console.log(resp.data);
     return resp.data;
   }
 );
@@ -93,6 +95,15 @@ const boardroomReservationSlice = createSlice({
     },
     setIsCreatingReservation: (state, action) => {
       state.isCreatingReservation = action.payload;
+    },
+    clearReservationError: (state) => {
+      state.error = null;
+    },
+    updateBoardroomReservation: (state, action) => {
+      state.boardroomReservations = state.boardroomReservations.map(
+        (reservation) =>
+          reservation.id === action.payload.id ? action.payload : reservation
+      );
     },
   },
   extraReducers: (builder) => {
@@ -146,8 +157,12 @@ const boardroomReservationSlice = createSlice({
 });
 
 export default boardroomReservationSlice.reducer;
-export const { removeboardroomReservation, setIsCreatingReservation } =
-  boardroomReservationSlice.actions;
+export const {
+  removeboardroomReservation,
+  setIsCreatingReservation,
+  clearReservationError,
+  updateBoardroomReservation,
+} = boardroomReservationSlice.actions;
 export {
   fetchBoardroomReservations,
   createReservation,

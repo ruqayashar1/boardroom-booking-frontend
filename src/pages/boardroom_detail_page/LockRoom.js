@@ -5,7 +5,7 @@ const LockRoom = ({ toggleLockRoomForm, boardroom }) => {
   return (
     <aside
       id="lock-room-popup"
-      className="w-full h-[100%] shadow absolute top-[0px] right-0 bg-white z-10"
+      className="w-full h-[100%] shadow absolute top-[0px] right-0 bg-white z-20"
     >
       <div className="flex justify-start p-4">
         <button

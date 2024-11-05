@@ -6,13 +6,14 @@ import {
   changeFromCSVToList,
   changeFromListToCSV,
   convertDateAndTimeToUtcIsoString,
+  getSelectedCalendarDate,
 } from "../../functions";
 import { useDispatch, useSelector } from "react-redux";
 import useKemriEmployees from "../../hooks/context/useKemriEmployees";
 import {
-  checkReservationEventOverlap,
+  clearReservationError,
   createReservation,
-  setIsCreatingReservation,
+  updateReservation,
 } from "../../context/reservation/boardroomReservationSlice";
 import ErrorAlert from "../alerts/ErrorAlert";
 import { parseISO, format } from "date-fns";
@@ -36,10 +37,12 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
   const [attendees, setAttendees] = useState(
     createDefaultAttendees(reservation, authUserEmail)
   );
-  const [overlaped, setOverlaped] = useState(false);
+
+  const error = useSelector((state) => state.boardroomReservation.error);
+  console.log(error);
 
   const removeError = () => {
-    setOverlaped(false);
+    dispatch(clearReservationError());
   };
 
   // Get the start of today
@@ -100,6 +103,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
       .min(1, "There must be at least one attendee.")
       .required("Attendees is required"),
   });
+  const selectedCalendarDate = getSelectedCalendarDate();
   const formik = useFormik({
     initialValues: {
       title: reservation?.meetingTitle || "",
@@ -107,10 +111,17 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
       boardroom: reservation?.boardroomName || boardroom?.name,
       meetingType: reservation?.meetingType || "PHYSICAL",
       ictSupport: reservation?.ictSupportRequired || true,
-      startDate: reservation?.startDate || "",
-      startTime: reservation?.startTime?.substring(0, 5) || "",
-      endDate: reservation?.endDate || "",
-      endTime: reservation?.endTime?.substring(0, 5) || "",
+      startDate:
+        reservation?.startDate || selectedCalendarDate?.startDate || "",
+      startTime:
+        reservation?.startTime?.substring(0, 5) ||
+        selectedCalendarDate?.startTime ||
+        "",
+      endDate: reservation?.endDate || selectedCalendarDate?.endDate || "",
+      endTime:
+        reservation?.endTime?.substring(0, 5) ||
+        selectedCalendarDate?.endTime ||
+        "",
       attendees: attendees?.length,
       urgent: reservation?.isUrgentMeeting || false,
       recordMeeting: reservation?.recordMeeting || false,
@@ -119,14 +130,16 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
     onSubmit: (values, { setSubmitting }) => {
       const numberOfAttendees = attendees.length;
       setTimeout(() => {
-        if (values?.meetingType === "Hybrid") {
+        if (values?.meetingType === "HYBRID") {
           if (numberOfAttendees < 1) {
             formik.setFieldError(
               "attendees",
               "There must be at least one attendee."
             );
           } else {
-            createReservationOnServer(values);
+            updateFormType
+              ? updateReservationOnServer(values)
+              : createReservationOnServer(values);
           }
         } else {
           if (numberOfAttendees < 1) {
@@ -140,7 +153,9 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               `Attendees exceed the capacity (${boardroom?.capacity}) of the boardroom.`
             );
           } else {
-            createReservationOnServer(values);
+            updateFormType
+              ? updateReservationOnServer(values)
+              : createReservationOnServer(values);
           }
         }
         setSubmitting(false);
@@ -186,56 +201,20 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
 
   const createReservationOnServer = async (val) => {
     const newReservation = prepareReservationDetails(val);
-    const anyOverlap = await checkDateOverlapOnServer(
-      newReservation.boardroomId,
-      newReservation.startDateTime,
-      newReservation.endDateTime
-    );
-    if (!anyOverlap) {
-      if (overlaped) {
-        setOverlaped(false);
-      }
-      dispatch(createReservation(newReservation));
-    } else {
-      setOverlaped(true);
-    }
+    dispatch(createReservation(newReservation));
   };
 
-  const checkDateOverlapOnServer = async (
-    boardroomId,
-    startDateTime,
-    endDateTime
-  ) => {
-    const reservationEventDate = {
-      startDateTime: startDateTime,
-      endDateTime: endDateTime,
-    };
-    try {
-      dispatch(setIsCreatingReservation(true));
-      const result = await dispatch(
-        checkReservationEventOverlap({ boardroomId, reservationEventDate })
-      ).then((resp) => resp);
-      if (checkReservationEventOverlap.fulfilled.match(result)) {
-        return result.payload.overlap;
-      } else {
-        dispatch(setIsCreatingReservation(false));
-        return false;
-      }
-    } catch {
-      console.error("error checking overlap");
-    } finally {
-      dispatch(setIsCreatingReservation(false));
-    }
+  const updateReservationOnServer = (val) => {
+    const newReservation = prepareReservationDetails(val);
+    dispatch(
+      updateReservation({ reservationId: reservation?.id, newReservation })
+    );
   };
 
   return (
     <>
-      {overlaped && (
-        <ErrorAlert
-          removeError={removeError}
-          message="Please choose another event date. The current one overlaps with another
-        scheduled event."
-        />
+      {error && (
+        <ErrorAlert removeError={removeError} message={error?.message} />
       )}
       <form
         onSubmit={formik.handleSubmit}
@@ -410,6 +389,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               Start Date
             </label>
             <input
+              disabled={updateFormType}
               type="date"
               name="startDate"
               id="startDate"
@@ -439,6 +419,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               Start Time
             </label>
             <input
+              disabled={updateFormType}
               type="time"
               name="startTime"
               id="startTime"
@@ -465,6 +446,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               End Date
             </label>
             <input
+              disabled={updateFormType}
               type="date"
               name="endDate"
               id="endDate"
@@ -491,6 +473,7 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               End Time
             </label>
             <input
+              disabled={updateFormType}
               type="time"
               name="endTime"
               id="endTime"
