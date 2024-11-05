@@ -4,9 +4,11 @@ import {
   BASE_URL,
   BOARDROOM_RESESERVATIONS_URL,
   CHECK_RESERVATION_EVENT_OVERLAP_URL,
+  RESERVATION_BY_ID_URL,
   RESERVATION_URL,
 } from "../../constants";
 import { toast } from "react-toastify";
+import { updateSelectedReservation } from "./reservationDetailSlice";
 
 const initialState = {
   isCreatingReservation: false,
@@ -52,12 +54,13 @@ const createReservation = createAsyncThunk(
 
 const updateReservation = createAsyncThunk(
   "boardroomReservation/updateReservation",
-  async (newReservation, { rejectWithValue }) => {
+  async ({ reservationId, newReservation }, { rejectWithValue, dispatch }) => {
     try {
       const resp = await apiClient.patch(
-        BASE_URL.concat(RESERVATION_URL),
+        BASE_URL.concat(RESERVATION_BY_ID_URL(reservationId)),
         newReservation
       );
+      dispatch(updateSelectedReservation(resp.data));
       return resp.data;
     } catch (error) {
       console.error(error);

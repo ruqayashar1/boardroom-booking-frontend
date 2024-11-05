@@ -5,7 +5,7 @@ import {
   BASE_URL,
   CREATE_RESERVATION_MEETING_LINK_URL,
   DELETE_RESERVATION_BY_ID_URL,
-  FETCH_RESERVATION_BY_ID_URL,
+  RESERVATION_BY_ID_URL,
   RESCHEDULE_RESERVATION_URL,
   RESERVATION_VENUE_CHANGE_BY_ID_URL,
 } from "../../constants";
@@ -29,7 +29,7 @@ const fetchReservationById = createAsyncThunk(
   async (reservationId) => {
     try {
       const resp = await apiClient.get(
-        BASE_URL.concat(FETCH_RESERVATION_BY_ID_URL(reservationId))
+        BASE_URL.concat(RESERVATION_BY_ID_URL(reservationId))
       );
       return resp.data;
     } catch (error) {
@@ -135,7 +135,11 @@ const rescheduleReservation = createAsyncThunk(
 const reservationDetailSlice = createSlice({
   name: "selectedReservation",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    updateSelectedReservation: (state, action) => {
+      state.reservation = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchReservationById.pending, (state) => {
       state.isLoading = true;
@@ -210,6 +214,7 @@ const reservationDetailSlice = createSlice({
 });
 
 export default reservationDetailSlice.reducer;
+export const { updateSelectedReservation } = reservationDetailSlice.actions;
 export {
   fetchReservationById,
   approveReservation,

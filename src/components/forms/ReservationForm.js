@@ -13,6 +13,7 @@ import useKemriEmployees from "../../hooks/context/useKemriEmployees";
 import {
   clearReservationError,
   createReservation,
+  updateReservation,
 } from "../../context/reservation/boardroomReservationSlice";
 import ErrorAlert from "../alerts/ErrorAlert";
 import { parseISO, format } from "date-fns";
@@ -37,7 +38,8 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
     createDefaultAttendees(reservation, authUserEmail)
   );
 
-  const overlaped = useSelector((state) => state.boardroomReservation.error);
+  const error = useSelector((state) => state.boardroomReservation.error);
+  console.log(error);
 
   const removeError = () => {
     dispatch(clearReservationError());
@@ -128,14 +130,16 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
     onSubmit: (values, { setSubmitting }) => {
       const numberOfAttendees = attendees.length;
       setTimeout(() => {
-        if (values?.meetingType === "Hybrid") {
+        if (values?.meetingType === "HYBRID") {
           if (numberOfAttendees < 1) {
             formik.setFieldError(
               "attendees",
               "There must be at least one attendee."
             );
           } else {
-            createReservationOnServer(values);
+            updateFormType
+              ? updateReservationOnServer(values)
+              : createReservationOnServer(values);
           }
         } else {
           if (numberOfAttendees < 1) {
@@ -149,7 +153,9 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
               `Attendees exceed the capacity (${boardroom?.capacity}) of the boardroom.`
             );
           } else {
-            createReservationOnServer(values);
+            updateFormType
+              ? updateReservationOnServer(values)
+              : createReservationOnServer(values);
           }
         }
         setSubmitting(false);
@@ -198,14 +204,17 @@ const ReservationForm = ({ boardroom, updateFormType, reservation = null }) => {
     dispatch(createReservation(newReservation));
   };
 
+  const updateReservationOnServer = (val) => {
+    const newReservation = prepareReservationDetails(val);
+    dispatch(
+      updateReservation({ reservationId: reservation?.id, newReservation })
+    );
+  };
+
   return (
     <>
-      {overlaped && (
-        <ErrorAlert
-          removeError={removeError}
-          message="Please choose another event date. The current one overlaps with another
-        scheduled event."
-        />
+      {error && (
+        <ErrorAlert removeError={removeError} message={error?.message} />
       )}
       <form
         onSubmit={formik.handleSubmit}

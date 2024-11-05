@@ -202,17 +202,17 @@ const ReservationDetails = ({ reservation }) => {
           </h3>
         </div>
         {reservation?.approvalStatus === "APPROVED" &&
-          !reservation?.meetingType === "PHYSICAL" && (
-            <div
-              id="meeting-link"
-              className="col-start-7 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
-            >
-              <MeetingLink
-                meetingLinkUrl={reservation?.meetingLink}
-                isAuthenticatedUserAdmin={isAuthenticatedUserAdmin}
-              />
-            </div>
-          )}
+        reservation?.meetingType !== "PHYSICAL" ? (
+          <div
+            id="meeting-link"
+            className="col-start-7 col-end-13 row-start-3 bg-[#D9D9D9] bg-opacity-[21%] shadow p-2"
+          >
+            <MeetingLink
+              meetingLinkUrl={reservation?.meetingLink}
+              isAuthenticatedUserAdmin={isAuthenticatedUserAdmin}
+            />
+          </div>
+        ) : null}
         <div
           id="meeting-dates"
           className="col-start-1 col-end-13 bg-[#D9D9D9] bg-opacity-[21%] shadow flex p-2"
