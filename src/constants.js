@@ -1,5 +1,5 @@
-export const BASE_URL = "http://10.0.2.72:8080";
-export const WS_BASE_URL = "http://10.0.2.72:8080/ws";
+export const BASE_URL = "/api";
+export const WS_BASE_URL = "/api";
 export const AUTH_URL = "/auth/login";
 export const REFRESH_TOKEN_URL = "/auth/refresh-token";
 export const TIMEZONES_FETCH_URL = "/user-timezones";
